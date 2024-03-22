@@ -1,0 +1,23 @@
+﻿<Window x:Class="MSBeverageRecordApp.CreateRecord"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MSBeverageRecordApp"
+        mc:Ignorable="d"
+        Title="CreateRecord" Height="450" Width="800">
+    <Grid>
+        <Label FontSize="22px" Content="Create Record" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="45" Width="152"/>
+        <TextBox HorizontalAlignment="Left" Margin="160,137,0,0" TextWrapping="Wrap" Text="Record Number" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Center" Margin="0,137,0,0" TextWrapping="Wrap" Text="Category" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
+        <TextBox HorizontalAlignment="Left" Margin="515,137,0,0" TextWrapping="Wrap" Text="Manufacturer" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="160,217,0,0" TextWrapping="Wrap" Text="Model " VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Center" Margin="0,217,0,0" TextWrapping="Wrap" Text="Serial Number" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="160,298,0,0" TextWrapping="Wrap" Text="Cost" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Center" Margin="0,298,0,0" TextWrapping="Wrap" Text="Location" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="515,298,0,0" TextWrapping="Wrap" Text="Sub Location" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Submit" HorizontalAlignment="Left" Margin="640,385,0,0" VerticalAlignment="Top" Height="22" Width="66"/>
+        <DatePicker HorizontalAlignment="Left" Margin="524,214,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>
