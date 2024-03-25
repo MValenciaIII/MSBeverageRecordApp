@@ -22,9 +22,14 @@ using System.CodeDom.Compiler;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Collections.ObjectModel;
 
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+
+//sort filter team adding here
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 //using Newtonsoft.Json;
 //using Newtonsoft.Json.Linq;
@@ -65,13 +70,17 @@ namespace MSBeverageRecordApp
     /// </summary>
     public partial class MainWindow : Window {
 
-
         //GLOBAL VARIABLE
         public class urlResult
         {
             public string[] results { get; set; }
         }
+        //public interface INotifyPropertyChanged;
+        //public interface IEditableObject;
 
+        //public class Destinations : ObservableCollection <Destination> {
+
+        //}
         public MainWindow()
         {
             
@@ -80,7 +89,7 @@ namespace MSBeverageRecordApp
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/destinations");
+            client.BaseAddress = new Uri("http://localhost:4000/api/destinations");
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
@@ -96,14 +105,15 @@ namespace MSBeverageRecordApp
                 //CURRENTLY TRYING TO CHANGE OUR STRING TO OBJECT DATA VVV
                 RootObject deserializeObject = new RootObject();
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Destination>>(dataobjects);
-
+                
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
 
 
-            }
-            
 
+            }
+
+            //this.dataGrid.FilterRowPosition = FilterRowPosition.FixedTop;
         }//end mainwindow
 
         private void muiSave_Click(object sender, RoutedEventArgs e) {
@@ -111,9 +121,9 @@ namespace MSBeverageRecordApp
             SaveFileDialog sfdSave = new SaveFileDialog();
             //open th edialog and wait for the user to make a selection
             bool fileSelected = (bool)sfdSave.ShowDialog();
-            if (fileSelected == true) {
-                WriteTextToFile(sfdSave.FileName, txtMain.Text);
-            }//end if
+            //if (fileSelected == true) {
+            //    WriteTextToFile(sfdSave.FileName, txtMain.Text);
+            //}//end if
         }//end event
 
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
@@ -123,7 +133,7 @@ namespace MSBeverageRecordApp
             public string location { get; set; }
             public string name { get; set; }
             public int lengthofstay { get; set; }
-            public int hotspot { get; set; }
+            public string hotspot { get; set; }//change back to int
             public int cost { get; set; }
             public DateTime startdate { get; set; }
             public DateTime enddate { get; set; }
@@ -154,25 +164,25 @@ namespace MSBeverageRecordApp
 
             }
 
-        private void WriteTextToFile(string fileName, string text) {
+        //private void WriteTextToFile(string fileName, string text) {
 
-            if (File.Exists(fileName)) {
-                File.Delete(fileName);
-            }//end if
+        //    if (File.Exists(fileName)) {
+        //        File.Delete(fileName);
+        //    }//end if
 
-            FileStream outfile = new FileStream(fileName, FileMode.OpenOrCreate);
+        //    FileStream outfile = new FileStream(fileName, FileMode.OpenOrCreate);
 
 
-            char[] buffer = text.ToCharArray();
-            char currentChar = '\0';
-            byte writeData = 0;
+        //    char[] buffer = text.ToCharArray();
+        //    char currentChar = '\0';
+        //    byte writeData = 0;
 
-            for (int index = 0; index < buffer.Length; index += 1) {
-                currentChar = buffer[index];
-                writeData = (byte)currentChar;
-                outfile.WriteByte(writeData);
-            }//end for
-            outfile.Close();
-        }//end function
+        //    for (int index = 0; index < buffer.Length; index += 1) {
+        //        currentChar = buffer[index];
+        //        writeData = (byte)currentChar;
+        //        outfile.WriteByte(writeData);
+        //    }//end for
+        //    outfile.Close();
+        //}//end function
     }//end class
 }//end namespace
