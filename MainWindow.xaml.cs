@@ -85,7 +85,7 @@ namespace MSBeverageRecordApp
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/destinations");
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
@@ -100,7 +100,7 @@ namespace MSBeverageRecordApp
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
                 //CURRENTLY TRYING TO CHANGE OUR STRING TO OBJECT DATA VVV
                 RootObject deserializeObject = new RootObject();
-                deserializeObject.Items = JsonSerializer.Deserialize<List<Destination>>(dataobjects);
+                deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
 
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
@@ -186,25 +186,22 @@ namespace MSBeverageRecordApp
 
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
-
-
-        //  C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv
-
-        public class Destination {
-            public int id { get; set; }
-            public string location { get; set; }
-            public string name { get; set; }
-            public int days { get; set; }
-            public string hotspot { get; set; }
-            public int cost { get; set; }
-            public DateTime sDate { get; set; }
-            public DateTime eDate { get; set; }
+        public class Records {
+            public int record_id { get; set; }
+            public string categoryName { get; set; }
+            public string companyName { get; set; }
+            public string model { get; set; }
+            public string serial { get; set; }
+            public string purchase_date { get; set; }
+            public double cost { get; set; }
+            public string locationName { get; set; }
+            public string sub_location { get; set; }
         }//end class
          ////CALLING THIS AS PARENT OBJECT HOLDER THINGY 
         public class RootObject {
             public int id { get; set; }
             
-            public List <Destination> Items { get; set; }
+            public List <Records> Items { get; set; }
         }//end class
 
 
