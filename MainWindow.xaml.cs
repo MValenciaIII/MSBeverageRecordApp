@@ -22,13 +22,14 @@ using System.CodeDom.Compiler;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Windows.Forms;
+//using System.Windows.Forms;
+//using CSVLibraryAK;
+//using DGVToCSV;
 
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using CSVLibraryAK;
-using DGVToCSV;
 using System.Data;
+using System.Reflection;
 
 //using Newtonsoft.Json;
 //using Newtonsoft.Json.Linq;
@@ -104,27 +105,72 @@ namespace MSBeverageRecordApp
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
 
-                consoleOutput.Text = dataobjects.Length.ToString();
+
+
+                StringBuilder sb = new StringBuilder();
+                //array to hold each row of data
+                //headers
+                bool first = true;
+                string headerline = "id, location, name, days, hotspot, cost, sDate, eDate";
+                string[] rows = new string[deserializeObject.Items.Count + 1];
+                rows[0] = headerline + "\n";
+                //loop over list and set values of each row into an array
+                for (int i = 1; i < deserializeObject.Items.Count +1; i++) {
+                    //clear string on each iteration
+                    sb.Clear();
+                    //set headers as first row
+         
+                    //add values
+                    sb.Append(deserializeObject.Items[i-1].id.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].location.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].name.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].days.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].hotspot.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].cost.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].sDate.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].eDate.ToString() + "," + "\n");
+
+
+                    
+                    //assign current string value to be one row
+                    rows[i] = sb.ToString();    
+                    //test output
+                    consoleOutput.Text = rows[0];
+                }
+
+                //path to test csv file
+                string file = @"C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv";
+                int colCount = 0;
+                //loop over rows and append lines
+                for(int i = 0; i < rows.Length; i++) {
+                    colCount++; 
+                    System.IO.File.AppendAllText(file, rows[i]);
+                    if(colCount > 7) {
+                        System.IO.File.AppendAllText(file, "\n");
+                    }
+                }
+
+
                 //How to get data from dataobjects into data grid view
 
-                DataGridView dgv = new DataGridView();
-                //function to write csv
-                ExportHelper.Export(dgv);
+                //DataGridView dgv = new DataGridView();
+                ////function to write csv
+                //ExportHelper.Export(dgv);
 
 
                 // Initialization.
-                bool hasHeader = true;
-                string importFilePath = @"C:\\Users\\MCA\\source\\repos\\MSBeverageRecordApp\\test.csv";
-                string exportFilePath = @"C:\\Users\\MCA\\source\\repos\\MSBeverageRecordApp\\test.csv";
+                //bool hasHeader = true;
+                //string importFilePath = @"C:\\Users\\MCA\\source\\repos\\MSBeverageRecordApp\\test.csv";
+                //string exportFilePath = @"C:\\Users\\MCA\\source\\repos\\MSBeverageRecordApp\\test.csv";
 
-                
+
 
                 // Export CSV file.
                 //CSVLibraryAK.Export(exportFilePath, dataobjects.Length);
 
 
             }
-            
+
 
         }//end mainwindow
 
@@ -200,5 +246,6 @@ namespace MSBeverageRecordApp
         //    }//end for
         //    outfile.Close();
         //}//end function
+
     }//end class
 }//end namespace

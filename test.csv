@@ -1,1 +1,4 @@
-﻿
+﻿id, location, name, days, hotspot, cost, sDate, eDate
+1,florida,disney,7,y,10000,4/20/2023 5:00:00 AM,4/27/2023 5:00:00 AM,
+2,hawaii,honolulu,14,y,50000,6/10/2023 5:00:00 AM,6/24/2023 5:00:00 AM,
+3,biloxi,beau rivage,5,n,50,1/10/2023 6:00:00 AM,1/15/2023 6:00:00 AM,
