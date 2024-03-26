@@ -30,6 +30,7 @@ using System.Runtime.Serialization.Json;
 //sort filter team adding here
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections;
 
 //using Newtonsoft.Json;
 //using Newtonsoft.Json.Linq;
@@ -60,7 +61,11 @@ using System.Runtime.CompilerServices;
 //new list to keep track of filtered list to replace data grid when it's filtered
 
 
-
+//WANTS TO ASSIGN ITS OWN RECORD NUMBER
+//CREATE ONE DIGIT CATEGORY VIEW WITH NAME AND DESCRIPTION, DISPLAY/PRINT BY CATEGORY
+//CALCULATE TOTAL COST FUNCTION IN REPORTS
+//HE WANTS INQUIRIES BY CATEGORY OR LOCATION
+//TOTAL VALUE BY CATEGORY/MANUFACTURER
 
 
 namespace MSBeverageRecordApp
@@ -138,13 +143,33 @@ namespace MSBeverageRecordApp
             public DateTime startdate { get; set; }
             public DateTime enddate { get; set; }
         }//end class
-         ////CALLING THIS AS PARENT OBJECT HOLDER THINGY 
+
+
+        //private void Filter_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
+            //Destination selectedLocation = (Destination)(MSBeverageRecordApp.SelectedItem as ItemInfo).GetValue(null, null);
+
+            //Color selectedColor = (Color)(cmbColors.SelectedItem as PropertyInfo).GetValue(null, null);
+            //this.Background = new SolidColorBrush(selectedColor);
+
+            //cmbColors.ItemsSource = typeof(Colors).GetProperties();
+
+            //MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+        //}//end event
+
+
+        ////CALLING THIS AS PARENT OBJECT HOLDER THINGY 
         public class RootObject {
             public int id { get; set; }
             
             public List <Destination> Items { get; set; }
         }//end class
 
+        public class FilterList : CollectionBase {
+            public List<Destination> FilterLocations { get; set; }
+                //List <Destination> locations = new List <Destination>();
+                //locations.AddRange();
+                //return locations;
+        }
 
         private void addRecord(object sender, RoutedEventArgs e)
             {
