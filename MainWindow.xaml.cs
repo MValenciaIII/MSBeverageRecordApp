@@ -22,42 +22,17 @@ using System.CodeDom.Compiler;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-//using System.Windows.Forms;
-//using CSVLibraryAK;
-//using DGVToCSV;
-
+using System.Drawing;
+using System.Drawing.Printing;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Data;
 using System.Reflection;
 
-//using Newtonsoft.Json;
-//using Newtonsoft.Json.Linq;
-
-
-//ability to create update delete 
-
-
-//a filter button possibly
-//records is a coloumn
-
-//a category filter table
-
-
-//category
-//manufactuer
-//model
-//serial number
-//purchase date
-//cost
-//location
-//sublocation
-
-
 
 //TODO
-//a way to print/export a C# datagrid to a .pdf or .csv sheet?
-//new list to keep track of filtered list to replace data grid when it's filtered
+// export to csv on button click
 
 
 
@@ -72,6 +47,7 @@ namespace MSBeverageRecordApp
 
 
         //GLOBAL VARIABLE
+        string file = "";
         public class urlResult
         {
             public string[] results { get; set; }
@@ -105,13 +81,11 @@ namespace MSBeverageRecordApp
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
 
-
-
                 StringBuilder sb = new StringBuilder();
-                //array to hold each row of data
-                //headers
-                bool first = true;
-                string headerline = "id, location, name, days, hotspot, cost, sDate, eDate";
+
+
+                decimal totalCost = 0.0m;
+                string headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location";
                 string[] rows = new string[deserializeObject.Items.Count + 1];
                 rows[0] = headerline + "\n";
                 //loop over list and set values of each row into an array
@@ -119,70 +93,76 @@ namespace MSBeverageRecordApp
                     //clear string on each iteration
                     sb.Clear();
                     //set headers as first row
-         
+                    
                     //add values
-                    sb.Append(deserializeObject.Items[i-1].id.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].location.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].name.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].days.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].hotspot.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].record_id.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].categoryName.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].companyName.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].model.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].serial.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i-1].purchase_date.ToString() + ",");
                     sb.Append(deserializeObject.Items[i-1].cost.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].sDate.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].eDate.ToString() + "," + "\n");
-
-
+                    sb.Append(deserializeObject.Items[i-1].locationName.ToString() + ","); 
+                    sb.Append(deserializeObject.Items[i-1].sub_location.ToString() + "\n");
+                    //get total cost
+                    totalCost += (decimal)deserializeObject.Items[i - 1].cost;
                     
                     //assign current string value to be one row
                     rows[i] = sb.ToString();    
                     //test output
-                    consoleOutput.Text = rows[0];
                 }
+                    consoleOutput.Text = $"{totalCost:C}";
 
                 //path to test csv file
                 string file = @"C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv";
                 int colCount = 0;
-                //loop over rows and append lines
-                for(int i = 0; i < rows.Length; i++) {
-                    colCount++; 
-                    System.IO.File.AppendAllText(file, rows[i]);
-                    if(colCount > 7) {
-                        System.IO.File.AppendAllText(file, "\n");
-                    }
+                ////loop over rows and append lines
+                //for(int i = 0; i < rows.Length; i++) {
+                //    colCount++; 
+                //    System.IO.File.AppendAllText(file, rows[i]);
+                //    if(colCount > 7) {
+                //        System.IO.File.AppendAllText(file, "\n");
+                //    }
+                //}
+
+                Saving(file, rows, colCount);
+
+            }//end if statusOK
+
+
+        }//end main
+
+        // use on button click, open save dialog and use path name as file to write to
+
+////////            MSBeverageRecordApp//
+
+            //PrintDG print = new Print();
+            //print.printDG(MSBeverageRecordApp, "Title"); 
+
+        public void Saving(string filePath, string[] array, int count) {
+
+            //loop over rows and append lines
+            for (int i = 0; i < array.Length; i++) {
+                count++;
+                System.IO.File.AppendAllText(file, array[i]);
+                if (count > 7) {
+                    System.IO.File.AppendAllText(file, "\n");
                 }
-
-
-                //How to get data from dataobjects into data grid view
-
-                //DataGridView dgv = new DataGridView();
-                ////function to write csv
-                //ExportHelper.Export(dgv);
-
-
-                // Initialization.
-                //bool hasHeader = true;
-                //string importFilePath = @"C:\\Users\\MCA\\source\\repos\\MSBeverageRecordApp\\test.csv";
-                //string exportFilePath = @"C:\\Users\\MCA\\source\\repos\\MSBeverageRecordApp\\test.csv";
-
-
-
-                // Export CSV file.
-                //CSVLibraryAK.Export(exportFilePath, dataobjects.Length);
-
-
             }
+        }//end function
+            
+        private void muiSave_Click_1(object sender, RoutedEventArgs e, string filePath, string[] array, int count) {
+            //create a save file dialog object
+            SaveFileDialog sfdSave = new SaveFileDialog();
+            file = sfdSave.FileName;
+            //open th edialog and wait for the user to make a selection
+            bool fileSelected = (bool)sfdSave.ShowDialog();
+            if (fileSelected == true) {
 
 
-        }//end mainwindow
 
-        //private void muiSave_Click(object sender, RoutedEventArgs e) {
-        //    //create a save file dialog object
-        //    SaveFileDialog sfdSave = new SaveFileDialog();
-        //    //open th edialog and wait for the user to make a selection
-        //    bool fileSelected = (bool)sfdSave.ShowDialog();
-        //    if (fileSelected == true) {
-        //        WriteTextToFile(sfdSave.FileName, txtMain.Text);
-        //    }//end if
-        //}//end event
+            }//end if
+        }
 
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
@@ -205,14 +185,27 @@ namespace MSBeverageRecordApp
         }//end class
 
 
-        private void addRecord(object sender, RoutedEventArgs e)
-            {
-                //MSBeverageRecordApp.Visibility = Visibility.Hidden;
-                CreateRecord window = new CreateRecord();
+        private void addRecord(object sender, RoutedEventArgs e) {
+            //MSBeverageRecordApp.Visibility = Visibility.Hidden;
+            CreateRecord window = new CreateRecord();
 
-                window.Show();
+            window.Show();
         }//end function
         //waldo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             static async Task TestAPI(HttpClient client)
             {
 
@@ -222,27 +215,6 @@ namespace MSBeverageRecordApp
             {
 
             }
-
-        //private void WriteTextToFile(string fileName, string text) {
-
-        //    if (File.Exists(fileName)) {
-        //        File.Delete(fileName);
-        //    }//end if
-
-        //    FileStream outfile = new FileStream(fileName, FileMode.OpenOrCreate);
-
-
-        //    char[] buffer = text.ToCharArray();
-        //    char currentChar = '\0';
-        //    byte writeData = 0;
-
-        //    for (int index = 0; index < buffer.Length; index += 1) {
-        //        currentChar = buffer[index];
-        //        writeData = (byte)currentChar;
-        //        outfile.WriteByte(writeData);
-        //    }//end for
-        //    outfile.Close();
-        //}//end function
 
     }//end class
 }//end namespace
