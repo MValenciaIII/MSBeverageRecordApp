@@ -80,7 +80,7 @@ namespace MSBeverageRecordApp
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/destinations");
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
@@ -95,7 +95,7 @@ namespace MSBeverageRecordApp
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
                 //CURRENTLY TRYING TO CHANGE OUR STRING TO OBJECT DATA VVV
                 RootObject deserializeObject = new RootObject();
-                deserializeObject.Items = JsonSerializer.Deserialize<List<Destination>>(dataobjects);
+                deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
 
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
@@ -106,33 +106,34 @@ namespace MSBeverageRecordApp
 
         }//end mainwindow
 
-        private void muiSave_Click(object sender, RoutedEventArgs e) {
-            //create a save file dialog object
-            SaveFileDialog sfdSave = new SaveFileDialog();
-            //open th edialog and wait for the user to make a selection
-            bool fileSelected = (bool)sfdSave.ShowDialog();
-            if (fileSelected == true) {
-                WriteTextToFile(sfdSave.FileName, txtMain.Text);
-            }//end if
-        }//end event
+        //private void muiSave_Click(object sender, RoutedEventArgs e) {
+        //    //create a save file dialog object
+        //    SaveFileDialog sfdSave = new SaveFileDialog();
+        //    //open th edialog and wait for the user to make a selection
+        //    bool fileSelected = (bool)sfdSave.ShowDialog();
+        //    if (fileSelected == true) {
+        //        WriteTextToFile(sfdSave.FileName, txtMain.Text);
+        //    }//end if
+        //}//end event
 
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
-        public class Destination {
-            public int id { get; set; }
-            public string location { get; set; }
-            public string name { get; set; }
-            public int lengthofstay { get; set; }
-            public int hotspot { get; set; }
-            public int cost { get; set; }
-            public DateTime startdate { get; set; }
-            public DateTime enddate { get; set; }
+        public class Records {
+            public int record_id { get; set; }
+            public string categoryName { get; set; }
+            public string companyName { get; set; }
+            public string model { get; set; }
+            public string serial { get; set; }
+            public string purchase_date { get; set; }
+            public double cost { get; set; }
+            public string locationName { get; set; }
+            public string sub_location { get; set; }
         }//end class
          ////CALLING THIS AS PARENT OBJECT HOLDER THINGY 
         public class RootObject {
             public int id { get; set; }
             
-            public List <Destination> Items { get; set; }
+            public List <Records> Items { get; set; }
         }//end class
 
 
@@ -154,25 +155,25 @@ namespace MSBeverageRecordApp
 
             }
 
-        private void WriteTextToFile(string fileName, string text) {
+        //private void WriteTextToFile(string fileName, string text) {
 
-            if (File.Exists(fileName)) {
-                File.Delete(fileName);
-            }//end if
+        //    if (File.Exists(fileName)) {
+        //        File.Delete(fileName);
+        //    }//end if
 
-            FileStream outfile = new FileStream(fileName, FileMode.OpenOrCreate);
+        //    FileStream outfile = new FileStream(fileName, FileMode.OpenOrCreate);
 
 
-            char[] buffer = text.ToCharArray();
-            char currentChar = '\0';
-            byte writeData = 0;
+        //    char[] buffer = text.ToCharArray();
+        //    char currentChar = '\0';
+        //    byte writeData = 0;
 
-            for (int index = 0; index < buffer.Length; index += 1) {
-                currentChar = buffer[index];
-                writeData = (byte)currentChar;
-                outfile.WriteByte(writeData);
-            }//end for
-            outfile.Close();
-        }//end function
+        //    for (int index = 0; index < buffer.Length; index += 1) {
+        //        currentChar = buffer[index];
+        //        writeData = (byte)currentChar;
+        //        outfile.WriteByte(writeData);
+        //    }//end for
+        //    outfile.Close();
+        //}//end function
     }//end class
 }//end namespace
