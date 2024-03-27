@@ -31,6 +31,8 @@ using System.Runtime.Serialization.Json;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections;
+using System.Runtime.InteropServices;
+using System.Security.Policy;
 
 //using Newtonsoft.Json;
 //using Newtonsoft.Json.Linq;
@@ -40,13 +42,13 @@ using System.Collections;
 
 
 //a filter button possibly
-//records is a coloumn
+//records is a column
 
 //a category filter table
 
 
 //category
-//manufactuer
+//manufacturer
 //model
 //serial number
 //purchase date
@@ -76,6 +78,7 @@ namespace MSBeverageRecordApp
     public partial class MainWindow : Window {
 
         //GLOBAL VARIABLE
+        RootObject deserializeObject = new RootObject();
         public class urlResult
         {
             public string[] results { get; set; }
@@ -149,7 +152,6 @@ namespace MSBeverageRecordApp
             //Destination selectedLocation = (Destination)(MSBeverageRecordApp.SelectedItem as ItemInfo).GetValue(null, null);
 
             //Color selectedColor = (Color)(cmbColors.SelectedItem as PropertyInfo).GetValue(null, null);
-            //this.Background = new SolidColorBrush(selectedColor);
 
             //cmbColors.ItemsSource = typeof(Colors).GetProperties();
 
@@ -164,13 +166,25 @@ namespace MSBeverageRecordApp
             public List <Destination> Items { get; set; }
         }//end class
 
-        public class FilterList : CollectionBase {
-            public List<Destination> FilterLocations { get; set; }
-                //List <Destination> locations = new List <Destination>();
-                //locations.AddRange();
-                //return locations;
-        }
+        public static List<Destination> FilterHotspotDestinations(List<Destination> destinations, ComboBox filter) {
 
+            if (filter.SelectedItem.ToString() != "all locations") {
+
+                return destinations.FindAll(destination => destination.location == filter.SelectedItem);
+
+            } else {
+
+                return destinations;
+
+            }
+
+        }//end
+        public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            consoleOutput.Text = $"{Filter.SelectedItem}";
+            var destination = deserializeObject.Items;
+            MSBeverageRecordApp.ItemsSource = FilterHotspotDestinations(destination, Filter);
+
+        }
         private void addRecord(object sender, RoutedEventArgs e)
             {
                 //MSBeverageRecordApp.Visibility = Visibility.Hidden;
@@ -178,7 +192,6 @@ namespace MSBeverageRecordApp
 
                 window.Show();
         }//end function
-        //waldo
             static async Task TestAPI(HttpClient client)
             {
 
