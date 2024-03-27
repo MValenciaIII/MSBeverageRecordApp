@@ -1,3 +1,4 @@
+﻿
 ﻿using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,8 +39,7 @@ using System.Reflection;
 
 
 
-namespace MSBeverageRecordApp
-{
+namespace MSBeverageRecordApp {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -48,14 +48,14 @@ namespace MSBeverageRecordApp
 
         //GLOBAL VARIABLE
         string file = "";
-        public class urlResult
-        {
+        string[] rows = new string[1];
+        int colCount = 0;
+        public class urlResult {
             public string[] results { get; set; }
         }
 
-        public MainWindow()
-        {
-            
+        public MainWindow() {
+
             InitializeComponent();
 
             //SETTING UP NEW instance of a type of data
@@ -68,8 +68,7 @@ namespace MSBeverageRecordApp
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
             var response = client.GetAsync(client.BaseAddress).Result;
             //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
-            if (response.IsSuccessStatusCode)
-            {
+            if (response.IsSuccessStatusCode) {
 
 
                 ////CONVERTING OBJECT "response" variable DATA TO STRING 
@@ -86,36 +85,39 @@ namespace MSBeverageRecordApp
 
                 decimal totalCost = 0.0m;
                 string headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location";
-                string[] rows = new string[deserializeObject.Items.Count + 1];
+                string[] cols = headerline.Split(',');
+                colCount = cols.Length;
+                rows = new string[deserializeObject.Items.Count + 2];
                 rows[0] = headerline + "\n";
                 //loop over list and set values of each row into an array
-                for (int i = 1; i < deserializeObject.Items.Count +1; i++) {
+                for (int i = 1; i < deserializeObject.Items.Count + 1; i++) {
                     //clear string on each iteration
                     sb.Clear();
                     //set headers as first row
-                    
+
                     //add values
-                    sb.Append(deserializeObject.Items[i-1].record_id.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].categoryName.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].companyName.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].model.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].serial.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].purchase_date.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].cost.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i-1].locationName.ToString() + ","); 
-                    sb.Append(deserializeObject.Items[i-1].sub_location.ToString() + "\n");
+                    sb.Append(deserializeObject.Items[i - 1].record_id.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i - 1].categoryName.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i - 1].companyName.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i - 1].model.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i - 1].serial.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i - 1].purchase_date.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i - 1].cost.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i - 1].locationName.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i - 1].sub_location.ToString() + "\n");
                     //get total cost
                     totalCost += (decimal)deserializeObject.Items[i - 1].cost;
-                    
+
                     //assign current string value to be one row
-                    rows[i] = sb.ToString();    
+                    rows[i] = sb.ToString();
                     //test output
                 }
-                    consoleOutput.Text = $"{totalCost:C}";
-
+                consoleOutput.Text = $"{totalCost:C}";
+                sb.Append(totalCost.ToString());
+                rows[deserializeObject.Items.Count +2] = sb.ToString();
                 //path to test csv file
-                string file = @"C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv";
-                int colCount = 0;
+                //string file = @"C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv";
+                //int colCount = 0;
                 ////loop over rows and append lines
                 //for(int i = 0; i < rows.Length; i++) {
                 //    colCount++; 
@@ -125,7 +127,7 @@ namespace MSBeverageRecordApp
                 //    }
                 //}
 
-                Saving(file, rows, colCount);
+                
 
             }//end if statusOK
 
@@ -134,32 +136,35 @@ namespace MSBeverageRecordApp
 
         // use on button click, open save dialog and use path name as file to write to
 
-////////            MSBeverageRecordApp//
+        ////////            MSBeverageRecordApp//
 
-            //PrintDG print = new Print();
-            //print.printDG(MSBeverageRecordApp, "Title"); 
+        //PrintDG print = new Print();
+        //print.printDG(MSBeverageRecordApp, "Title"); 
 
-        public void Saving(string filePath, string[] array, int count) {
+        public void Saving(string filePath, string[] array, int num) {
+            //VARIABLE
+            int count = 0;
 
             //loop over rows and append lines
             for (int i = 0; i < array.Length; i++) {
                 count++;
                 System.IO.File.AppendAllText(file, array[i]);
-                if (count > 7) {
+                if (count > num) {
                     System.IO.File.AppendAllText(file, "\n");
                 }
-            }
+            }//end for
+
         }//end function
-            
-        private void muiSave_Click_1(object sender, RoutedEventArgs e, string filePath, string[] array, int count) {
+
+        private void muiSave_Click_1(object sender, RoutedEventArgs e) {
             //create a save file dialog object
             SaveFileDialog sfdSave = new SaveFileDialog();
-            file = sfdSave.FileName;
             //open th edialog and wait for the user to make a selection
             bool fileSelected = (bool)sfdSave.ShowDialog();
+            file = sfdSave.FileName;
             if (fileSelected == true) {
 
-
+                Saving(file, rows, colCount);
 
             }//end if
         }
@@ -180,8 +185,8 @@ namespace MSBeverageRecordApp
          ////CALLING THIS AS PARENT OBJECT HOLDER THINGY 
         public class RootObject {
             public int id { get; set; }
-            
-            public List <Records> Items { get; set; }
+
+            public List<Records> Items { get; set; }
         }//end class
 
 
@@ -191,7 +196,7 @@ namespace MSBeverageRecordApp
 
             window.Show();
         }//end function
-        //waldo
+         //waldo
 
 
 
@@ -206,15 +211,13 @@ namespace MSBeverageRecordApp
 
 
 
-            static async Task TestAPI(HttpClient client)
-            {
+        static async Task TestAPI(HttpClient client) {
 
-            }
+        }
 
-            private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-            {
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e) {
 
-            }
+        }
 
     }//end class
 }//end namespace
