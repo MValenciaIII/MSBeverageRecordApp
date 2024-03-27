@@ -25,7 +25,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.IO;
+
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Data;
@@ -87,10 +87,10 @@ namespace MSBeverageRecordApp {
                 string headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location";
                 string[] cols = headerline.Split(',');
                 colCount = cols.Length;
-                rows = new string[deserializeObject.Items.Count + 2];
+                rows = new string[deserializeObject.Items.Count + 3];
                 rows[0] = headerline + "\n";
                 //loop over list and set values of each row into an array
-                for (int i = 1; i < deserializeObject.Items.Count + 1; i++) {
+                for (int i = 1; i <= deserializeObject.Items.Count; i++) {
                     //clear string on each iteration
                     sb.Clear();
                     //set headers as first row
@@ -109,37 +109,24 @@ namespace MSBeverageRecordApp {
                     totalCost += (decimal)deserializeObject.Items[i - 1].cost;
 
                     //assign current string value to be one row
+
+                    //remove trailing comma on last row
+                    if (i == deserializeObject.Items.Count) {
+                        sb.Remove(sb.Length-2,1);    
+                    }
                     rows[i] = sb.ToString();
                     //test output
                 }
                 consoleOutput.Text = $"{totalCost:C}";
-                sb.Append(totalCost.ToString());
-                rows[deserializeObject.Items.Count +2] = sb.ToString();
-                //path to test csv file
-                //string file = @"C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv";
-                //int colCount = 0;
-                ////loop over rows and append lines
-                //for(int i = 0; i < rows.Length; i++) {
-                //    colCount++; 
-                //    System.IO.File.AppendAllText(file, rows[i]);
-                //    if(colCount > 7) {
-                //        System.IO.File.AppendAllText(file, "\n");
-                //    }
-                //}
-
+                sb.Clear();
+                 
+                sb.Append("\ntotal equipment cost: " + totalCost.ToString());
                 
+                rows[deserializeObject.Items.Count +1] = sb.ToString();  
 
             }//end if statusOK
 
-
         }//end main
-
-        // use on button click, open save dialog and use path name as file to write to
-
-        ////////            MSBeverageRecordApp//
-
-        //PrintDG print = new Print();
-        //print.printDG(MSBeverageRecordApp, "Title"); 
 
         public void Saving(string filePath, string[] array, int num) {
             //VARIABLE
@@ -156,7 +143,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
-        private void muiSave_Click_1(object sender, RoutedEventArgs e) {
+        private void muiSave_Click(object sender, RoutedEventArgs e) {
             //create a save file dialog object
             SaveFileDialog sfdSave = new SaveFileDialog();
             //open th edialog and wait for the user to make a selection
