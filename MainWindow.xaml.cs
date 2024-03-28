@@ -46,23 +46,6 @@ using System.Security.Policy;
 
 //a category filter table
 
-
-//category
-//manufacturer
-//model
-//serial number
-//purchase date
-//cost
-//location
-//sublocation
-
-
-
-//TODO
-//a way to print/export a C# datagrid to a .pdf or .csv sheet?
-//new list to keep track of filtered list to replace data grid when it's filtered
-
-
 //WANTS TO ASSIGN ITS OWN RECORD NUMBER
 //CREATE ONE DIGIT CATEGORY VIEW WITH NAME AND DESCRIPTION, DISPLAY/PRINT BY CATEGORY
 //CALCULATE TOTAL COST FUNCTION IN REPORTS
@@ -97,7 +80,7 @@ namespace MSBeverageRecordApp
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4000/api/destinations");
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
@@ -111,7 +94,7 @@ namespace MSBeverageRecordApp
                 ////CONVERTING OBJECT "response" variable DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
                 //CURRENTLY TRYING TO CHANGE OUR STRING TO OBJECT DATA VVV
-                deserializeObject.Items = JsonSerializer.Deserialize<List<Destination>>(dataobjects);
+                deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
@@ -126,7 +109,7 @@ namespace MSBeverageRecordApp
         private void muiSave_Click(object sender, RoutedEventArgs e) {
             //create a save file dialog object
             SaveFileDialog sfdSave = new SaveFileDialog();
-            //open th edialog and wait for the user to make a selection
+            //open the dialog and wait for the user to make a selection
             bool fileSelected = (bool)sfdSave.ShowDialog();
             //if (fileSelected == true) {
             //    WriteTextToFile(sfdSave.FileName, txtMain.Text);
@@ -135,65 +118,55 @@ namespace MSBeverageRecordApp
 
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
-        public class Destination {
-            public int id { get; set; }
-            public string location { get; set; }
-            public string name { get; set; }
-            public int lengthofstay { get; set; }
-            public string hotspot { get; set; }//change back to int
-            public int cost { get; set; }
-            public DateTime startdate { get; set; }
-            public DateTime enddate { get; set; }
+        public class Records {
+            public int record_id { get; set; }
+            public string categoryName { get; set; }
+            public string companyName { get; set; }
+            public string model { get; set; }
+            public string serial { get; set; }
+            public DateTime purchase_date { get; set; }
+            public decimal cost { get; set; }
+            public string locationName { get; set; }
+            public string sub_location { get; set; }
+
         }//end class
 
-
-        //private void Filter_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
-            //Destination selectedLocation = (Destination)(MSBeverageRecordApp.SelectedItem as ItemInfo).GetValue(null, null);
-
-            //Color selectedColor = (Color)(cmbColors.SelectedItem as PropertyInfo).GetValue(null, null);
-
-            //cmbColors.ItemsSource = typeof(Colors).GetProperties();
-
-            //MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
-        //}//end event
-
-
-        ////CALLING THIS AS PARENT OBJECT HOLDER THINGY 
+        ////CALLING THIS AS PARENT OBJECT HOLDER 
         public class RootObject {
             public int id { get; set; }
             
-            public List <Destination> Items { get; set; }
+            public List <Records> Items { get; set; }
         }//end class
 
-        public static List<Destination> FilterHotspotDestinations(List<Destination> destinations, ComboBox filter) {
+        public static List<Records> FilterHotspotRecords(List<Records> records, ComboBox filter) {
 
-            if (filter.SelectedItem.ToString() != "all locations") {
+            if (filter.SelectedItem.ToString() != "all categories") {
 
-                return destinations.FindAll(destination => destination.location == filter.SelectedItem);
+                return records.FindAll(record => record.categoryName == filter.SelectedItem);
 
             } else {
 
-                return destinations;
+                return records;
 
             }
 
         }//end
         public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            var destination = deserializeObject.Items;
-            MSBeverageRecordApp.ItemsSource = FilterHotspotDestinations(destination, Filter);
+            var record = deserializeObject.Items;
+            MSBeverageRecordApp.ItemsSource = FilterHotspotRecords(record, Filter);
 
-        }
+        }//end function
         private void CreateLocationFilterItems(RootObject list) {
 
             bool contains = false;
 
-            Filter.Items.Add("All Locations");
+            Filter.Items.Add("All Categories");
 
             for (int index = 0; index < list.Items.Count; index++) {
 
                 for (int itemIndex = 0; itemIndex < Filter.Items.Count; itemIndex++)
 
-                    if (Filter.Items[itemIndex].ToString() == list.Items[index].location) {
+                    if (Filter.Items[itemIndex].ToString() == list.Items[index].categoryName) {
 
                         contains = true;
 
@@ -203,7 +176,7 @@ namespace MSBeverageRecordApp
 
                 if (contains == false) {
 
-                    Filter.Items.Add(list.Items[index].location);
+                    Filter.Items.Add(list.Items[index].categoryName);
 
                 }
 
