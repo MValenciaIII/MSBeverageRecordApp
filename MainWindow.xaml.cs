@@ -115,7 +115,7 @@ namespace MSBeverageRecordApp
                 
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
-
+                CreateLocationFilterItems(deserializeObject);
 
 
             }
@@ -202,6 +202,37 @@ namespace MSBeverageRecordApp
             var destination = deserializeObject.Items;
             //Shows data on datagrid when selected filter is changed
             MSBeverageRecordApp.ItemsSource = FilterHotspotDestinations(destination, Filter);
+
+        }
+private void CreateLocationFilterItems(RootObject list) {
+
+            bool contains = false;
+
+            Filter.Items.Add("All Locations");
+
+            for (int index = 0; index < list.Items.Count; index++) {
+
+                for (int itemIndex = 0; itemIndex < Filter.Items.Count; itemIndex++)
+
+                    if (Filter.Items[itemIndex].ToString() == list.Items[index].location) {
+
+                        contains = true;
+
+                    }
+
+                //txtMain.Text += " " + item.Content;
+
+                if (contains == false) {
+
+                    Filter.Items.Add(list.Items[index].location);
+
+                }
+
+            }
+
+            //for (int index = 0; index < list.Count; index++) {
+
+            //}
 
         }
         private void addRecord(object sender, RoutedEventArgs e)
