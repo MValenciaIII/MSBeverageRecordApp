@@ -33,10 +33,43 @@ using System.Xml.Linq;
 //TODO
 //modify/update data grid 
 //
-namespace MSBeverageRecordApp {
+using System.Collections.ObjectModel;
+
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+
+//sort filter team adding here
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Collections;
+using System.Runtime.InteropServices;
+using System.Security.Policy;
+
+//using Newtonsoft.Json;
+//using Newtonsoft.Json.Linq;
+
+
+//ability to create update delete 
+
+
+//a filter button possibly
+//records is a column
+
+//a category filter table
+
+//WANTS TO ASSIGN ITS OWN RECORD NUMBER
+//CREATE ONE DIGIT CATEGORY VIEW WITH NAME AND DESCRIPTION, DISPLAY/PRINT BY CATEGORY
+//CALCULATE TOTAL COST FUNCTION IN REPORTS
+//HE WANTS INQUIRIES BY CATEGORY OR LOCATION
+//TOTAL VALUE BY CATEGORY/MANUFACTURER
+
+
+namespace MSBeverageRecordApp
+{
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+     
     public partial class MainWindow : Window {
 
         //GLOBAL VARIABLE
@@ -47,6 +80,12 @@ namespace MSBeverageRecordApp {
             public string[] results { get; set; }
         }
         public MainWindow() {
+        RootObject deserializeObject = new RootObject();
+
+        public class urlResult
+        {
+            public string[] results { get; set; }
+        }//end class
 
             InitializeComponent();
 
@@ -65,10 +104,11 @@ namespace MSBeverageRecordApp {
                 ////CONVERTING OBJECT "response" variable DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
                 //CURRENTLY TRYING TO CHANGE OUR STRING TO OBJECT DATA VVV
-                RootObject deserializeObject = new RootObject();
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
+                
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+                CreateLocationFilterItems(deserializeObject);
 
                 #region CSV
                 //vars to hold rows, cost, headers, col count
@@ -158,22 +198,103 @@ namespace MSBeverageRecordApp {
             public string companyName { get; set; }
             public string model { get; set; }
             public string serial { get; set; }
-            public string purchase_date { get; set; }
-            public double cost { get; set; }
+            public DateTime purchase_date { get; set; }
+            public decimal cost { get; set; }
             public string locationName { get; set; }
             public string sub_location { get; set; }
+
         }//end class
-         ////CALLING THIS AS PARENT OBJECT HOLDER THINGY 
+
+        //CALLING THIS AS PARENT OBJECT HOLDER 
         public class RootObject {
             public int id { get; set; }
-
-            public List<Records> Items { get; set; }
+            
+            public List <Records> Items { get; set; }
         }//end class
-        private void addRecord(object sender, RoutedEventArgs e) {
+
+        public static List<Records> FilterHotspotRecords(List<Records> records, ComboBox filter) {
+
+            if (filter.SelectedItem.ToString() != "All Categories") {
+
+                return records.FindAll(record => record.categoryName == filter.SelectedItem);
+
+            } else {
+
+                return records;
+
+            }//end if
+
+        }//end function
+
+        public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var record = deserializeObject.Items;
+            MSBeverageRecordApp.ItemsSource = FilterHotspotRecords(record, Filter);
+
+        }//end function
+
+        private void CreateLocationFilterItems(RootObject list) {
+
+            bool contains = false;
+
+            Filter.Items.Add("All Categories");
+
+            for (int index = 0; index < list.Items.Count; index++) {
+
+                for (int itemIndex = 0; itemIndex < Filter.Items.Count; itemIndex++)
+
+                    if (Filter.Items[itemIndex].ToString() == list.Items[index].categoryName) {
+
+                        contains = true;
+
+                    }//end if
+
+                if (contains == false) {
+
+                    Filter.Items.Add(list.Items[index].categoryName);
+
+                }//end if
+
+            }//end for
+
+        }//end for
+
+        private void addRecord(object sender, RoutedEventArgs e)
+        {
             //MSBeverageRecordApp.Visibility = Visibility.Hidden;
             CreateRecord window = new CreateRecord();
+
             window.Show();
-            //waldo
         }//end function
+
+        static async Task TestAPI(HttpClient client)
+        {
+
+        }//end function
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }//end function
+
+        //private void WriteTextToFile(string fileName, string text) {
+
+        //    if (File.Exists(fileName)) {
+        //        File.Delete(fileName);
+        //    }//end if
+
+        //    FileStream outfile = new FileStream(fileName, FileMode.OpenOrCreate);
+
+
+        //    char[] buffer = text.ToCharArray();
+        //    char currentChar = '\0';
+        //    byte writeData = 0;
+
+        //    for (int index = 0; index < buffer.Length; index += 1) {
+        //        currentChar = buffer[index];
+        //        writeData = (byte)currentChar;
+        //        outfile.WriteByte(writeData);
+        //    }//end for
+        //    outfile.Close();
+        //}//end function
     }//end class
 }//end namespace
