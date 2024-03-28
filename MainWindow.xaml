@@ -23,7 +23,7 @@
         <TextBox x:Name="consoleOutput" HorizontalAlignment="Left" Margin="182,296,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
 
         <ComboBox x:Name="Filter" Margin="51,56,609,337">
-            <ComboBoxItem Content="all locations" IsSelected="True">
+            <ComboBoxItem Content="all locations" >
             </ComboBoxItem>
         </ComboBox>
     </Grid>

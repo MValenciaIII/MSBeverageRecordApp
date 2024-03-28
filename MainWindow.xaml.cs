@@ -111,7 +111,6 @@ namespace MSBeverageRecordApp
                 ////CONVERTING OBJECT "response" variable DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
                 //CURRENTLY TRYING TO CHANGE OUR STRING TO OBJECT DATA VVV
-                RootObject deserializeObject = new RootObject();
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Destination>>(dataobjects);
                 
                 //How to set the query data to the DATAGRID element.
@@ -180,7 +179,6 @@ namespace MSBeverageRecordApp
 
         }//end
         public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            consoleOutput.Text = $"{Filter.SelectedItem}";
             var destination = deserializeObject.Items;
             MSBeverageRecordApp.ItemsSource = FilterHotspotDestinations(destination, Filter);
 
