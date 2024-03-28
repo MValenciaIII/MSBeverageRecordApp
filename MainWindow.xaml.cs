@@ -43,6 +43,8 @@ namespace MSBeverageRecordApp {
         string file = "";
         string[] rows = new string[1];
         int colCount = 0;
+        RootObject deserializeObject = new RootObject();
+
         public class urlResult {
             public string[] results { get; set; }
         }
@@ -65,13 +67,41 @@ namespace MSBeverageRecordApp {
                 ////CONVERTING OBJECT "response" variable DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
                 //CURRENTLY TRYING TO CHANGE OUR STRING TO OBJECT DATA VVV
-                RootObject deserializeObject = new RootObject();
+                
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
 
+            }//end if statusOK
+        }//end main
+
+        public void Saving(string filePath, string[] array, int num) {
+
+            //VARIABLE
+            int count = 0;
+            //loop over rows and append lines
+            for (int i = 0; i < array.Length; i++) {
+                count++;
+                System.IO.File.AppendAllText(file, array[i]);
+                if (count > num) {
+                    //start new line after printing each cell in a row
+                    System.IO.File.AppendAllText(file, "\n");
+                }
+                
+            }//end for
+        }//end function
+        private void muiSave_Click(object sender, RoutedEventArgs e) {
+            //create a save file dialog object
+            SaveFileDialog sfdSave = new SaveFileDialog();
+            //open the dialog and wait for the user to make a selection
+            sfdSave.DefaultExt = "csv";
+            sfdSave.Filter =
+                "Text files (*.csv)|*.txt|All files (*.*)|*.*";
+            bool fileSelected = (bool)sfdSave.ShowDialog();
+            file = sfdSave.FileName;
+            if (fileSelected == true) {
+
                 #region CSV
-                //vars to hold rows, cost, headers, col count
                 StringBuilder sb = new StringBuilder();
                 decimal totalCost = 0.0m;
                 string headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location, ";
@@ -107,10 +137,10 @@ namespace MSBeverageRecordApp {
                 consoleOutput.Text = $"{totalCost:C}";
                 sb.Clear();
                 sb.Append("\ntotal equipment cost: " + totalCost.ToString());
-                rows[deserializeObject.Items.Count + 1] = sb.ToString();
-            }//end if statusOK
-        }//end main
+                rows[deserializeObject.Items.Count + 1] = sb.ToString(); 
+                #endregion
 
+<<<<<<< Updated upstream
         public void Saving(string filePath, string[] array, int num) {
 
             //VARIABLE
@@ -138,16 +168,13 @@ namespace MSBeverageRecordApp {
             bool fileSelected = (bool)sfdSave.ShowDialog();
             file = sfdSave.FileName;
             if (fileSelected == true) {
+=======
+>>>>>>> Stashed changes
                 Saving(file, rows, colCount);
                 
             }//end if
         }
-        #endregion
-
-
-
-
-
+        
 
 
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
@@ -175,5 +202,13 @@ namespace MSBeverageRecordApp {
             window.Show();
             //waldo
         }//end function
+
+        private void MSBeverageRecordApp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e) {
+
+            if(e.EditAction == DataGridEditAction.Commit) {
+                
+            }
+        }
+
     }//end class
 }//end namespace
