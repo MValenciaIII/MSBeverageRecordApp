@@ -69,23 +69,21 @@ namespace MSBeverageRecordApp
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-     
+
     public partial class MainWindow : Window {
 
         //GLOBAL VARIABLE
         string file = "";
         string[] rows = new string[1];
         int colCount = 0;
-        public class urlResult {
-            public string[] results { get; set; }
-        }
-        public MainWindow() {
         RootObject deserializeObject = new RootObject();
 
         public class urlResult
         {
             public string[] results { get; set; }
         }//end class
+
+        public MainWindow() {
 
             InitializeComponent();
 
@@ -95,7 +93,7 @@ namespace MSBeverageRecordApp
             client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(
-               new MediaTypeWithQualityHeaderValue("application/json"));
+                       new MediaTypeWithQualityHeaderValue("application/json"));
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
             var response = client.GetAsync(client.BaseAddress).Result;
 
@@ -105,51 +103,53 @@ namespace MSBeverageRecordApp
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
                 //CURRENTLY TRYING TO CHANGE OUR STRING TO OBJECT DATA VVV
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
-                
+
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
                 CreateLocationFilterItems(deserializeObject);
 
-                #region CSV
-                //vars to hold rows, cost, headers, col count
-                StringBuilder sb = new StringBuilder();
-                decimal totalCost = 0.0m;
-                string headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location, ";
-                string[] cols = headerline.Split(',');
-                colCount = cols.Length;
-                rows = new string[deserializeObject.Items.Count + 3];
-                //set headers as first row
-                rows[0] = headerline + "\n";
-                //loop over list and set values of each row into an array
-                for (int i = 1; i <= deserializeObject.Items.Count; i++) {
-                    //clear string on each iteration
-                    sb.Clear();
-                    //add values
-                    sb.Append(deserializeObject.Items[i - 1].record_id.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i - 1].categoryName.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i - 1].companyName.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i - 1].model.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i - 1].serial.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i - 1].purchase_date.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i - 1].cost.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i - 1].locationName.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i - 1].sub_location.ToString() + "\n");
-                    //get total cost
-                    totalCost += (decimal)deserializeObject.Items[i - 1].cost;
-                    //remove trailing comma on last row
-                    if (i == deserializeObject.Items.Count) {
-                        sb.Remove(sb.Length - 2, 1);
-                    }
-                    //assign current string value to be one row
-                    rows[i] = sb.ToString();
-                }
+            }
 
-                consoleOutput.Text = $"{totalCost:C}";
-                sb.Clear();
-                sb.Append("\ntotal equipment cost: " + totalCost.ToString());
-                rows[deserializeObject.Items.Count + 1] = sb.ToString();
-            }//end if statusOK
-        }//end main
+            //    #region CSV
+            //    //vars to hold rows, cost, headers, col count
+            //    StringBuilder sb = new StringBuilder();
+            //    decimal totalCost = 0.0m;
+            //    string headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location, ";
+            //    string[] cols = headerline.Split(',');
+            //    colCount = cols.Length;
+            //    rows = new string[deserializeObject.Items.Count + 3];
+            //    //set headers as first row
+            //    rows[0] = headerline + "\n";
+            //    //loop over list and set values of each row into an array
+            //    for (int i = 1; i <= deserializeObject.Items.Count; i++) {
+            //        //clear string on each iteration
+            //        sb.Clear();
+            //        //add values
+            //        sb.Append(deserializeObject.Items[i - 1].record_id.ToString() + ",");
+            //        sb.Append(deserializeObject.Items[i - 1].categoryName.ToString() + ",");
+            //        sb.Append(deserializeObject.Items[i - 1].companyName.ToString() + ",");
+            //        sb.Append(deserializeObject.Items[i - 1].model.ToString() + ",");
+            //        sb.Append(deserializeObject.Items[i - 1].serial.ToString() + ",");
+            //        sb.Append(deserializeObject.Items[i - 1].purchase_date.ToString() + ",");
+            //        sb.Append(deserializeObject.Items[i - 1].cost.ToString() + ",");
+            //        sb.Append(deserializeObject.Items[i - 1].locationName.ToString() + ",");
+            //        sb.Append(deserializeObject.Items[i - 1].sub_location.ToString() + "\n");
+            //        //get total cost
+            //        totalCost += (decimal)deserializeObject.Items[i - 1].cost;
+            //        //remove trailing comma on last row
+            //        if (i == deserializeObject.Items.Count) {
+            //            sb.Remove(sb.Length - 2, 1);
+            //        }
+            //        //assign current string value to be one row
+            //        rows[i] = sb.ToString();
+            //    }
+
+            //    consoleOutput.Text = $"{totalCost:C}";
+            //    sb.Clear();
+            //    sb.Append("\ntotal equipment cost: " + totalCost.ToString());
+            //    rows[deserializeObject.Items.Count + 1] = sb.ToString();
+        //end if statusOK
+    }//end main
 
         public void Saving(string filePath, string[] array, int num) {
 
@@ -182,7 +182,7 @@ namespace MSBeverageRecordApp
                 
             }//end if
         }
-        #endregion
+
 
 
 
