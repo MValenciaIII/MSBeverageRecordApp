@@ -166,8 +166,8 @@ namespace MSBeverageRecordApp
         }//end class
 
         public static List<Destination> FilterHotspotDestinations(List<Destination> destinations, ComboBox filter) {
-
-            if (filter.SelectedItem.ToString() != "all locations") {
+            // returns data based on the selected filter item
+            if (filter.SelectedItem.ToString() != "All Locations") {
 
                 return destinations.FindAll(destination => destination.location == filter.SelectedItem);
 
@@ -178,8 +178,29 @@ namespace MSBeverageRecordApp
             }
 
         }//end
+
+        private void CreateLocationFilterItems(RootObject list) {
+            bool contains = false;
+            //loops to create unique combo box items for each location in data set
+            Filter.Items.Add("All Locations");
+            for (int index = 0; index < list.Items.Count; index++) {
+                for (int itemIndex = 0; itemIndex < Filter.Items.Count; itemIndex++)
+                    if (Filter.Items[itemIndex].ToString() == list.Items[index].location) {
+                        contains = true;
+                    }
+                //txtMain.Text += " " + item.Content;
+
+                if (contains == false) {
+                    Filter.Items.Add(list.Items[index].location);
+                }
+            }
+            //for (int index = 0; index < list.Count; index++) {
+
+            //}
+        }//end
         public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var destination = deserializeObject.Items;
+            //Shows data on datagrid when selected filter is changed
             MSBeverageRecordApp.ItemsSource = FilterHotspotDestinations(destination, Filter);
 
         }
