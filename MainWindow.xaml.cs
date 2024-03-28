@@ -31,7 +31,8 @@ using System.Data;
 using System.Reflection;
 using System.Xml.Linq;
 //TODO
-
+//modify/update data grid 
+//
 namespace MSBeverageRecordApp {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -129,6 +130,8 @@ namespace MSBeverageRecordApp {
             //create a save file dialog object
             SaveFileDialog sfdSave = new SaveFileDialog();
             //open the dialog and wait for the user to make a selection
+
+            //FIX
             sfdSave.DefaultExt = "csv";
             sfdSave.Filter =
                 "Text files (*.csv)|*.txt|All files (*.*)|*.*";
