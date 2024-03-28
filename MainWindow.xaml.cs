@@ -183,7 +183,7 @@ namespace MSBeverageRecordApp
             MSBeverageRecordApp.ItemsSource = FilterHotspotDestinations(destination, Filter);
 
         }
-private void CreateLocationFilterItems(RootObject list) {
+        private void CreateLocationFilterItems(RootObject list) {
 
             bool contains = false;
 
