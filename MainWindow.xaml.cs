@@ -31,8 +31,7 @@ using System.Data;
 using System.Reflection;
 using System.Xml.Linq;
 //TODO
-//modify/update data grid 
-//
+
 namespace MSBeverageRecordApp {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -101,6 +100,8 @@ namespace MSBeverageRecordApp {
             file = sfdSave.FileName;
             if (fileSelected == true) {
 
+
+
                 #region CSV
                 StringBuilder sb = new StringBuilder();
                 decimal totalCost = 0.0m;
@@ -140,36 +141,6 @@ namespace MSBeverageRecordApp {
                 rows[deserializeObject.Items.Count + 1] = sb.ToString(); 
                 #endregion
 
-<<<<<<< Updated upstream
-        public void Saving(string filePath, string[] array, int num) {
-
-            //VARIABLE
-            int count = 0;
-            //loop over rows and append lines
-            for (int i = 0; i < array.Length; i++) {
-                count++;
-                System.IO.File.AppendAllText(file, array[i]);
-                if (count > num) {
-                    //start new line after printing each cell in a row
-                    System.IO.File.AppendAllText(file, "\n");
-                }
-                
-            }//end for
-        }//end function
-        private void muiSave_Click(object sender, RoutedEventArgs e) {
-            //create a save file dialog object
-            SaveFileDialog sfdSave = new SaveFileDialog();
-            //open the dialog and wait for the user to make a selection
-
-            //FIX
-            sfdSave.DefaultExt = "csv";
-            sfdSave.Filter =
-                "Text files (*.csv)|*.txt|All files (*.*)|*.*";
-            bool fileSelected = (bool)sfdSave.ShowDialog();
-            file = sfdSave.FileName;
-            if (fileSelected == true) {
-=======
->>>>>>> Stashed changes
                 Saving(file, rows, colCount);
                 
             }//end if
