@@ -198,7 +198,7 @@ namespace MSBeverageRecordApp
             public string companyName { get; set; }
             public string model { get; set; }
             public string serial { get; set; }
-            public DateTime purchase_date { get; set; }
+            public string purchase_date { get; set; }
             public decimal cost { get; set; }
             public string locationName { get; set; }
             public string sub_location { get; set; }
