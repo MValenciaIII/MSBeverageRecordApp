@@ -140,7 +140,7 @@ namespace MSBeverageRecordApp
 
         public static List<Records> FilterHotspotRecords(List<Records> records, ComboBox filter) {
 
-            if (filter.SelectedItem.ToString() != "all categories") {
+            if (filter.SelectedItem.ToString() != "All Categories") {
 
                 return records.FindAll(record => record.categoryName == filter.SelectedItem);
 
