@@ -58,20 +58,17 @@ namespace MSBeverageRecordApp
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+     
     public partial class MainWindow : Window {
 
         //GLOBAL VARIABLE
         RootObject deserializeObject = new RootObject();
+
         public class urlResult
         {
             public string[] results { get; set; }
-        }
-        //public interface INotifyPropertyChanged;
-        //public interface IEditableObject;
+        }//end class
 
-        //public class Destinations : ObservableCollection <Destination> {
-
-        //}
         public MainWindow()
         {
             
@@ -101,10 +98,8 @@ namespace MSBeverageRecordApp
                 CreateLocationFilterItems(deserializeObject);
 
 
-            }
-
-            //this.dataGrid.FilterRowPosition = FilterRowPosition.FixedTop;
-        }//end mainwindow
+            }//end if
+        }//end main window
 
         private void muiSave_Click(object sender, RoutedEventArgs e) {
             //create a save file dialog object
@@ -131,7 +126,7 @@ namespace MSBeverageRecordApp
 
         }//end class
 
-        ////CALLING THIS AS PARENT OBJECT HOLDER 
+        //CALLING THIS AS PARENT OBJECT HOLDER 
         public class RootObject {
             public int id { get; set; }
             
@@ -148,14 +143,16 @@ namespace MSBeverageRecordApp
 
                 return records;
 
-            }
+            }//end if
 
-        }//end
+        }//end function
+
         public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var record = deserializeObject.Items;
             MSBeverageRecordApp.ItemsSource = FilterHotspotRecords(record, Filter);
 
         }//end function
+
         private void CreateLocationFilterItems(RootObject list) {
 
             bool contains = false;
@@ -170,39 +167,35 @@ namespace MSBeverageRecordApp
 
                         contains = true;
 
-                    }
-
-                //txtMain.Text += " " + item.Content;
+                    }//end if
 
                 if (contains == false) {
 
                     Filter.Items.Add(list.Items[index].categoryName);
 
-                }
+                }//end if
 
-            }
+            }//end for
 
-            //for (int index = 0; index < list.Count; index++) {
+        }//end for
 
-            //}
-
-        }
         private void addRecord(object sender, RoutedEventArgs e)
-            {
-                //MSBeverageRecordApp.Visibility = Visibility.Hidden;
-                CreateRecord window = new CreateRecord();
+        {
+            //MSBeverageRecordApp.Visibility = Visibility.Hidden;
+            CreateRecord window = new CreateRecord();
 
-                window.Show();
+            window.Show();
         }//end function
-            static async Task TestAPI(HttpClient client)
-            {
 
-            }
+        static async Task TestAPI(HttpClient client)
+        {
 
-            private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-            {
+        }//end function
 
-            }
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }//end function
 
         //private void WriteTextToFile(string fileName, string text) {
 
