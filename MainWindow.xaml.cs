@@ -43,6 +43,7 @@ namespace MSBeverageRecordApp {
         string[] rows = new string[1];
         int colCount = 0;
         RootObject deserializeObject = new RootObject();
+        string c = "";
 
         public class urlResult {
             public string[] results { get; set; }
@@ -53,6 +54,7 @@ namespace MSBeverageRecordApp {
 
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
+            
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
             // Add an Accept header for JSON format.
@@ -64,15 +66,27 @@ namespace MSBeverageRecordApp {
             //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode) {
                 ////CONVERTING OBJECT "response" variable DATA TO STRING 
-                var dataobjects = response.Content.ReadAsStringAsync().Result;
+                string dataobjects = response.Content.ReadAsStringAsync().Result;
+                c = dataobjects;
+                //Need access globally to 
+                
                 //CURRENTLY TRYING TO CHANGE OUR STRING TO OBJECT DATA VVV
                 
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
 
+
             }//end if statusOK
         }//end main
+
+
+        private void btnSave_Click(object sender, RoutedEventArgs e) {
+
+
+            //deserializeObject.Items = JsonSerializer.Serialize<List<Records>>(c);
+
+        }
 
         public void Saving(string filePath, string[] array, int num) {
 
@@ -89,19 +103,20 @@ namespace MSBeverageRecordApp {
                 
             }//end for
         }//end function
+        
+        //SAVE
         private void muiSave_Click(object sender, RoutedEventArgs e) {
             //create a save file dialog object
             SaveFileDialog sfdSave = new SaveFileDialog();
             //open the dialog and wait for the user to make a selection
+            //fix
             sfdSave.DefaultExt = "csv";
             sfdSave.Filter =
                 "Text files (*.csv)|*.txt|All files (*.*)|*.*";
             bool fileSelected = (bool)sfdSave.ShowDialog();
             file = sfdSave.FileName;
+
             if (fileSelected == true) {
-
-
-
                 #region CSV
                 StringBuilder sb = new StringBuilder();
                 decimal totalCost = 0.0m;
@@ -134,19 +149,21 @@ namespace MSBeverageRecordApp {
                     //assign current string value to be one row
                     rows[i] = sb.ToString();
                 }
-
+               
                 consoleOutput.Text = $"{totalCost:C}";
                 sb.Clear();
                 sb.Append("\ntotal equipment cost: " + totalCost.ToString());
-                rows[deserializeObject.Items.Count + 1] = sb.ToString(); 
+                rows[deserializeObject.Items.Count + 1] = sb.ToString();
                 #endregion
 
                 Saving(file, rows, colCount);
-                
             }//end if
         }
         
-
+        //UPDATE
+        private void UpdateDataBase(object sender, DependencyPropertyChangedEventArgs e) {
+           
+        }
 
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 

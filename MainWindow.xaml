@@ -17,12 +17,11 @@
             </MenuItem>
 
         </Menu>
-        <DataGrid x:Name="MSBeverageRecordApp" Margin="51,97,51,205" RowEditEnding="MSBeverageRecordApp_RowEditEnding" ItemsSource="{Binding Records}" />
-                                                                                                                                     
+        <DataGrid x:Name="MSBeverageRecordApp" Margin="51,97,51,205" RowEditEnding="MSBeverageRecordApp_RowEditEnding"/>
         <Label  FontSize="22px" Content="Mississippi Beverage Records" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="47" Width="300"/>
         <Button x:Name="btnaddRecord" Content="New Record" HorizontalAlignment="Left" Margin="675,45,0,0" VerticalAlignment="Top" Click="addRecord" Height="23" Width="74"/>
+        <Button x:Name="btnSave" Content="Save Changes" HorizontalAlignment="Left" Margin="576,45,0,0" VerticalAlignment="Top" Height="23" Width="74" Click="btnSave_Click"/>
         <TextBox x:Name="consoleOutput" HorizontalAlignment="Left" Margin="70,296,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="655" />
-        
         <ComboBox x:Name="Filter" Margin="51,56,609,337">
             <ComboBoxItem Content="Select a Filter" IsSelected="True"/>
             <ComboBoxItem Content="Category 1" />
@@ -30,7 +29,6 @@
             <ComboBoxItem Content="Category 3" />
             <ComboBoxItem Content="Category 4" />
             <ComboBoxItem Content="Category 5" />
-
         </ComboBox>
 
 
