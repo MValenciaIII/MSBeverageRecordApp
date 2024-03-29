@@ -6,23 +6,29 @@
         xmlns:local="clr-namespace:MSBeverageRecordApp"
         xmlns:VisualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core" x:Class="MSBeverageRecordApp.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="510" Width="890" WindowStartupLocation="CenterScreen">
     <Grid>
 
-        <Menu DockPanel.Dock="Top">
+        <Menu DockPanel.Dock="Top" HorizontalAlignment="Left" Width="890">
             <MenuItem Header="_File">
-                
+
                 <MenuItem x:Name="muiSave" Header="_Save" Click="muiSave_Click"/>
 
             </MenuItem>
 
         </Menu>
-        <DataGrid x:Name="MSBeverageRecordApp" Margin="51,97,51,205" RowEditEnding="MSBeverageRecordApp_RowEditEnding"/>
+        <DataGrid x:Name="MSBeverageRecordApp" Margin="51,97,51,150" IsReadOnly="True" CanUserAddRows="False">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
+                </Style>
+            </DataGrid.Resources>
+        </DataGrid>
         <Label  FontSize="22px" Content="Mississippi Beverage Records" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="47" Width="300"/>
-        <Button x:Name="btnaddRecord" Content="New Record" HorizontalAlignment="Left" Margin="675,45,0,0" VerticalAlignment="Top" Click="addRecord" Height="23" Width="74"/>
-        <Button x:Name="btnSave" Content="Save Changes" HorizontalAlignment="Left" Margin="576,45,0,0" VerticalAlignment="Top" Height="23" Width="74" Click="btnSave_Click"/>
-        <TextBox x:Name="consoleOutput" HorizontalAlignment="Left" Margin="70,296,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="655" />
-        <ComboBox x:Name="Filter" Margin="51,56,609,337">
+        <Button x:Name="btnaddRecord" Content="New Record" HorizontalAlignment="Left" Margin="740,56,0,0" VerticalAlignment="Top" Click="addRecord" Height="23" Width="74"/>
+        <Button x:Name="btnSave" Content="Save Changes" HorizontalAlignment="Left" Margin="600,56,0,0" VerticalAlignment="Top" Height="23" Width="74" Click="btnSave_Click"/>
+        <TextBox x:Name="consoleOutput" HorizontalAlignment="Center" Margin="0,409,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="654" />
+        <ComboBox x:Name="Filter" Margin="51,56,609,380">
             <ComboBoxItem Content="Select a Filter" IsSelected="True"/>
             <ComboBoxItem Content="Category 1" />
             <ComboBoxItem Content="Category 2" />

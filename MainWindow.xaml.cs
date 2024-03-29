@@ -81,13 +81,6 @@ namespace MSBeverageRecordApp {
         }//end main
 
 
-        private void btnSave_Click(object sender, RoutedEventArgs e) {
-
-
-            //deserializeObject.Items = JsonSerializer.Serialize<List<Records>>(c);
-
-        }
-
         public void Saving(string filePath, string[] array, int num) {
 
             //VARIABLE
@@ -103,6 +96,16 @@ namespace MSBeverageRecordApp {
                 
             }//end for
         }//end function
+
+        private void btnSave_Click(object sender, RoutedEventArgs e) {
+
+
+            //deserializeObject.Items = JsonSerializer.Serialize<List<Records>>();
+
+            //NO UPDATING BUT IS CONVERTING
+            var json = JsonSerializer.Serialize(rows);
+            consoleOutput.Text = json.ToString();
+        }
         
         //SAVE
         private void muiSave_Click(object sender, RoutedEventArgs e) {
@@ -156,6 +159,10 @@ namespace MSBeverageRecordApp {
                 rows[deserializeObject.Items.Count + 1] = sb.ToString();
                 #endregion
 
+                //CONVERT 
+                var json = JsonSerializer.Serialize(rows);
+                consoleOutput.Text = json.ToString();
+
                 Saving(file, rows, colCount);
             }//end if
         }
@@ -191,12 +198,16 @@ namespace MSBeverageRecordApp {
             //waldo
         }//end function
 
-        private void MSBeverageRecordApp_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e) {
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 
-            if(e.EditAction == DataGridEditAction.Commit) {
-                
-            }
+            var row = sender as DataGridRow;
+            var rep = row.DataContext as Records;
+
+            var editRep = new Edit();
+            editRep.Owner = this;
+
+            editRep.ShowRecord(rep);
+
         }
-
     }//end class
 }//end namespace
