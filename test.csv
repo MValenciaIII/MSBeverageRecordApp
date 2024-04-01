@@ -1,4 +1,3 @@
-﻿
-id, category, company, model, serial, purchase date, cost, location, sub-location
+﻿id, category, company, model, serial, purchase date, cost, location, sub-location
 143,drink,BUNN,model1TEST,99999,2024-03-25T05:00:00.000Z,1000,WAREHOUSE,
 32,snack,CORNELIUS,model22TEST,620710JT076,2024-03-25T05:00:00.000Z,840.21,BEAU RIVAGE,

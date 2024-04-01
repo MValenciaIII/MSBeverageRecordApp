@@ -30,6 +30,9 @@ using System.Runtime.Serialization.Json;
 using System.Data;
 using System.Reflection;
 using System.Xml.Linq;
+
+//using ChoETL;
+
 //TODO
 
 namespace MSBeverageRecordApp {
@@ -44,12 +47,14 @@ namespace MSBeverageRecordApp {
         int colCount = 0;
         RootObject deserializeObject = new RootObject();
         string c = "";
-
+        string[] cols = new string[0];
         public class urlResult {
             public string[] results { get; set; }
         }
         public MainWindow() {
 
+        string headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location";
+        cols = headerline.Split(',');
             InitializeComponent();
 
             //SETTING UP NEW instance of a type of data
@@ -69,20 +74,50 @@ namespace MSBeverageRecordApp {
                 string dataobjects = response.Content.ReadAsStringAsync().Result;
                 c = dataobjects;
                 //Need access globally to 
-                
-                //CURRENTLY TRYING TO CHANGE OUR STRING TO OBJECT DATA VVV
-                
+
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+                //create csv array
+                StringBuilder sb = new StringBuilder();
+                decimal totalCost = 0.0m;
+                headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location";
+                string[] cols = headerline.Split(',');
+                colCount = cols.Length;
+                rows = new string[deserializeObject.Items.Count + 2];
+                //set headers as first row
+                rows[0] = headerline + "\n";
+                //loop over list and set values of each row into an array
+                for (int i = 1; i <= deserializeObject.Items.Count; i++) {
+                    //clear string on each iteration
+                    sb.Clear();
+                    //add values
+                    sb.Append(deserializeObject.Items[i - 1].record_id.ToString());
+                    sb.Append(deserializeObject.Items[i - 1].categoryName.ToString());
+                    sb.Append(deserializeObject.Items[i - 1].companyName.ToString());
+                    sb.Append(deserializeObject.Items[i - 1].model.ToString());
+                    sb.Append(deserializeObject.Items[i - 1].serial.ToString());
+                    sb.Append(deserializeObject.Items[i - 1].purchase_date.ToString());
+                    sb.Append(deserializeObject.Items[i - 1].cost.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i - 1].locationName.ToString() + ",");
+                    sb.Append(deserializeObject.Items[i - 1].sub_location.ToString());
+                    //get total cost
+                    totalCost += (decimal)deserializeObject.Items[i - 1].cost;
+                    //remove trailing comma on last row
+                    if (i == deserializeObject.Items.Count) {
+                        sb.Remove(sb.Length - 2, 1);
+                    }
+                    //assign current string value to be one row
+                    rows[i] = sb.ToString();
 
-
+                    // StringBuilder s2 = new StringBuilder();
+                }
+                //sb.Clear();
+                //consoleOutput.Text = sb.ToString();
             }//end if statusOK
         }//end main
 
-
         public void Saving(string filePath, string[] array, int num) {
-
             //VARIABLE
             int count = 0;
             //loop over rows and append lines
@@ -93,22 +128,49 @@ namespace MSBeverageRecordApp {
                     //start new line after printing each cell in a row
                     System.IO.File.AppendAllText(file, "\n");
                 }
-                
             }//end for
         }//end function
 
         private void btnSave_Click(object sender, RoutedEventArgs e) {
+            #region fromfile
+            //rows array --> csv
+            //var csv = new List<string[]>();
+            //var lines = System.IO.File.ReadAllLines(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv"); // csv file location
 
+            //// loop through all lines and add it in list as string
+            //foreach (string line in lines)
+            //    csv.Add(line.Split(','));
 
-            //deserializeObject.Items = JsonSerializer.Serialize<List<Records>>();
+            ////split string to get first line, header line as JSON properties
+            //var properties = lines[0].Split(',');
 
-            //NO UPDATING BUT IS CONVERTING
-            var json = JsonSerializer.Serialize(rows);
-            consoleOutput.Text = json.ToString();
+            //var listObjResult = new List<Dictionary<string, string>>();
+
+            ////loop all remaining lines, except header so starting it from 1
+            //// instead of 0
+            //var objResult = new Dictionary<string, string>();
+            //for (int i = 1; i < lines.Length; i++) {
+            //    if (i > 1) {
+            //        objResult.Clear();
+            //    }
+            //    for (int j = 0; j < properties.Length; j++) {
+
+            //        objResult.Add(properties[j], csv[i][j]);
+            //        //clear duplicates maybe?
+            //         listObjResult.Add(objResult);
+            //    }
+            //}
+            //consoleOutput.Text = listObjResult[0]["id"].ToString(); 
+            #endregion
+            //from object
+            #region from obj
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(deserializeObject.Items);
+            System.IO.File.AppendAllText(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test2.txt", json);
+            #endregion
         }
         
         //SAVE
-        private void muiSave_Click(object sender, RoutedEventArgs e) {
+        public void muiSave_Click(object sender, RoutedEventArgs e) {
             //create a save file dialog object
             SaveFileDialog sfdSave = new SaveFileDialog();
             //open the dialog and wait for the user to make a selection
@@ -158,20 +220,13 @@ namespace MSBeverageRecordApp {
                 sb.Append("\ntotal equipment cost: " + totalCost.ToString());
                 rows[deserializeObject.Items.Count + 1] = sb.ToString();
                 #endregion
-
-                //CONVERT 
-                var json = JsonSerializer.Serialize(rows);
-                consoleOutput.Text = json.ToString();
-
-                Saving(file, rows, colCount);
+                    Saving(file, rows, colCount);
             }//end if
         }
-        
         //UPDATE
         private void UpdateDataBase(object sender, DependencyPropertyChangedEventArgs e) {
            
         }
-
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
         public class Records {
