@@ -47,7 +47,9 @@ namespace MSBeverageRecordApp {
         int colCount = 0;
         RootObject deserializeObject = new RootObject();
         string c = "";
-        //string[] cols = new string[0];
+        Edit editWindow = new Edit();
+
+        
         public class urlResult {
             public string[] results { get; set; }
         }
@@ -56,13 +58,14 @@ namespace MSBeverageRecordApp {
 
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
-            
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
             // Add an Accept header for JSON format.
+
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
+
             var response = client.GetAsync(client.BaseAddress).Result;
 
             //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
@@ -70,13 +73,15 @@ namespace MSBeverageRecordApp {
                 ////CONVERTING OBJECT "response" variable DATA TO STRING 
                 string dataobjects = response.Content.ReadAsStringAsync().Result;
                 c = dataobjects;
+
                 //Need access globally to 
 
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
 
-                
+                //Records editRecs = editWindow.Reports;
+                //how to get this into root obj
 
                 //create csv array why did we do this here?
                 #region csv
@@ -251,7 +256,7 @@ namespace MSBeverageRecordApp {
             public int id { get; set; }
 
             public List<Records> Items { get; set; }
-        }//end class'
+        }//end class
 
 
         private void addRecord(object sender, RoutedEventArgs e) {
@@ -262,16 +267,26 @@ namespace MSBeverageRecordApp {
         }//end function
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-
+            //make global to be able to call save function
             var row = sender as DataGridRow;
             var rep = row.DataContext as Records;
-            Edit editRep = new Edit();
-            editRep.Owner = this;
-            editRep.ShowRecord(rep);
-            //somehow call save function and send new value to datagrid object
+            //Edit editRep = new Edit();
+            RootObject root = new RootObject();
+            editWindow.Owner = this;
+            editWindow.ShowRecord(rep, deserializeObject);
+
+            root = editWindow.c;
+            edit(root);
             
+            //somehow call save function and send new value to datagrid object
         }
 
+        
+        public void edit(RootObject root) {
+           deserializeObject = editWindow.saveGrid(root);
+
+            MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+        }
 
 
 
