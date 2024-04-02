@@ -21,6 +21,8 @@ namespace MSBeverageRecordApp {
         
         public Edit() {
             InitializeComponent();
+
+            
         }
 
         public Records Reports { get; set; }
@@ -41,7 +43,7 @@ namespace MSBeverageRecordApp {
         }
 
         //EDIT WINDOW SAVE
-        private void BtnSave_Click(object sender, RoutedEventArgs e) {
+        public void BtnSave_Click(object sender, RoutedEventArgs e) {
             
 
         }

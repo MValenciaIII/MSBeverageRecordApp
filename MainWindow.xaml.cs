@@ -31,7 +31,7 @@ using System.Data;
 using System.Reflection;
 using System.Xml.Linq;
 
-//using ChoETL;
+
 
 //TODO
 
@@ -47,14 +47,11 @@ namespace MSBeverageRecordApp {
         int colCount = 0;
         RootObject deserializeObject = new RootObject();
         string c = "";
-        string[] cols = new string[0];
+        //string[] cols = new string[0];
         public class urlResult {
             public string[] results { get; set; }
         }
         public MainWindow() {
-
-        string headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location";
-        cols = headerline.Split(',');
             InitializeComponent();
 
             //SETTING UP NEW instance of a type of data
@@ -78,45 +75,49 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
-                //create csv array
-                StringBuilder sb = new StringBuilder();
-                decimal totalCost = 0.0m;
-                headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location";
-                string[] cols = headerline.Split(',');
-                colCount = cols.Length;
-                rows = new string[deserializeObject.Items.Count + 2];
-                //set headers as first row
-                rows[0] = headerline + "\n";
-                //loop over list and set values of each row into an array
-                for (int i = 1; i <= deserializeObject.Items.Count; i++) {
-                    //clear string on each iteration
-                    sb.Clear();
-                    //add values
-                    sb.Append(deserializeObject.Items[i - 1].record_id.ToString());
-                    sb.Append(deserializeObject.Items[i - 1].categoryName.ToString());
-                    sb.Append(deserializeObject.Items[i - 1].companyName.ToString());
-                    sb.Append(deserializeObject.Items[i - 1].model.ToString());
-                    sb.Append(deserializeObject.Items[i - 1].serial.ToString());
-                    sb.Append(deserializeObject.Items[i - 1].purchase_date.ToString());
-                    sb.Append(deserializeObject.Items[i - 1].cost.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i - 1].locationName.ToString() + ",");
-                    sb.Append(deserializeObject.Items[i - 1].sub_location.ToString());
-                    //get total cost
-                    totalCost += (decimal)deserializeObject.Items[i - 1].cost;
-                    //remove trailing comma on last row
-                    if (i == deserializeObject.Items.Count) {
-                        sb.Remove(sb.Length - 2, 1);
-                    }
-                    //assign current string value to be one row
-                    rows[i] = sb.ToString();
 
-                    // StringBuilder s2 = new StringBuilder();
-                }
-                //sb.Clear();
-                //consoleOutput.Text = sb.ToString();
+                
+
+                //create csv array why did we do this here?
+                #region csv
+                //StringBuilder sb = new StringBuilder();
+                //decimal totalCost = 0.0m;
+                //string headerline = "id, category, company, model, serial, purchase date, cost, location, sub-location";
+                //string[] cols = headerline.Split(',');
+                //colCount = cols.Length;
+                //rows = new string[deserializeObject.Items.Count + 2];
+                ////set headers as first row
+                //rows[0] = headerline + "\n";
+                ////loop over list and set values of each row into an array
+                //for (int i = 1; i <= deserializeObject.Items.Count; i++) {
+                //    //clear string on each iteration
+                //    sb.Clear();
+                //    //add values
+                //    sb.Append(deserializeObject.Items[i - 1].record_id.ToString());
+                //    sb.Append(deserializeObject.Items[i - 1].categoryName.ToString());
+                //    sb.Append(deserializeObject.Items[i - 1].companyName.ToString());
+                //    sb.Append(deserializeObject.Items[i - 1].model.ToString());
+                //    sb.Append(deserializeObject.Items[i - 1].serial.ToString());
+                //    sb.Append(deserializeObject.Items[i - 1].purchase_date.ToString());
+                //    sb.Append(deserializeObject.Items[i - 1].cost.ToString() + ",");
+                //    sb.Append(deserializeObject.Items[i - 1].locationName.ToString() + ",");
+                //    sb.Append(deserializeObject.Items[i - 1].sub_location.ToString());
+                //    //get total cost
+                //    totalCost += (decimal)deserializeObject.Items[i - 1].cost;
+                //    //remove trailing comma on last row
+                //    if (i == deserializeObject.Items.Count) {
+                //        sb.Remove(sb.Length - 2, 1);
+                //    }
+                //    //assign current string value to be one row
+                //    rows[i] = sb.ToString();
+
+                //    // StringBuilder s2 = new StringBuilder();
+                //} 
+                #endregion
             }//end if statusOK
         }//end main
 
+        //save to file
         public void Saving(string filePath, string[] array, int num) {
             //VARIABLE
             int count = 0;
@@ -131,6 +132,7 @@ namespace MSBeverageRecordApp {
             }//end for
         }//end function
 
+        //test serialize datagrid back to json
         private void btnSave_Click(object sender, RoutedEventArgs e) {
             #region fromfile
             //rows array --> csv
@@ -169,7 +171,7 @@ namespace MSBeverageRecordApp {
             #endregion
         }
         
-        //SAVE
+        //file dialog and csv format
         public void muiSave_Click(object sender, RoutedEventArgs e) {
             //create a save file dialog object
             SaveFileDialog sfdSave = new SaveFileDialog();
@@ -180,7 +182,6 @@ namespace MSBeverageRecordApp {
                 "Text files (*.csv)|*.txt|All files (*.*)|*.*";
             bool fileSelected = (bool)sfdSave.ShowDialog();
             file = sfdSave.FileName;
-
             if (fileSelected == true) {
                 #region CSV
                 StringBuilder sb = new StringBuilder();
@@ -225,10 +226,12 @@ namespace MSBeverageRecordApp {
         }
         //UPDATE
         private void UpdateDataBase(object sender, DependencyPropertyChangedEventArgs e) {
+
            
         }
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
+
         public class Records {
             public int record_id { get; set; }
             public string categoryName { get; set; }
@@ -241,28 +244,36 @@ namespace MSBeverageRecordApp {
             public string sub_location { get; set; }
         }//end class
          ////CALLING THIS AS PARENT OBJECT HOLDER THINGY 
+         /// <summary>
+        
+         /// </summary>
         public class RootObject {
             public int id { get; set; }
 
             public List<Records> Items { get; set; }
-        }//end class
+        }//end class'
+
+
         private void addRecord(object sender, RoutedEventArgs e) {
             //MSBeverageRecordApp.Visibility = Visibility.Hidden;
             CreateRecord window = new CreateRecord();
             window.Show();
-            //waldo
+            
         }//end function
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 
             var row = sender as DataGridRow;
             var rep = row.DataContext as Records;
-
-            var editRep = new Edit();
+            Edit editRep = new Edit();
             editRep.Owner = this;
-
             editRep.ShowRecord(rep);
-
+            //somehow call save function and send new value to datagrid object
+            
         }
+
+
+
+
     }//end class
 }//end namespace
