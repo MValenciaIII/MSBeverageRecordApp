@@ -23,16 +23,16 @@ namespace MSBeverageRecordApp {
     /// </summary>
     
     public partial class Edit : Window {
-        public Records Reports { get; set; }
+        //public Records Reports { get; set; }
         //public MainWindow main = new();
         public RootObject c = new MainWindow.RootObject();
-
+        public Records Reports = new MainWindow.Records();
         
 
-        
-        public bool saved = false;
-        
-        
+
+
+
+
         public Edit() {
             InitializeComponent();
         }
@@ -60,8 +60,7 @@ namespace MSBeverageRecordApp {
         public void BtnSave_Click(object sender, RoutedEventArgs e) {
 
             //WHY WONT YOU RUN
-            saveGrid();
-            saved = true;
+            
             Reports.categoryName = txbCatName.Text;
             Reports.companyName = txbCompName.Text;
             Reports.model = txbModel.Text;
@@ -70,6 +69,7 @@ namespace MSBeverageRecordApp {
             Reports.cost = double.Parse(txbCost.Text);
             Reports.locationName = txbLocation.Text;
             Reports.sub_location = txbSubLocation.Text;
+            saveGrid();
             Close();
         }
         //save row

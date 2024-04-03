@@ -49,6 +49,8 @@ namespace MSBeverageRecordApp {
         string c = "";
         Edit editWindow = new Edit();
 
+        
+
         public class RootObject {
             public int id { get; set; }
 
@@ -86,9 +88,9 @@ namespace MSBeverageRecordApp {
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
                 editWindow.c.Items = deserializeObject.Items;
 
-                if (editWindow.saved) {
-                    MSBeverageRecordApp.ItemsSource = editWindow.saveGrid().Items;
-                }
+                
+                MSBeverageRecordApp.ItemsSource = editWindow.saveGrid().Items;
+                
 
                 //Records editRecs = editWindow.Reports;
                 //how to get this into root obj
