@@ -30,7 +30,7 @@ using System.Runtime.Serialization.Json;
 using System.Data;
 using System.Reflection;
 using System.Xml.Linq;
-
+using static MSBeverageRecordApp.Edit;
 
 
 //TODO
@@ -49,7 +49,12 @@ namespace MSBeverageRecordApp {
         string c = "";
         Edit editWindow = new Edit();
 
-        
+        public class RootObject {
+            public int id { get; set; }
+
+            public List<Records> Items { get; set; }
+        }//end class
+
         public class urlResult {
             public string[] results { get; set; }
         }
@@ -79,10 +84,15 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+                editWindow.c.Items = deserializeObject.Items;
+
+                if (editWindow.saved) {
+                    MSBeverageRecordApp.ItemsSource = editWindow.saveGrid().Items;
+                }
 
                 //Records editRecs = editWindow.Reports;
                 //how to get this into root obj
-
+                //MSBeverageRecordApp.ItemsSource = editWindow.saveGrid(deserializeObject).Items;
                 //create csv array why did we do this here?
                 #region csv
                 //StringBuilder sb = new StringBuilder();
@@ -252,11 +262,7 @@ namespace MSBeverageRecordApp {
          /// <summary>
         
          /// </summary>
-        public class RootObject {
-            public int id { get; set; }
 
-            public List<Records> Items { get; set; }
-        }//end class
 
 
         private void addRecord(object sender, RoutedEventArgs e) {
@@ -273,20 +279,21 @@ namespace MSBeverageRecordApp {
             //Edit editRep = new Edit();
             RootObject root = new RootObject();
             editWindow.Owner = this;
-            editWindow.ShowRecord(rep, deserializeObject);
+            editWindow.ShowRecord(rep);
 
-            root = editWindow.c;
-            edit(root);
+            //root = editWindow.c;
+
             
             //somehow call save function and send new value to datagrid object
         }
 
         
-        public void edit(RootObject root) {
-           deserializeObject = editWindow.saveGrid(root);
+        //public void edit() {
+        //   //deserializeObject = editWindow.saveGrid(root);
 
-            MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
-        }
+        //    MSBeverageRecordApp.ItemsSource = editWindow.saveGrid(deserializeObject).Items;
+            
+        //}
 
 
 
