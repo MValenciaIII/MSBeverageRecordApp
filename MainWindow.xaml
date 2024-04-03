@@ -17,7 +17,19 @@
             </MenuItem>
 
         </Menu>
-        <DataGrid x:Name="MSBeverageRecordApp" Margin="51,97,51,150" IsReadOnly="False" CanUserAddRows="False">
+        <DataGrid x:Name="MSBeverageRecordApp" Margin="51,97,51,150" IsReadOnly="False" CanUserAddRows="False" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding record_id}"></DataGridTextColumn>
+                <DataGridTextColumn Header="category" Binding="{Binding categoryName}"></DataGridTextColumn>
+                <DataGridTextColumn Header="company" Binding="{Binding companyName}"></DataGridTextColumn>
+                <DataGridTextColumn Header="model" Binding="{Binding model}"></DataGridTextColumn>
+                <DataGridTextColumn Header="serial" Binding="{Binding serial}"></DataGridTextColumn>
+                <DataGridTextColumn Header="purchase date" Binding="{Binding purchase_date}"></DataGridTextColumn>
+                <DataGridTextColumn Header="cost" Binding="{Binding cost}"></DataGridTextColumn>
+                <DataGridTextColumn Header="location" Binding="{Binding locationName}"></DataGridTextColumn>
+                <DataGridTextColumn Header="sub-location" Binding="{Binding sub_location}"></DataGridTextColumn>
+
+            </DataGrid.Columns>
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>

@@ -34,7 +34,7 @@ using static MSBeverageRecordApp.Edit;
 
 
 //TODO
-
+//add print whole data grid function so raw csv data and report are both options
 namespace MSBeverageRecordApp {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -88,9 +88,18 @@ namespace MSBeverageRecordApp {
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
                 editWindow.c.Items = deserializeObject.Items;
 
-                
-                MSBeverageRecordApp.ItemsSource = editWindow.saveGrid().Items;
-                
+
+
+
+                //does not set object items to edit window items
+
+                //needs to happen AFTER edit window function runs
+                //trying to call btnSave in main
+                //what is 2nd param
+                // editWindow.AddHandler(editWindow.BtnSave_Click,); 
+                //MSBeverageRecordApp.ItemsSource = editWindow.saveGrid().Items;
+
+
 
                 //Records editRecs = editWindow.Reports;
                 //how to get this into root obj
@@ -190,6 +199,8 @@ namespace MSBeverageRecordApp {
         
         //file dialog and csv format
         public void muiSave_Click(object sender, RoutedEventArgs e) {
+
+            //save to csv
             //create a save file dialog object
             SaveFileDialog sfdSave = new SaveFileDialog();
             //open the dialog and wait for the user to make a selection
@@ -279,23 +290,49 @@ namespace MSBeverageRecordApp {
             var row = sender as DataGridRow;
             var rep = row.DataContext as Records;
             //Edit editRep = new Edit();
-            RootObject root = new RootObject();
             editWindow.Owner = this;
-            editWindow.ShowRecord(rep);
 
-            //root = editWindow.c;
 
-            
+            Task.Run(() => {
+                editWindow.ShowRecord(rep);
+                editWindow.Show();
+            });
+
+            //RootObject root = editWindow.BtnSave_Click(editWindow.x, editWindow.y);
+
+            //var tasks = new List<Task> {editWindow.saveGrid()};
+            //Task<RootObject> tasks =  editWindow.BtnSave_Click(editWindow.x, editWindow.y);
+
+           
+
+
+            //// await Task.WhenAll(tasks);
+            //do {
+            //    await Task.WhenAll(tasks);
+
+            //} while (editWindow.editing == false );
+
+            //MSBeverageRecordApp.ItemsSource = tasks.Result.Items
+
+            ;
             //somehow call save function and send new value to datagrid object
         }
 
         
-        //public void edit() {
-        //   //deserializeObject = editWindow.saveGrid(root);
+        //public async Task<Task<RootObject>> edit() {
+        //    //deserializeObject = editWindow.saveGrid(root);
 
-        //    MSBeverageRecordApp.ItemsSource = editWindow.saveGrid(deserializeObject).Items;
-            
+        //    // MSBeverageRecordApp.ItemsSource = editWindow.saveGrid(deserializeObject).Items;
+
+        //    // RootObject tasks = editWindow.saveGrid();
+        //    Task<RootObject> tasks = editWindow.saveGrid();
+        //    await Task.WhenAll(tasks);
+
+        //    return tasks;
+
         //}
+
+
 
 
 

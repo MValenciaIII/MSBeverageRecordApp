@@ -35,7 +35,7 @@
         <TextBox Grid.Column="1" HorizontalAlignment="Left" Name="txbSubLocation" Margin="30,324,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32"/>
 
         <Button Grid.Column="1" Name="btnCancel" Content="Cancel" HorizontalAlignment="Center" Margin="0,33,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="79" Click="BtnCancel_Click"/>
-        <Button Grid.Column="1" Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="152,33,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="79" Click="BtnSave_Click"/>
+        <Button Grid.Column="1" Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="152,33,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="79" Click="BtnCancel_Click"/>
 
 
     </Grid>

@@ -24,13 +24,13 @@ namespace MSBeverageRecordApp {
     
     public partial class Edit : Window {
         //public Records Reports { get; set; }
-        //public MainWindow main = new();
-        public RootObject c = new MainWindow.RootObject();
-        public Records Reports = new MainWindow.Records();
-        
+       // public MainWindow main = new();
+        public RootObject c = new RootObject();
+        public Records Reports = new Records();
+        public bool editing = false;
 
-
-
+        public object x = new object();
+        public RoutedEventArgs y = new RoutedEventArgs();  
 
 
         public Edit() {
@@ -41,7 +41,7 @@ namespace MSBeverageRecordApp {
         //MainWindow main = new MainWindow();
 
         public void ShowRecord(Records rep) {
-
+            editing = true;
 
             Reports = rep;
             txbCatName.Text = $"{Reports.categoryName}";
@@ -52,14 +52,17 @@ namespace MSBeverageRecordApp {
             txbCost.Text = $"{Reports.cost}";
             txbLocation.Text = $"{Reports.locationName}";
             txbSubLocation.Text = $"{Reports.sub_location}";
-            Show();
+            //Show();
 
         }
 
-        //EDIT WINDOW SAVE
-        public void BtnSave_Click(object sender, RoutedEventArgs e) {
 
-            //WHY WONT YOU RUN
+        //EDIT WINDOW SAVE
+        public RootObject BtnSave_Click(object sender, RoutedEventArgs e) {
+            //test
+            x = sender;
+            y = e;
+            editing = false;
             
             Reports.categoryName = txbCatName.Text;
             Reports.companyName = txbCompName.Text;
@@ -69,11 +72,8 @@ namespace MSBeverageRecordApp {
             Reports.cost = double.Parse(txbCost.Text);
             Reports.locationName = txbLocation.Text;
             Reports.sub_location = txbSubLocation.Text;
-            saveGrid();
-            Close();
-        }
-        //save row
-        public RootObject saveGrid() {
+
+
             //should take in root obj, update records
             for (int i = 0; i < c.Items.Count; i++) {
                 if (c.Items[i].record_id == Reports.record_id) {
@@ -87,8 +87,33 @@ namespace MSBeverageRecordApp {
                     c.Items[i].sub_location = Reports.sub_location;
                 }
             }
+            Close();
+            
             return c;
+
+
+
+            //saveGrid();
+
         }
+
+        //save row
+        //public async Task<RootObject> saveGrid() {
+        //    //should take in root obj, update records
+        //    for (int i = 0; i < c.Items.Count; i++) {
+        //        if (c.Items[i].record_id == Reports.record_id) {
+        //            c.Items[i].categoryName = Reports.categoryName;
+        //            c.Items[i].companyName = Reports.companyName;
+        //            c.Items[i].model = Reports.model;
+        //            c.Items[i].serial = Reports.serial;
+        //            c.Items[i].purchase_date = Reports.purchase_date;
+        //            c.Items[i].cost = Reports.cost;
+        //            c.Items[i].locationName = Reports.locationName;
+        //            c.Items[i].sub_location = Reports.sub_location;
+        //        }
+        //    }
+        //    return c;
+        //}
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e) {
             Close();
