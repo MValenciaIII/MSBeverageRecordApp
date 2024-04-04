@@ -17,7 +17,18 @@ namespace MSBeverageRecordApp {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
-    // System.StackOverflowException: 'Exception of type 'System.StackOverflowException' was thrown.'
+        //todo
+    //cannot access deserialized object inside of edit window to update it on save
+    //OPTION 1
+    //re-factor xaml into one window? setting visibility on/off in the datagrid double click event
+    //then could use datacontext/databinding to update both on save click
+    //OPTION 2
+    //await the button click event in edit window,
+    //how to run a function in mainWindow based on event in editWindow?
+    //then update deserialized obj inside of main using editWindow.c.Items
+
+    //fix bug where program crashes on closing/re-opening edit window
+    //find library to give option print out datagrid records instead of raw csv
     public partial class MainWindow : Window {
         Edit editWindow = new Edit();
         public class RootObject {
@@ -32,9 +43,6 @@ namespace MSBeverageRecordApp {
         int colCount = 0;
         public RootObject deserializeObject = new RootObject();
         string c = "";
-
-        
-
 
         public class urlResult {
             public string[] results { get; set; }
@@ -160,6 +168,13 @@ namespace MSBeverageRecordApp {
             #endregion
         }
         
+
+        //add function
+        private void printRec_Click(object sender, RoutedEventArgs e) {
+            PrintDialog s = new PrintDialog();
+            
+        }
+        
         //file dialog and csv format
         public void muiSave_Click(object sender, RoutedEventArgs e) {
 
@@ -214,12 +229,12 @@ namespace MSBeverageRecordApp {
                 #endregion
                     Saving(file, rows, colCount);
             }//end if
-        }
+        }//ef
         //UPDATE
         private void UpdateDataBase(object sender, DependencyPropertyChangedEventArgs e) {
 
            
-        }
+        }//ef
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
 
@@ -254,7 +269,7 @@ namespace MSBeverageRecordApp {
             var rep = row.DataContext as Records;
             //Edit editRep = new Edit();
             editWindow.Owner = this;
-            editWindow.ShowRecord(rep);
+            //editWindow.ShowRecord(rep);
             editWindow.Show();
             
 
@@ -277,11 +292,12 @@ namespace MSBeverageRecordApp {
 
             //MSBeverageRecordApp.ItemsSource = tasks.Result.Items
 
-            ;
+            
             //somehow call save function and send new value to datagrid object
-        }
+        }//ef
 
-        
+
+
         //public async Task<Task<RootObject>> edit() {
         //    //deserializeObject = editWindow.saveGrid(root);
 
