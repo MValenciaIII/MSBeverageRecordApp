@@ -33,27 +33,26 @@ namespace MSBeverageRecordApp {
 
         public Edit() {
             InitializeComponent();
-            DataContext = c.Items;
+            
 
         }
 
-
         //MainWindow main = new MainWindow();
 
-        //public void ShowRecord(Records rep) {
-        //    //editing = true;
+        public void ShowRecord(Records rep) {
+            //editing = true;
 
-        //    Reports = rep;
-        //    txbCatName.Text = $"{Reports.categoryName}";
-        //    txbCompName.Text = $"{Reports.companyName}";
-        //    txbModel.Text = $"{Reports.model}";
-        //    txbSerial.Text = $"{Reports.serial}";
-        //    txbPurchaseDate.Text = $"{Reports.purchase_date}";
-        //    txbCost.Text = $"{Reports.cost}";
-        //    txbLocation.Text = $"{Reports.locationName}";
-        //    txbSubLocation.Text = $"{Reports.sub_location}";
-        //    Show();
-        //}
+            Reports = rep;
+            txbCatName.Text = $"{Reports.categoryName}";
+            txbCompName.Text = $"{Reports.companyName}";
+            txbModel.Text = $"{Reports.model}";
+            txbSerial.Text = $"{Reports.serial}";
+            txbPurchaseDate.Text = $"{Reports.purchase_date}";
+            txbCost.Text = $"{Reports.cost}";
+            txbLocation.Text = $"{Reports.locationName}";
+            txbSubLocation.Text = $"{Reports.sub_location}";
+            Show();
+        }
 
 
         //EDIT WINDOW SAVE

@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using static MSBeverageRecordApp.Edit;
+using System.Runtime.CompilerServices;
+using static MSBeverageRecordApp.MainWindow;
 
 //TODO
 //add print whole data grid function so raw csv data and report are both options
@@ -18,19 +20,11 @@ namespace MSBeverageRecordApp {
     /// </summary>
     /// 
         //todo
-    //cannot access deserialized object inside of edit window to update it on save
-    //OPTION 1
-    //re-factor xaml into one window? setting visibility on/off in the datagrid double click event
-    //then could use datacontext/databinding to update both on save click
-    //OPTION 2
-    //await the button click event in edit window,
-    //how to run a function in mainWindow based on event in editWindow?
-    //then update deserialized obj inside of main using editWindow.c.Items
 
-    //fix bug where program crashes on closing/re-opening edit window
+
     //find library to give option print out datagrid records instead of raw csv
     public partial class MainWindow : Window {
-        Edit editWindow = new Edit();
+        
         public class RootObject {
             public int id { get; set; }
 
@@ -73,7 +67,7 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
-                editWindow.c.Items = deserializeObject.Items;
+                
 
                 //create csv array why did we do this here?
                 #region csv
@@ -112,6 +106,9 @@ namespace MSBeverageRecordApp {
                 //} 
                 #endregion
             }//end if statusOK
+
+
+            //this.DataContext = deserializeObject;
         }//end main
 
         //save to file
@@ -262,57 +259,110 @@ namespace MSBeverageRecordApp {
             window.Show();
             
         }//end function
+        Records rep = new Records();
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             //make global to be able to call save function
-            var row = sender as DataGridRow;
-            var rep = row.DataContext as Records;
-            //Edit editRep = new Edit();
-            editWindow.Owner = this;
+            //Edit editWindow = new Edit();
+            //editWindow.c.Items = deserializeObject.Items;
+            ////Edit editRep = new Edit();
+            //editWindow.Owner = this;
             //editWindow.ShowRecord(rep);
-            editWindow.Show();
+            Records Reports = new Records();
+            var row = sender as DataGridRow;
+            rep = row.DataContext as Records;
+
+
+            Reports = rep;
+            txbCatName.Text = $"{Reports.categoryName}";
+            txbCompName.Text = $"{Reports.companyName}";
+            txbModel.Text = $"{Reports.model}";
+            txbSerial.Text = $"{Reports.serial}";
+            txbPurchaseDate.Text = $"{Reports.purchase_date}";
+            txbCost.Text = $"{Reports.cost}";
+            txbLocation.Text = $"{Reports.locationName}";
+            txbSubLocation.Text = $"{Reports.sub_location}";
+
+            lblEdit.Visibility = Visibility.Visible;
+            lblCat.Visibility = Visibility.Visible;
+            txbCatName.Visibility = Visibility.Visible;
+            lblComp.Visibility = Visibility.Visible;
+            txbCompName.Visibility = Visibility.Visible;
+            lblModel.Visibility = Visibility.Visible;
+            txbModel.Visibility = Visibility.Visible;
+            lblSerial.Visibility = Visibility.Visible;
+            txbSerial.Visibility = Visibility.Visible;
+            lblDate.Visibility = Visibility.Visible;
+            txbPurchaseDate.Visibility = Visibility.Visible;
+            lblCost.Visibility = Visibility.Visible;
+            txbCost.Visibility = Visibility.Visible;
+            lblLoc.Visibility = Visibility.Visible;
+            txbLocation.Visibility = Visibility.Visible;    
+            lblSubLoc.Visibility = Visibility.Visible;
+            txbSubLocation.Visibility = Visibility.Visible;
             
+            btnSave.Visibility = Visibility.Visible;
+            btnCancel.Visibility = Visibility.Visible;
 
+            MSBeverageRecordApp.Visibility = Visibility.Collapsed;
+            consoleOutput.Visibility = Visibility.Collapsed;
+            fileMenu.Visibility = Visibility.Collapsed;
+            btnaddRecord.Visibility = Visibility.Collapsed;
+            Filter.Visibility = Visibility.Collapsed;
 
-            
-
-            //RootObject root = editWindow.BtnSave_Click(editWindow.x, editWindow.y);
-
-            //var tasks = new List<Task> {editWindow.saveGrid()};
-            //Task<RootObject> tasks =  editWindow.BtnSave_Click(editWindow.x, editWindow.y);
-
-           
-
-
-            //// await Task.WhenAll(tasks);
-            //do {
-            //    await Task.WhenAll(tasks);
-
-            //} while (editWindow.editing == false );
-
-            //MSBeverageRecordApp.ItemsSource = tasks.Result.Items
-
-            
-            //somehow call save function and send new value to datagrid object
         }//ef
 
+        private void btnSaveChange_Click(object sender, RoutedEventArgs e) {
+
+            Records Reports = rep;
+
+            for (int i = 0; i < deserializeObject.Items.Count; i++) {
+                if (deserializeObject.Items[i].record_id == Reports.record_id) {
+                    deserializeObject.Items[i].categoryName  = txbCatName.Text;
+                    deserializeObject.Items[i].companyName   = txbCompName.Text;
+                    deserializeObject.Items[i].model         = txbModel.Text;
+                    deserializeObject.Items[i].serial        = txbSerial.Text;
+                    deserializeObject.Items[i].purchase_date = txbPurchaseDate.Text;
+                    deserializeObject.Items[i].cost          = double.Parse(txbCost.Text);    
+                    deserializeObject.Items[i].locationName  = txbLocation.Text;
+                    deserializeObject.Items[i].sub_location  = txbSubLocation.Text;
+                }
+
+                MSBeverageRecordApp.ItemsSource = null;
+                MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+                
+            }
 
 
-        //public async Task<Task<RootObject>> edit() {
-        //    //deserializeObject = editWindow.saveGrid(root);
 
-        //    // MSBeverageRecordApp.ItemsSource = editWindow.saveGrid(deserializeObject).Items;
+            lblEdit.Visibility         = Visibility.Hidden;
+            lblCat.Visibility          = Visibility.Hidden;
+            txbCatName.Visibility      = Visibility.Hidden;
+            lblComp.Visibility         = Visibility.Hidden;
+            txbCompName.Visibility     = Visibility.Hidden;
+            lblModel.Visibility        = Visibility.Hidden;
+            txbModel.Visibility        = Visibility.Hidden;
+            lblSerial.Visibility       = Visibility.Hidden;
+            txbSerial.Visibility       = Visibility.Hidden;
+            lblDate.Visibility         = Visibility.Hidden;
+            txbPurchaseDate.Visibility = Visibility.Hidden;
+            lblCost.Visibility         = Visibility.Hidden;
+            txbCost.Visibility         = Visibility.Hidden;
+            lblLoc.Visibility          = Visibility.Hidden;
+            txbLocation.Visibility     = Visibility.Hidden;
+            lblSubLoc.Visibility       = Visibility.Hidden;
+            txbSubLocation.Visibility  = Visibility.Hidden;      
+            btnSave.Visibility         = Visibility.Hidden;
+            btnCancel.Visibility       = Visibility.Hidden;
 
-        //    // RootObject tasks = editWindow.saveGrid();
-        //    Task<RootObject> tasks = editWindow.saveGrid();
-        //    await Task.WhenAll(tasks);
 
-        //    return tasks;
+            MSBeverageRecordApp.Visibility = Visibility.Visible;
+            consoleOutput.Visibility       = Visibility.Visible;
+            fileMenu.Visibility            = Visibility.Visible;
+            btnaddRecord.Visibility        = Visibility.Visible;
+            Filter.Visibility              = Visibility.Visible;
 
-        //}
-
-
-
+        }
 
 
     }//end class

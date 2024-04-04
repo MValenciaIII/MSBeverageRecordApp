@@ -9,7 +9,20 @@
         Title="MainWindow" Height="510" Width="890" WindowStartupLocation="CenterScreen">
     <Grid>
 
-        <Menu DockPanel.Dock="Top" HorizontalAlignment="Left" Width="890">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35*"></RowDefinition>
+            <RowDefinition Height="100*"></RowDefinition>
+            <RowDefinition Height="25*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50*"></ColumnDefinition>
+            <ColumnDefinition Width="50*"></ColumnDefinition>
+            <ColumnDefinition Width="50*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+
+        <Menu Name="fileMenu" Visibility="Visible" DockPanel.Dock="Top" HorizontalAlignment="Left" Width="890" Background="White" Grid.ColumnSpan="3">
             <MenuItem Header="_File">
 
                 <MenuItem x:Name="muiSave" Header="_Save" Click="muiSave_Click"/>
@@ -18,7 +31,7 @@
             </MenuItem>
 
         </Menu>
-        <DataGrid x:Name="MSBeverageRecordApp" Margin="51,97,51,150" IsReadOnly="False" CanUserAddRows="False" AutoGenerateColumns="False">
+        <DataGrid Visibility="Visible" x:Name="MSBeverageRecordApp" Margin="10,5,10,13" IsReadOnly="False" CanUserAddRows="False" AutoGenerateColumns="False" Grid.ColumnSpan="3" Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding record_id}"></DataGridTextColumn>
                 <DataGridTextColumn Header="category" Binding="{Binding categoryName}"></DataGridTextColumn>
@@ -37,12 +50,12 @@
                 </Style>
             </DataGrid.Resources>
         </DataGrid>
-        <Label  FontSize="22px" Content="Mississippi Beverage Records" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="47" Width="300"/>
-        <Button x:Name="btnaddRecord" Content="New Record" HorizontalAlignment="Left" Margin="740,56,0,0" VerticalAlignment="Top" Click="addRecord" Height="23" Width="74"/>
-        <Button x:Name="btnSave" Content="Save " HorizontalAlignment="Left" Margin="600,56,0,0" VerticalAlignment="Top" Height="23" Width="74" Click="btnSave_Click"/>
-        
-        <TextBox x:Name="consoleOutput" HorizontalAlignment="Center" Margin="0,409,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="654" />
-        <ComboBox x:Name="Filter" Margin="51,56,609,380">
+
+        <Label Visibility="Visible"  FontSize="22px" Content="Mississippi Beverage Records" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="47" Width="300" Grid.ColumnSpan="3"/>
+        <Button Visibility="Visible" x:Name="btnaddRecord" Content="New Record" HorizontalAlignment="Left" Margin="172,54,0,0" VerticalAlignment="Top" Click="addRecord" Height="23" Width="74" Grid.Column="2"/>
+
+        <TextBox Visibility="Visible" x:Name="consoleOutput" HorizontalAlignment="Left" Margin="95,22,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="654" Grid.ColumnSpan="3" Grid.Row="2" />
+        <ComboBox Visibility="Visible" x:Name="Filter" Margin="29,55,139,28" Grid.Column="0">
             <ComboBoxItem Content="Select a Filter" IsSelected="True"/>
             <ComboBoxItem Content="Category 1" />
             <ComboBoxItem Content="Category 2" />
@@ -52,10 +65,42 @@
         </ComboBox>
 
 
+            
+            
+            <Label Name="lblEdit" Content="Edit Record" HorizontalAlignment="Left" FontSize="20" FontWeight="Bold"  Grid.ColumnSpan="1" Width="150" Visibility="Hidden"></Label>
+        
+            <Label Name="lblCat" Content="Category Name" HorizontalAlignment="Right" Margin="0,24,134,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1"/>
+            <TextBox HorizontalAlignment="Left" Name="txbCatName" Margin="184,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2"/>
+        
+            <Label Name="lblComp" Content="Company Name" HorizontalAlignment="Right" Margin="0,24,37,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Column="1" Grid.Row="1"/>
+            <TextBox Grid.Column="2" HorizontalAlignment="Left" Name="txbCompName" Margin="43,24,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1"/>
+        
+            <Label Name="lblModel" Content="Model" HorizontalAlignment="Right" Margin="0,67,181,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1"/>
+            <TextBox HorizontalAlignment="Left" Name="txbModel" Margin="184,71,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2"/>
+        
+            <Label Name="lblSerial" Content="Serial" HorizontalAlignment="Right" Margin="0,71,83,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1" Grid.Column="1"/>
+            <TextBox Grid.Column="2" HorizontalAlignment="Left" Name="txbSerial" Margin="43,67,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1"/>
+        
+             <Label Name="lblDate" Content="Purchase Date" HorizontalAlignment="Right" Margin="0,120,139,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1"/>
+            <TextBox HorizontalAlignment="Left" Name="txbPurchaseDate" Margin="184,124,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2"/>
+        
+            <Label Name="lblCost" Content="Cost" HorizontalAlignment="Right" Margin="0,124,10,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" RenderTransformOrigin="0.512,0.449" Grid.Row="1" Width="112" Grid.Column="1"/>
+            <TextBox Grid.Column="2" HorizontalAlignment="Left" Name="txbCost" Margin="43,124,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1"/>
+        
+            <Label Name="lblLoc" Content="Location" HorizontalAlignment="Right" Margin="0,181,115,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1" Width="110"/>
+            <TextBox HorizontalAlignment="Left" Name="txbLocation" Margin="184,185,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2"/>
+        
+            <Label Name="lblSubLoc" Content="Sub-Location" HorizontalAlignment="Right" Margin="0,177,15,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1" Width="107" Grid.Column="1"/>
+            <TextBox Grid.Column="2" HorizontalAlignment="Left" Name="txbSubLocation" Margin="43,181,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1"/>
+        
+            <Button Grid.Column="2" Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="156,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden"/>
+            <Button Grid.Column="2" Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="39,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden" Click="btnSaveChange_Click"/>
+
+
 
     </Grid>
- 
-    
-    
-    
+
+
+
+
 </Window>
