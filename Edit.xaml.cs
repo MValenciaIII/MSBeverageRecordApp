@@ -23,7 +23,7 @@ namespace MSBeverageRecordApp {
     /// </summary>
     
     public partial class Edit : Window {
-        MainWindow main = new MainWindow();
+        //MainWindow main = new MainWindow();
         //public Records Reports { get; set; }
         //public bool editing = false;
         public RootObject c = new RootObject();
@@ -86,7 +86,7 @@ namespace MSBeverageRecordApp {
                 }
             }
             //set deserialized object to c here
-            main.deserializeObject = c;
+            
            
         }//ef
 

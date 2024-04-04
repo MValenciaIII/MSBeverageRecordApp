@@ -1,37 +1,14 @@
 ﻿
-﻿using System.Text;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
-using System;
-using System.IO;
 using System.Net.Http;
 //IMPORTING
 using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
-using static System.Net.WebRequestMethods;
-using System.Collections.Generic;
-using System.Net.Http.Json;
-using System.CodeDom.Compiler;
-using System.Text.Json.Serialization;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Data;
-using System.Reflection;
-using System.Xml.Linq;
 using static MSBeverageRecordApp.Edit;
-
 
 //TODO
 //add print whole data grid function so raw csv data and report are both options
@@ -90,22 +67,6 @@ namespace MSBeverageRecordApp {
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
                 editWindow.c.Items = deserializeObject.Items;
 
-
-
-
-                //does not set object items to edit window items
-
-                //needs to happen AFTER edit window function runs
-                //trying to call btnSave in main
-                //what is 2nd param
-                // editWindow.AddHandler(editWindow.BtnSave_Click,); 
-                //MSBeverageRecordApp.ItemsSource = editWindow.saveGrid().Items;
-
-
-
-                //Records editRecs = editWindow.Reports;
-                //how to get this into root obj
-                //MSBeverageRecordApp.ItemsSource = editWindow.saveGrid(deserializeObject).Items;
                 //create csv array why did we do this here?
                 #region csv
                 //StringBuilder sb = new StringBuilder();
