@@ -39,23 +39,25 @@ namespace MSBeverageRecordApp {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+    // System.StackOverflowException: 'Exception of type 'System.StackOverflowException' was thrown.'
     public partial class MainWindow : Window {
-
-        //GLOBAL VARIABLE
-        string file = "";
-        string[] rows = new string[1];
-        int colCount = 0;
-        RootObject deserializeObject = new RootObject();
-        string c = "";
         Edit editWindow = new Edit();
-
-        
-
         public class RootObject {
             public int id { get; set; }
 
             public List<Records> Items { get; set; }
         }//end class
+
+        //GLOBAL VARIABLE
+        string file = "";
+        string[] rows = new string[1];
+        int colCount = 0;
+        public RootObject deserializeObject = new RootObject();
+        string c = "";
+
+        
+
 
         public class urlResult {
             public string[] results { get; set; }
@@ -291,12 +293,12 @@ namespace MSBeverageRecordApp {
             var rep = row.DataContext as Records;
             //Edit editRep = new Edit();
             editWindow.Owner = this;
+            editWindow.ShowRecord(rep);
+            editWindow.Show();
+            
 
 
-            Task.Run(() => {
-                editWindow.ShowRecord(rep);
-                editWindow.Show();
-            });
+            
 
             //RootObject root = editWindow.BtnSave_Click(editWindow.x, editWindow.y);
 
