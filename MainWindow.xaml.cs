@@ -6,11 +6,24 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using System.Net.Http;
 //IMPORTING
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Media;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using static MSBeverageRecordApp.Edit;
 using System.Runtime.CompilerServices;
 using static MSBeverageRecordApp.MainWindow;
+using System.Data;
+
+using System.Printing;
+using System.Windows.Controls.Primitives;
+
+using System.Windows.Markup;
+
+using System.Windows.Xps;
+using System;
+
 
 //TODO
 //add print whole data grid function so raw csv data and report are both options
@@ -108,7 +121,7 @@ namespace MSBeverageRecordApp {
             }//end if statusOK
 
 
-            //this.DataContext = deserializeObject;
+        //this.DataContext = deserializeObject;
         }//end main
 
         //save to file
@@ -166,13 +179,18 @@ namespace MSBeverageRecordApp {
         }
         
 
-        //add function
+        //adding function to format the grid and print
+        //saves pdf kind of
         private void printRec_Click(object sender, RoutedEventArgs e) {
-            PrintDialog s = new PrintDialog();
+
             
+            PrintDialog printDlg = new PrintDialog();
+            printDlg.PrintVisual(MSBeverageRecordApp, "Grid Printing.");
+            printDlg.ShowDialog();
         }
-        
-        //file dialog and csv format
+
+
+         //file dialog and csv format
         public void muiSave_Click(object sender, RoutedEventArgs e) {
 
             //save to csv
@@ -224,10 +242,10 @@ namespace MSBeverageRecordApp {
                 sb.Append("\ntotal equipment cost: " + totalCost.ToString());
                 rows[deserializeObject.Items.Count + 1] = sb.ToString();
                 #endregion
-                    Saving(file, rows, colCount);
+                Saving(file, rows, colCount);
             }//end if
         }//ef
-        //UPDATE
+            //UPDATE
         private void UpdateDataBase(object sender, DependencyPropertyChangedEventArgs e) {
 
            
@@ -257,6 +275,8 @@ namespace MSBeverageRecordApp {
             //MSBeverageRecordApp.Visibility = Visibility.Hidden;
             CreateRecord window = new CreateRecord();
             window.Show();
+
+
             
         }//end function
         Records rep = new Records();
@@ -272,7 +292,6 @@ namespace MSBeverageRecordApp {
             var row = sender as DataGridRow;
             rep = row.DataContext as Records;
 
-
             Reports = rep;
             txbCatName.Text = $"{Reports.categoryName}";
             txbCompName.Text = $"{Reports.companyName}";
@@ -283,6 +302,7 @@ namespace MSBeverageRecordApp {
             txbLocation.Text = $"{Reports.locationName}";
             txbSubLocation.Text = $"{Reports.sub_location}";
 
+            //wont work with filtered grid, find way to wrap elements and hide as a group
             lblEdit.Visibility = Visibility.Visible;
             lblCat.Visibility = Visibility.Visible;
             txbCatName.Visibility = Visibility.Visible;
@@ -312,6 +332,7 @@ namespace MSBeverageRecordApp {
 
         }//ef
 
+        //fix datetime format to just date or a string
         private void btnSaveChange_Click(object sender, RoutedEventArgs e) {
 
             Records Reports = rep;
@@ -334,7 +355,7 @@ namespace MSBeverageRecordApp {
             }
 
 
-
+            //wont work with filtered grid, find way to wrap elements and hide as a group
             lblEdit.Visibility         = Visibility.Hidden;
             lblCat.Visibility          = Visibility.Hidden;
             txbCatName.Visibility      = Visibility.Hidden;
