@@ -37,7 +37,7 @@ namespace MSBeverageRecordApp {
 
     //find library to give option print out datagrid records instead of raw csv
     public partial class MainWindow : Window {
-        
+       
         public class RootObject {
             public int id { get; set; }
 
@@ -182,18 +182,10 @@ namespace MSBeverageRecordApp {
         //adding function to format the grid and print
         //saves pdf kind of
         private void savepdf_Click(object sender, RoutedEventArgs e) {
-            
-            BlockUIContainer blk = new BlockUIContainer(MSBeverageRecordApp);
-            FlowDocument fd = new FlowDocument(blk);
 
-            //FlowDocumentScrollViewer dv = new FlowDocumentScrollViewer();
-            //dv.Document = fd;
-            //Window n = new Window();
-            //n.Content = dv;
-            //n.Show();
             //saves
-            PrintDialog printDlg = new PrintDialog();
-            printDlg.PrintVisual(MSBeverageRecordApp, "Grid Printing.");
+            //PrintDialog printDlg = new PrintDialog();
+            //printDlg.PrintVisual(MSBeverageRecordApp, "Grid Printing.");
         }
 
 
