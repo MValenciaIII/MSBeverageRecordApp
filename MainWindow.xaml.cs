@@ -66,7 +66,7 @@ namespace MSBeverageRecordApp
             InitializeComponent();
         }//end main window
         private void btnAddCategory_Click(object sender, RoutedEventArgs e) {
-
+            
         }
 
         private void btnViewReports_Click(object sender, RoutedEventArgs e) {
