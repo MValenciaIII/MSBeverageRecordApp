@@ -181,17 +181,24 @@ namespace MSBeverageRecordApp {
 
         //adding function to format the grid and print
         //saves pdf kind of
-        private void printRec_Click(object sender, RoutedEventArgs e) {
-
+        private void savepdf_Click(object sender, RoutedEventArgs e) {
             
+            BlockUIContainer blk = new BlockUIContainer(MSBeverageRecordApp);
+            FlowDocument fd = new FlowDocument(blk);
+
+            //FlowDocumentScrollViewer dv = new FlowDocumentScrollViewer();
+            //dv.Document = fd;
+            //Window n = new Window();
+            //n.Content = dv;
+            //n.Show();
+            //saves
             PrintDialog printDlg = new PrintDialog();
             printDlg.PrintVisual(MSBeverageRecordApp, "Grid Printing.");
-            printDlg.ShowDialog();
         }
 
 
          //file dialog and csv format
-        public void muiSave_Click(object sender, RoutedEventArgs e) {
+        public void savecsv_Click(object sender, RoutedEventArgs e) {
 
             //save to csv
             //create a save file dialog object
@@ -282,12 +289,7 @@ namespace MSBeverageRecordApp {
         Records rep = new Records();
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            //make global to be able to call save function
-            //Edit editWindow = new Edit();
-            //editWindow.c.Items = deserializeObject.Items;
-            ////Edit editRep = new Edit();
-            //editWindow.Owner = this;
-            //editWindow.ShowRecord(rep);
+
             Records Reports = new Records();
             var row = sender as DataGridRow;
             rep = row.DataContext as Records;
@@ -302,25 +304,13 @@ namespace MSBeverageRecordApp {
             txbLocation.Text = $"{Reports.locationName}";
             txbSubLocation.Text = $"{Reports.sub_location}";
 
-            //wont work with filtered grid, find way to wrap elements and hide as a group
-            lblEdit.Visibility = Visibility.Visible;
-            lblCat.Visibility = Visibility.Visible;
-            txbCatName.Visibility = Visibility.Visible;
-            lblComp.Visibility = Visibility.Visible;
-            txbCompName.Visibility = Visibility.Visible;
-            lblModel.Visibility = Visibility.Visible;
-            txbModel.Visibility = Visibility.Visible;
-            lblSerial.Visibility = Visibility.Visible;
-            txbSerial.Visibility = Visibility.Visible;
-            lblDate.Visibility = Visibility.Visible;
-            txbPurchaseDate.Visibility = Visibility.Visible;
-            lblCost.Visibility = Visibility.Visible;
-            txbCost.Visibility = Visibility.Visible;
-            lblLoc.Visibility = Visibility.Visible;
-            txbLocation.Visibility = Visibility.Visible;    
-            lblSubLoc.Visibility = Visibility.Visible;
-            txbSubLocation.Visibility = Visibility.Visible;
-            
+            //switch views
+            spLabels.Visibility = Visibility.Visible;
+            spText.Visibility   = Visibility.Visible;
+            spLbl.Visibility    = Visibility.Visible;
+            spTxt.Visibility    = Visibility.Visible;
+
+
             btnSave.Visibility = Visibility.Visible;
             btnCancel.Visibility = Visibility.Visible;
 
@@ -355,36 +345,36 @@ namespace MSBeverageRecordApp {
             }
 
 
-            //wont work with filtered grid, find way to wrap elements and hide as a group
-            lblEdit.Visibility         = Visibility.Hidden;
-            lblCat.Visibility          = Visibility.Hidden;
-            txbCatName.Visibility      = Visibility.Hidden;
-            lblComp.Visibility         = Visibility.Hidden;
-            txbCompName.Visibility     = Visibility.Hidden;
-            lblModel.Visibility        = Visibility.Hidden;
-            txbModel.Visibility        = Visibility.Hidden;
-            lblSerial.Visibility       = Visibility.Hidden;
-            txbSerial.Visibility       = Visibility.Hidden;
-            lblDate.Visibility         = Visibility.Hidden;
-            txbPurchaseDate.Visibility = Visibility.Hidden;
-            lblCost.Visibility         = Visibility.Hidden;
-            txbCost.Visibility         = Visibility.Hidden;
-            lblLoc.Visibility          = Visibility.Hidden;
-            txbLocation.Visibility     = Visibility.Hidden;
-            lblSubLoc.Visibility       = Visibility.Hidden;
-            txbSubLocation.Visibility  = Visibility.Hidden;      
-            btnSave.Visibility         = Visibility.Hidden;
-            btnCancel.Visibility       = Visibility.Hidden;
-
-
+            //switch views
             MSBeverageRecordApp.Visibility = Visibility.Visible;
             consoleOutput.Visibility       = Visibility.Visible;
             fileMenu.Visibility            = Visibility.Visible;
             btnaddRecord.Visibility        = Visibility.Visible;
             Filter.Visibility              = Visibility.Visible;
 
+            btnSave.Visibility = Visibility.Hidden;
+            btnCancel.Visibility = Visibility.Hidden;
+
+            spLabels.Visibility = Visibility.Hidden;
+            spText.Visibility   = Visibility.Hidden;
+            spLbl.Visibility    = Visibility.Hidden;
+            spTxt.Visibility    = Visibility.Hidden;
         }
 
+        private void btnCancel_Click(object sender, RoutedEventArgs e) {
+            MSBeverageRecordApp.Visibility = Visibility.Visible;
+            consoleOutput.Visibility = Visibility.Visible;
+            fileMenu.Visibility = Visibility.Visible;
+            btnaddRecord.Visibility = Visibility.Visible;
+            Filter.Visibility = Visibility.Visible;
 
+            btnSave.Visibility = Visibility.Hidden;
+            btnCancel.Visibility = Visibility.Hidden;
+
+            spLabels.Visibility = Visibility.Hidden;
+            spText.Visibility = Visibility.Hidden;
+            spLbl.Visibility = Visibility.Hidden;
+            spTxt.Visibility = Visibility.Hidden;
+        }
     }//end class
 }//end namespace

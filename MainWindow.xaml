@@ -7,6 +7,8 @@
         xmlns:VisualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core" x:Class="MSBeverageRecordApp.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="510" Width="890" WindowStartupLocation="CenterScreen">
+    
+    
     <Grid>
 
 
@@ -25,8 +27,8 @@
         <Menu Name="fileMenu" Visibility="Visible" DockPanel.Dock="Top" HorizontalAlignment="Left" Width="890" Background="White" Grid.ColumnSpan="3">
             <MenuItem Header="_File">
 
-                <MenuItem x:Name="muiSave" Header="_Save" Click="muiSave_Click"/>
-                <MenuItem x:Name="printRec" Header="Print" Click="printRec_Click"/>
+                <MenuItem x:Name="muiSave" Header="save csv" Click="savecsv_Click"/>
+                <MenuItem x:Name="printRec" Header="save pdf" Click="savepdf_Click"/>
 
             </MenuItem>
 
@@ -68,34 +70,42 @@
 
             
             
-            <Label Name="lblEdit" Content="Edit Record" HorizontalAlignment="Left" FontSize="20" FontWeight="Bold"  Grid.ColumnSpan="1" Width="150" Visibility="Hidden"></Label>
+        <Label Name="lblEdit" Content="Edit Record" HorizontalAlignment="Left" FontSize="30" FontWeight="Bold"  Grid.ColumnSpan="1" Width="221" Visibility="Hidden"/>
         
-            <Label Name="lblCat" Content="Category Name" HorizontalAlignment="Right" Margin="0,24,134,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1"/>
-            <TextBox HorizontalAlignment="Left" Name="txbCatName" Margin="184,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2"/>
-        
-            <Label Name="lblComp" Content="Company Name" HorizontalAlignment="Right" Margin="0,24,37,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Column="1" Grid.Row="1"/>
-            <TextBox Grid.Column="2" HorizontalAlignment="Left" Name="txbCompName" Margin="43,24,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1"/>
-        
-            <Label Name="lblModel" Content="Model" HorizontalAlignment="Right" Margin="0,67,181,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1"/>
-            <TextBox HorizontalAlignment="Left" Name="txbModel" Margin="184,71,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2"/>
-        
-            <Label Name="lblSerial" Content="Serial" HorizontalAlignment="Right" Margin="0,71,83,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1" Grid.Column="1"/>
-            <TextBox Grid.Column="2" HorizontalAlignment="Left" Name="txbSerial" Margin="43,67,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1"/>
-        
-             <Label Name="lblDate" Content="Purchase Date" HorizontalAlignment="Right" Margin="0,120,139,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1"/>
-            <TextBox HorizontalAlignment="Left" Name="txbPurchaseDate" Margin="184,124,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2"/>
-        
-            <Label Name="lblCost" Content="Cost" HorizontalAlignment="Right" Margin="0,124,10,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" RenderTransformOrigin="0.512,0.449" Grid.Row="1" Width="112" Grid.Column="1"/>
-            <TextBox Grid.Column="2" HorizontalAlignment="Left" Name="txbCost" Margin="43,124,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1"/>
-        
-            <Label Name="lblLoc" Content="Location" HorizontalAlignment="Right" Margin="0,181,115,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1" Width="110"/>
-            <TextBox HorizontalAlignment="Left" Name="txbLocation" Margin="184,185,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2"/>
-        
-            <Label Name="lblSubLoc" Content="Sub-Location" HorizontalAlignment="Right" Margin="0,177,15,0" VerticalAlignment="Top" Height="36" Visibility="Hidden" Grid.Row="1" Width="107" Grid.Column="1"/>
-            <TextBox Grid.Column="2" HorizontalAlignment="Left" Name="txbSubLocation" Margin="43,181,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="150" Height="32" Visibility="Hidden" Grid.Row="1"/>
-        
-            <Button Grid.Column="2" Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="156,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden"/>
-            <Button Grid.Column="2" Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="39,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden" Click="btnSaveChange_Click"/>
+           
+        <StackPanel x:Name="spLabels" Grid.Row="1" Visibility="Hidden"   HorizontalAlignment="Left" Width="184">
+            <Label Content="Category Name" Margin="0,30,0,0" Height="36" Width="176" HorizontalContentAlignment="Center"/>
+            <Label Content="Company Name" HorizontalAlignment="Right" Margin="0,30,0,0" Height="36" Visibility="Visible" Width="180"  HorizontalContentAlignment="Center" />
+            <Label Content="Purchase Date" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="180" HorizontalContentAlignment="Center"/>
+            <Label Content="Location" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Height="36" Width="180" HorizontalContentAlignment="Center"/>
+
+
+        </StackPanel>
+        <StackPanel x:Name="spText" Grid.ColumnSpan="2" Visibility="Hidden" HorizontalAlignment="Left" Width="205" Margin="191,94,0,0" Grid.RowSpan="2">
+            <TextBox x:Name="txbCatName"  Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="202" Height="36"/>
+            <TextBox x:Name="txbCompName"  Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="198" Height="36"/>
+            <TextBox HorizontalAlignment="Left" Name="txbPurchaseDate" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="203" Height="36"/>
+        <TextBox HorizontalAlignment="Left" Name="txbLocation" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="203" Height="36"/>
+
+
+        </StackPanel>
+        <StackPanel x:Name="spLbl" Grid.ColumnSpan="2" Visibility="Hidden"   HorizontalAlignment="Left" Width="170" Margin="134,0,0,0" Grid.Column="1" Grid.Row="1">
+            <Label Content="Model" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="173" FlowDirection="RightToLeft" HorizontalContentAlignment="Center"/>
+            <Label Content="Serial" HorizontalAlignment="Right" Margin="0,30,0,0" Height="36" Width="173" FlowDirection="RightToLeft" HorizontalContentAlignment="Center"/>
+            <Label Content="Cost" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="173" HorizontalContentAlignment="Center"/>
+            <Label Content="Sub-Location" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Height="36" Width="173" HorizontalContentAlignment="Center"/>
+
+        </StackPanel>
+        <StackPanel x:Name="spTxt" Visibility="Hidden"   HorizontalAlignment="Left" Width="205" Margin="52,4,0,63" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2">
+            <TextBox HorizontalAlignment="Left" Name="txbModel" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="203" Height="36"/>
+            <TextBox HorizontalAlignment="Left" Name="txbSerial" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="203" Height="36"/>
+            <TextBox HorizontalAlignment="Left" Name="txbCost" Margin="0,30,0,0" Height="36" TextWrapping="Wrap" Text="TextBox" Width="203"/>
+            <TextBox HorizontalAlignment="Left" Name="txbSubLocation" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="203" Height="36"/>
+
+        </StackPanel>
+
+        <Button Grid.Column="2" Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="156,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden" Click="btnCancel_Click"/>
+        <Button Grid.Column="2" Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="39,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden" Click="btnSaveChange_Click"/>
 
 
 
