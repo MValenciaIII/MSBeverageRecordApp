@@ -7,10 +7,9 @@
         xmlns:VisualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core" x:Class="MSBeverageRecordApp.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="510" Width="890" WindowStartupLocation="CenterScreen">
-    
-    
-    <Grid>
 
+
+    <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="35*"></RowDefinition>
@@ -53,6 +52,7 @@
                 </Style>
             </DataGrid.Resources>
         </DataGrid>
+        
         
         <Label Visibility="Visible"  FontSize="22px" Content="Mississippi Beverage Records" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="47" Width="300" Grid.ColumnSpan="3"/>
         <Button Visibility="Visible" x:Name="btnaddRecord" Content="New Record" HorizontalAlignment="Left" Margin="172,54,0,0" VerticalAlignment="Top" Click="addRecord" Height="23" Width="74" Grid.Column="2"/>
@@ -111,6 +111,7 @@
 
     </Grid>
 
+    
 
 
 

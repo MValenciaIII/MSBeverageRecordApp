@@ -18,11 +18,17 @@ using System.Data;
 
 using System.Printing;
 using System.Windows.Controls.Primitives;
+using Syncfusion.Data;
 
 using System.Windows.Markup;
 
 using System.Windows.Xps;
 using System;
+using System.IO;
+using Syncfusion.UI.Xaml.Grid;
+using System.Windows.Xps.Packaging;
+using System.Reflection.Metadata;
+using System.Windows.Media.Imaging;
 
 
 //TODO
@@ -181,15 +187,18 @@ namespace MSBeverageRecordApp {
 
         //adding function to format the grid and print
         //saves pdf kind of
+
         private void savepdf_Click(object sender, RoutedEventArgs e) {
 
-            //saves
+            //saves but need to add print preview
+            //test with more than one page of data
             //PrintDialog printDlg = new PrintDialog();
             //printDlg.PrintVisual(MSBeverageRecordApp, "Grid Printing.");
+
         }
 
 
-         //file dialog and csv format
+        //file dialog and csv format
         public void savecsv_Click(object sender, RoutedEventArgs e) {
 
             //save to csv

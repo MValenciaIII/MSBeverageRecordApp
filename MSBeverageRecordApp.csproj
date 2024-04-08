@@ -18,6 +18,7 @@
     <!--<PackageReference Include="CSVLibraryAK" Version="1.1.4" />-->
     <PackageReference Include="ChoETL.JSON" Version="1.2.1.65" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="25.1.38" />
   </ItemGroup>
 
 </Project>
