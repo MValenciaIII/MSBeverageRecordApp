@@ -11,7 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using static MSBeverageRecordApp.Edit;
+
 using System.Runtime.CompilerServices;
 using static MSBeverageRecordApp.MainWindow;
 using System.Data;
@@ -29,6 +29,7 @@ using Syncfusion.UI.Xaml.Grid;
 using System.Windows.Xps.Packaging;
 using System.Reflection.Metadata;
 using System.Windows.Media.Imaging;
+using System.Xml.Linq;
 
 
 //TODO
@@ -38,11 +39,13 @@ namespace MSBeverageRecordApp {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
-        //todo
+    //todo
 
 
     //find library to give option print out datagrid records instead of raw csv
     public partial class MainWindow : Window {
+
+
        
         public class RootObject {
             public int id { get; set; }
@@ -87,7 +90,6 @@ namespace MSBeverageRecordApp {
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
                 
-
                 //create csv array why did we do this here?
                 #region csv
                 //StringBuilder sb = new StringBuilder();
@@ -192,8 +194,13 @@ namespace MSBeverageRecordApp {
 
             //saves but need to add print preview
             //test with more than one page of data
-            //PrintDialog printDlg = new PrintDialog();
-            //printDlg.PrintVisual(MSBeverageRecordApp, "Grid Printing.");
+            PrintDialog printDlg = new PrintDialog();
+            printDlg.PrintVisual(MSBeverageRecordApp, "Grid Printing.");
+
+
+            //PrintDG pg = new PrintDG();
+
+
 
         }
 
@@ -253,7 +260,9 @@ namespace MSBeverageRecordApp {
                 Saving(file, rows, colCount);
             }//end if
         }//ef
-            //UPDATE
+
+
+        //UPDATE
         private void UpdateDataBase(object sender, DependencyPropertyChangedEventArgs e) {
 
            
@@ -283,9 +292,6 @@ namespace MSBeverageRecordApp {
             //MSBeverageRecordApp.Visibility = Visibility.Hidden;
             CreateRecord window = new CreateRecord();
             window.Show();
-
-
-            
         }//end function
         Records rep = new Records();
 
