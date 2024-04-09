@@ -30,7 +30,10 @@ using System.Windows.Xps.Packaging;
 using System.Reflection.Metadata;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
-
+using PrintDialogX;
+using PrintDialogX.PrintDialog;
+using ChoETL;
+using System.Reflection.PortableExecutable;
 
 //TODO
 //add print whole data grid function so raw csv data and report are both options
@@ -53,6 +56,8 @@ namespace MSBeverageRecordApp {
             public List<Records> Items { get; set; }
         }//end class
 
+
+
         //GLOBAL VARIABLE
         string file = "";
         string[] rows = new string[1];
@@ -60,12 +65,13 @@ namespace MSBeverageRecordApp {
         public RootObject deserializeObject = new RootObject();
         string c = "";
 
+
+
         public class urlResult {
             public string[] results { get; set; }
         }
         public MainWindow() {
-            InitializeComponent();
-
+            InitializeComponent(); 
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
@@ -88,8 +94,8 @@ namespace MSBeverageRecordApp {
 
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
-                MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
-                
+                MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
+
                 //create csv array why did we do this here?
                 #region csv
                 //StringBuilder sb = new StringBuilder();
@@ -128,7 +134,6 @@ namespace MSBeverageRecordApp {
                 #endregion
             }//end if statusOK
 
-
         //this.DataContext = deserializeObject;
         }//end main
 
@@ -140,10 +145,9 @@ namespace MSBeverageRecordApp {
             for (int i = 0; i < array.Length; i++) {
                 count++;
                 System.IO.File.AppendAllText(file, array[i]);
-                if (count > num) {
-                    //start new line after printing each cell in a row
-                    System.IO.File.AppendAllText(file, "\n");
-                }
+                //start new line after printing each cell in a row
+                count = 0;
+
             }//end for
         }//end function
 
@@ -191,31 +195,36 @@ namespace MSBeverageRecordApp {
         //saves pdf kind of
 
         private void savepdf_Click(object sender, RoutedEventArgs e) {
+            //how to set the width?
+            FrameworkElement head = new FrameworkElement();
+            FrameworkElement foot = new FrameworkElement();
 
             //saves but need to add print preview
             //test with more than one page of data
-            PrintDialog printDlg = new PrintDialog();
-            printDlg.PrintVisual(MSBeverageRecordApp, "Grid Printing.");
+            //maybe add a header
 
+            //MSBeverageRecordGrid.
+            System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
+            //printDlg.PrintVisual(MSBeverageRecordGrid, "title");
+            PrintDG print = new PrintDG();
+            print.PrintDataGrid(head, MSBeverageRecordGrid, foot, printDlg);
 
-            //PrintDG pg = new PrintDG();
-
-
-
+            //WORKS BUT ONLY USES HALF THE PAGE AND NO PREVIEW
+            //add a show print dialog in class to give print options
+            //or add a print button 
         }
 
 
         //file dialog and csv format
-        public void savecsv_Click(object sender, RoutedEventArgs e) {
+        public void savecsv_Click(object sender, RoutedEventArgs e) { 
 
             //save to csv
             //create a save file dialog object
-            SaveFileDialog sfdSave = new SaveFileDialog();
+            Microsoft.Win32.SaveFileDialog sfdSave = new Microsoft.Win32.SaveFileDialog();
             //open the dialog and wait for the user to make a selection
             //fix
-            sfdSave.DefaultExt = "csv";
-            sfdSave.Filter =
-                "Text files (*.csv)|*.txt|All files (*.*)|*.*";
+            sfdSave.InitialDirectory = @"C:\";
+            sfdSave.Filter = "CSV file (*.csv)|*.csv|All Files (*.*)|*.*";
             bool fileSelected = (bool)sfdSave.ShowDialog();
             file = sfdSave.FileName;
             if (fileSelected == true) {
@@ -263,13 +272,42 @@ namespace MSBeverageRecordApp {
 
 
         //UPDATE
-        private void UpdateDataBase(object sender, DependencyPropertyChangedEventArgs e) {
+        
+        //SET post request here then call in the edit window save button click event
+        private void UpdateDataBase() {
+            Records reports = rep;
+            var postRec = new Records {
+                record_id = rep.record_id,
+                categoryName = rep.categoryName,
+                companyName = rep.companyName,
+                model = rep.model,
+                serial = rep.serial,
+                purchase_date = rep.purchase_date,
+                cost = rep.cost,
+                locationName = rep.locationName,
+                sub_location = rep.sub_location
+            };
+            //http client instance
+            var client = new HttpClient();
+            //connection url
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
+            var json = JsonSerializer.Serialize(postRec);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-           
+            //no status code?
+            var response = client.PostAsync(client.BaseAddress, content).Result;
+
+            if (response.IsSuccessStatusCode) {
+                var responseContent = response.Content.ReadAsStringAsync().Result;
+                
+                
+            } else {
+                MessageBox.Show("Error" + response.StatusCode);
+            }
+
         }//ef
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
-
         public class Records {
             public int record_id { get; set; }
             public string categoryName { get; set; }
@@ -293,8 +331,8 @@ namespace MSBeverageRecordApp {
             CreateRecord window = new CreateRecord();
             window.Show();
         }//end function
-        Records rep = new Records();
 
+        Records rep = new Records();
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 
             Records Reports = new Records();
@@ -321,7 +359,7 @@ namespace MSBeverageRecordApp {
             btnSave.Visibility = Visibility.Visible;
             btnCancel.Visibility = Visibility.Visible;
 
-            MSBeverageRecordApp.Visibility = Visibility.Collapsed;
+            MSBeverageRecordGrid.Visibility = Visibility.Collapsed;
             consoleOutput.Visibility = Visibility.Collapsed;
             fileMenu.Visibility = Visibility.Collapsed;
             btnaddRecord.Visibility = Visibility.Collapsed;
@@ -346,14 +384,15 @@ namespace MSBeverageRecordApp {
                     deserializeObject.Items[i].sub_location  = txbSubLocation.Text;
                 }
 
-                MSBeverageRecordApp.ItemsSource = null;
-                MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+
+                MSBeverageRecordGrid.ItemsSource = null;
+                MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
                 
             }
 
 
             //switch views
-            MSBeverageRecordApp.Visibility = Visibility.Visible;
+            MSBeverageRecordGrid.Visibility = Visibility.Visible;
             consoleOutput.Visibility       = Visibility.Visible;
             fileMenu.Visibility            = Visibility.Visible;
             btnaddRecord.Visibility        = Visibility.Visible;
@@ -366,10 +405,14 @@ namespace MSBeverageRecordApp {
             spText.Visibility   = Visibility.Hidden;
             spLbl.Visibility    = Visibility.Hidden;
             spTxt.Visibility    = Visibility.Hidden;
+
+
+            //call update database here
+            UpdateDataBase();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e) {
-            MSBeverageRecordApp.Visibility = Visibility.Visible;
+            MSBeverageRecordGrid.Visibility = Visibility.Visible;
             consoleOutput.Visibility = Visibility.Visible;
             fileMenu.Visibility = Visibility.Visible;
             btnaddRecord.Visibility = Visibility.Visible;
