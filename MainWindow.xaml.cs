@@ -34,7 +34,6 @@ using System.Xml.Linq;
 //modify/update data grid 
 //
 using System.Collections.ObjectModel;
-
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 
@@ -54,23 +53,27 @@ using System.Runtime.Serialization.Json;
 //TOTAL VALUE BY CATEGORY/MANUFACTURER
 
 
-namespace MSBeverageRecordApp
-{
+namespace MSBeverageRecordApp {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MenuPage.xaml
     /// </summary>
-
-    public partial class MainWindow : Window {
-        public MainWindow() {
-
+    public partial class MenuPage : Page {
+        public MenuPage() {
             InitializeComponent();
-        }//end main window
-        private void btnAddCategory_Click(object sender, RoutedEventArgs e) {
-            
         }
+        #region Button Event Functions
+        private void btnAddCategory_Click(object sender, RoutedEventArgs e) {
+            this.NavigationService.Navigate(new Uri("CategoryTable.xaml", UriKind.Relative));
+
+        }//end event
 
         private void btnViewReports_Click(object sender, RoutedEventArgs e) {
 
+        }//end event
+        #endregion
+
+        private void addRecord(object sender, RoutedEventArgs e) {
+            this.NavigationService.Navigate(new Uri("CreateRecord.xaml", UriKind.Relative));
         }
     }//end class
 }//end namespace

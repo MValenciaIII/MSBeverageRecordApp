@@ -32,24 +32,27 @@ namespace MSBeverageRecordApp {
         }//end class
         public CategoryTable() {
             InitializeComponent();
+        }//end main CategoryTable
+        private void btnSubmit_Click(object sender, RoutedEventArgs e) {
+            string input = txtInput.Text;
 
             //CREATE AN INSTANCE OF THE POSTDATA CLASS
             var postData = new PostData {
-                categoryName = "test"//will link to input from btnSubmit_Click
+                categoryName = input
             };//end var postData
 
             //CREATING A NEW HTTPCLIENT OBJECT
             var client = new HttpClient();
 
             //SET BASE ADDRESS OF API
-            client.BaseAddress = new Uri("http://localhost:4001/api/category");
+            client.BaseAddress = new Uri("http://localhost:4001/api/category/categorycreate/");
 
             //SERIALIZE POSTDATA OBJECT TO JSON STRING
             var json = System.Text.Json.JsonSerializer.Serialize(postData);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             //MAKE POST REQUEST
-            var response = client.PostAsync("posts", content).Result;
+            var response = client.PostAsync("", content).Result;
 
             //CHECK STATUS CODE TO SEE IF REQUEST WAS SUCCESSFUL
             if (response.IsSuccessStatusCode) {
@@ -58,39 +61,9 @@ namespace MSBeverageRecordApp {
                     PropertyNameCaseInsensitive = true
                 };//end var options
 
-                //DESERIALIZE BACK INTO C# OBJECT
-                var postResponse = System.Text.Json.JsonSerializer.Deserialize<PostResponse>(responseContent, options);
-                Debug.WriteLine("Post successful. ID: " + postResponse.Id);
-
-            } else {
-                //GIVE ERROR MESSAGE IF UNSUCCESSFUL
-                Debug.WriteLine("Error: " + response.StatusCode);
+                Debug.WriteLine("Post request sent");
             }//end if
-
-        }//end main CategoryTable
-        private void btnSubmit_Click(object sender, RoutedEventArgs e) {
-            string input = txtInput.SelectedText;
         }//end function
-
-        //FIGURING OUT HOW TO CREATE A WAY TO MAKE A NEW CATEGORY TO POST INTO THE API?
-        //The Hypertext Transfer Protocol(HTTP) Post method is mainly used at the client (Browser)
-        //side to send data to a Specified server in order to create or rewrite a particular resource/data.
-        //This data sent to the server is stored in the request body of the HTTP request.
-        //Post method eventually leads to the creation of a new resource or updating an existing one. -FW
-
-        // Instantiate one HttpClient for your application's lifetime (recommended)
-        //private static HttpClient client = new HttpClient();
-
-        //From POST example, it was written just like this, trying to figure it out it didnt have private
-        // async Task SendPostRequestAsync() {
-        //    var categoryValue = new Category { 
-        //            "Icecream";
-        //}
-        //        var categoryContent = new FormUrlEncodedContent(categoryValue);
-        //        //i want Icecream to be added as a new Category value
-        //        var categoryResponse = await client.PostAsync(http://localhost:4001/api/category);
-        //        var responseString = await categoryResponse.Content.ReadAsStringAsync;
-        //} 
 
     }//end class
 
