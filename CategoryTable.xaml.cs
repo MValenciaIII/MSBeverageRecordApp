@@ -31,12 +31,12 @@ namespace MSBeverageRecordApp {
             public int Id { get; set; }
         }//end class
         public CategoryTable() {
-            InitializeComponent(); 
+            InitializeComponent();
 
             //CREATE AN INSTANCE OF THE POSTDATA CLASS
             var postData = new PostData {
-                categoryName = "test"//will link to txtInput
-            };
+                categoryName = "test"//will link to input from btnSubmit_Click
+            };//end var postData
 
             //CREATING A NEW HTTPCLIENT OBJECT
             var client = new HttpClient();
@@ -56,7 +56,7 @@ namespace MSBeverageRecordApp {
                 var responseContent = response.Content.ReadAsStringAsync().Result;
                 var options = new JsonSerializerOptions {
                     PropertyNameCaseInsensitive = true
-                };
+                };//end var options
 
                 //DESERIALIZE BACK INTO C# OBJECT
                 var postResponse = System.Text.Json.JsonSerializer.Deserialize<PostResponse>(responseContent, options);
@@ -68,7 +68,9 @@ namespace MSBeverageRecordApp {
             }//end if
 
         }//end main CategoryTable
-
+        private void btnSubmit_Click(object sender, RoutedEventArgs e) {
+            string input = txtInput.SelectedText;
+        }//end function
 
         //FIGURING OUT HOW TO CREATE A WAY TO MAKE A NEW CATEGORY TO POST INTO THE API?
         //The Hypertext Transfer Protocol(HTTP) Post method is mainly used at the client (Browser)
@@ -80,7 +82,7 @@ namespace MSBeverageRecordApp {
         //private static HttpClient client = new HttpClient();
 
         //From POST example, it was written just like this, trying to figure it out it didnt have private
-       // async Task SendPostRequestAsync() {
+        // async Task SendPostRequestAsync() {
         //    var categoryValue = new Category { 
         //            "Icecream";
         //}
@@ -89,10 +91,6 @@ namespace MSBeverageRecordApp {
         //        var categoryResponse = await client.PostAsync(http://localhost:4001/api/category);
         //        var responseString = await categoryResponse.Content.ReadAsStringAsync;
         //} 
-
-    private void txtInput_TextChanged(object sender, TextChangedEventArgs e) {
-           string input = txtInput.Text;
-        }//end function
 
     }//end class
 
