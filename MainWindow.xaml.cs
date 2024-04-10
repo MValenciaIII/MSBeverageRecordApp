@@ -34,6 +34,7 @@ using PrintDialogX;
 using PrintDialogX.PrintDialog;
 using ChoETL;
 using System.Reflection.PortableExecutable;
+using System.Collections.Generic;
 
 //TODO
 //add print whole data grid function so raw csv data and report are both options
@@ -49,13 +50,24 @@ namespace MSBeverageRecordApp {
     public partial class MainWindow : Window {
 
 
-       
+
         public class RootObject {
             public int id { get; set; }
 
             public List<Records> Items { get; set; }
         }//end class
 
+        public class RootObj {
+            public int id { get; set; }
+
+            public List<PostRecords> Items { get; set; }
+        }//end class
+
+        public class Root {
+            public int id { get; set; }
+
+            public List<Category> Items { get; set; }
+        }//end class
 
 
         //GLOBAL VARIABLE
@@ -64,18 +76,19 @@ namespace MSBeverageRecordApp {
         int colCount = 0;
         public RootObject deserializeObject = new RootObject();
         string c = "";
-
+        Root root = new Root();
+        RootObj post = new RootObj();
 
 
         public class urlResult {
             public string[] results { get; set; }
         }
         public MainWindow() {
-            InitializeComponent(); 
+            InitializeComponent();
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
+            client.BaseAddress = new Uri("http://localhost:4002/api/records/recordsreal");
             // Add an Accept header for JSON format.
 
             client.DefaultRequestHeaders.Accept.Add(
@@ -95,6 +108,8 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
+                Tables();
+                //CreateLocationFilterItems(deserializeObject);
 
                 //create csv array why did we do this here?
                 #region csv
@@ -133,8 +148,10 @@ namespace MSBeverageRecordApp {
                 //} 
                 #endregion
             }//end if statusOK
+             //MessageBox.Show();
 
-        //this.DataContext = deserializeObject;
+
+            //this.DataContext = deserializeObject;
         }//end main
 
         //save to file
@@ -189,7 +206,7 @@ namespace MSBeverageRecordApp {
             System.IO.File.AppendAllText(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test2.txt", json);
             #endregion
         }
-        
+
 
         //adding function to format the grid and print
         //saves pdf kind of
@@ -216,7 +233,7 @@ namespace MSBeverageRecordApp {
 
 
         //file dialog and csv format
-        public void savecsv_Click(object sender, RoutedEventArgs e) { 
+        public void savecsv_Click(object sender, RoutedEventArgs e) {
 
             //save to csv
             //create a save file dialog object
@@ -260,7 +277,7 @@ namespace MSBeverageRecordApp {
                     //assign current string value to be one row
                     rows[i] = sb.ToString();
                 }
-               
+
                 consoleOutput.Text = $"{totalCost:C}";
                 sb.Clear();
                 sb.Append("\ntotal equipment cost: " + totalCost.ToString());
@@ -272,10 +289,13 @@ namespace MSBeverageRecordApp {
 
 
         //UPDATE
-        
+
         //SET post request here then call in the edit window save button click event
         private void UpdateDataBase() {
-            Records reports = rep;
+           Records reports = rep;
+
+
+
             var postRec = new Records {
                 record_id = rep.record_id,
                 categoryName = rep.categoryName,
@@ -290,19 +310,20 @@ namespace MSBeverageRecordApp {
             //http client instance
             var client = new HttpClient();
             //connection url
-            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
+            client.BaseAddress = new Uri("http://localhost:4002/api/records/recordsreal");
             var json = JsonSerializer.Serialize(postRec);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             //no status code?
-            var response = client.PostAsync(client.BaseAddress, content).Result;
+            var response = client.PostAsync("modifyid", content).Result;
 
             if (response.IsSuccessStatusCode) {
                 var responseContent = response.Content.ReadAsStringAsync().Result;
-                
-                
+                var postResponse = JsonSerializer.Deserialize<Records>(responseContent);
+                MessageBox.Show("CatName:" + postResponse.categoryName);
+
             } else {
-                MessageBox.Show("Error" + response.StatusCode);
+                MessageBox.Show("Error " + response.StatusCode);
             }
 
         }//ef
@@ -319,12 +340,18 @@ namespace MSBeverageRecordApp {
             public string locationName { get; set; }
             public string sub_location { get; set; }
         }//end class
-         ////CALLING THIS AS PARENT OBJECT HOLDER THINGY 
-         /// <summary>
-        
-         /// </summary>
 
-
+        public class PostRecords {
+            public int record_id { get; set; }
+            public int categoryName { get; set; }
+            public int companyName { get; set; }
+            public string model { get; set; }
+            public string serial { get; set; }
+            public string purchase_date { get; set; }
+            public double cost { get; set; }
+            public int locationName { get; set; }
+            public string sub_location { get; set; }
+        }//end class
 
         private void addRecord(object sender, RoutedEventArgs e) {
             //MSBeverageRecordApp.Visibility = Visibility.Hidden;
@@ -351,9 +378,9 @@ namespace MSBeverageRecordApp {
 
             //switch views
             spLabels.Visibility = Visibility.Visible;
-            spText.Visibility   = Visibility.Visible;
-            spLbl.Visibility    = Visibility.Visible;
-            spTxt.Visibility    = Visibility.Visible;
+            spText.Visibility = Visibility.Visible;
+            spLbl.Visibility = Visibility.Visible;
+            spTxt.Visibility = Visibility.Visible;
 
 
             btnSave.Visibility = Visibility.Visible;
@@ -371,40 +398,53 @@ namespace MSBeverageRecordApp {
         private void btnSaveChange_Click(object sender, RoutedEventArgs e) {
 
             Records Reports = rep;
+            
 
             for (int i = 0; i < deserializeObject.Items.Count; i++) {
                 if (deserializeObject.Items[i].record_id == Reports.record_id) {
-                    deserializeObject.Items[i].categoryName  = txbCatName.Text;
-                    deserializeObject.Items[i].companyName   = txbCompName.Text;
-                    deserializeObject.Items[i].model         = txbModel.Text;
-                    deserializeObject.Items[i].serial        = txbSerial.Text;
+                    deserializeObject.Items[i].categoryName = txbCatName.Text;
+                    deserializeObject.Items[i].companyName = txbCompName.Text;
+                    deserializeObject.Items[i].model = txbModel.Text;
+                    deserializeObject.Items[i].serial = txbSerial.Text;
                     deserializeObject.Items[i].purchase_date = txbPurchaseDate.Text;
-                    deserializeObject.Items[i].cost          = double.Parse(txbCost.Text);    
-                    deserializeObject.Items[i].locationName  = txbLocation.Text;
-                    deserializeObject.Items[i].sub_location  = txbSubLocation.Text;
+                    deserializeObject.Items[i].cost = double.Parse(txbCost.Text);
+                    deserializeObject.Items[i].locationName = txbLocation.Text;
+                    deserializeObject.Items[i].sub_location = txbSubLocation.Text;
+
+                    if (txbCatName.Text == root.Items[i].categoryName) {
+                        post.Items[i].categoryName = root.Items[i].id;
+                    }
+                    //post.Items[i].companyName = txbCompName.Text;
+                    //post.Items[i].model = txbModel.Text;
+                    //post.Items[i].serial = txbSerial.Text;
+                    //post.Items[i].purchase_date = txbPurchaseDate.Text;
+                    //post.Items[i].cost = double.Parse(txbCost.Text);
+                    //post.Items[i].locationName = txbLocation.Text;
+                    //post.Items[i].sub_location = txbSubLocation.Text;
+
                 }
 
 
                 MSBeverageRecordGrid.ItemsSource = null;
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
-                
+
             }
 
 
             //switch views
             MSBeverageRecordGrid.Visibility = Visibility.Visible;
-            consoleOutput.Visibility       = Visibility.Visible;
-            fileMenu.Visibility            = Visibility.Visible;
-            btnaddRecord.Visibility        = Visibility.Visible;
-            Filter.Visibility              = Visibility.Visible;
+            consoleOutput.Visibility = Visibility.Visible;
+            fileMenu.Visibility = Visibility.Visible;
+            btnaddRecord.Visibility = Visibility.Visible;
+            Filter.Visibility = Visibility.Visible;
 
             btnSave.Visibility = Visibility.Hidden;
             btnCancel.Visibility = Visibility.Hidden;
 
             spLabels.Visibility = Visibility.Hidden;
-            spText.Visibility   = Visibility.Hidden;
-            spLbl.Visibility    = Visibility.Hidden;
-            spTxt.Visibility    = Visibility.Hidden;
+            spText.Visibility = Visibility.Hidden;
+            spLbl.Visibility = Visibility.Hidden;
+            spTxt.Visibility = Visibility.Hidden;
 
 
             //call update database here
@@ -425,6 +465,124 @@ namespace MSBeverageRecordApp {
             spText.Visibility = Visibility.Hidden;
             spLbl.Visibility = Visibility.Hidden;
             spTxt.Visibility = Visibility.Hidden;
+        }//end method
+
+        public class Category {
+            public int id { get; set; }
+            public string categoryName { get; set; }
+        }//end class
+
+        public void Tables() {
+
+            //SETTING UP NEW instance of a type of data
+            using HttpClient client = new();
+            //GETTING QUERY API LINK FOR OBJECT DATA 
+            client.BaseAddress = new Uri("http://localhost:4002/api/category");
+            // Add an Accept header for JSON format.
+
+            client.DefaultRequestHeaders.Accept.Add(
+               new MediaTypeWithQualityHeaderValue("application/json"));
+            //THIS IS VARIABLE TO GET OBJECT DATA FROM API
+
+            var response = client.GetAsync(client.BaseAddress).Result;
+
+            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            if (response.IsSuccessStatusCode) {
+                ////CONVERTING OBJECT "response" variable DATA TO STRING 
+                string dataobjects = response.Content.ReadAsStringAsync().Result;
+
+                //Need access globally to 
+                root.Items = JsonSerializer.Deserialize<List<Category>>(dataobjects);
+                CreateLocationFilterItems(deserializeObject);
+                CreateCompanyFilterItems(deserializeObject);
+                CreateCategoryFilterItems(root);
+            }//end if statusOK
         }
+
+        private void CreateLocationFilterItems(RootObject list) {
+
+            bool contains = false;
+
+
+            txbLocation.Items.Add("none");
+          
+
+
+            for (int index = 0; index < list.Items.Count; index++) {
+
+                for (int itemIndex = 0; itemIndex < txbLocation.Items.Count; itemIndex++) 
+
+                    if (txbLocation.Items[itemIndex].ToString() == list.Items[index].locationName) {
+
+                        contains = true;
+
+                    }//end if
+
+                    if (contains == false) {
+
+                        txbLocation.Items.Add(list.Items[index].locationName);
+
+                    }//end if
+                
+
+            }
+
+        }//end method
+
+        private void CreateCompanyFilterItems(RootObject list) {
+
+            bool contains = false;
+
+
+            txbCompName.Items.Add("none");
+
+            for (int index = 0; index < list.Items.Count; index++) {
+
+                for (int itemIndex = 0; itemIndex < txbCompName.Items.Count; itemIndex++)
+
+                    if (txbCompName.Items[itemIndex].ToString() == list.Items[index].companyName) {
+
+                        contains = true;
+
+                    }//end if
+
+                if (contains == false) {
+
+                    txbCompName.Items.Add(list.Items[index].companyName);
+
+                }//end if
+
+            }//end for
+
+        }//end for
+
+
+        private void CreateCategoryFilterItems(Root list) {
+
+            bool contains = false;
+
+
+            txbCatName.Items.Add("none");
+
+            for (int index = 0; index < list.Items.Count; index++) {
+
+                for (int itemIndex = 0; itemIndex < txbCatName.Items.Count; itemIndex++)
+
+                    if (txbCatName.Items[itemIndex].ToString() == list.Items[index].categoryName) {
+
+                        contains = true;
+
+                    }//end if
+
+                if (contains == false) {
+
+                    txbCatName.Items.Add(list.Items[index].categoryName);
+
+                }//end if
+
+            }//end for
+
+        }//end for
+
     }//end class
 }//end namespace
