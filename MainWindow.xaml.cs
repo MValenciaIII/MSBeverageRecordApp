@@ -77,6 +77,8 @@ namespace MSBeverageRecordApp {
         public RootObject deserializeObject = new RootObject();
         string c = "";
         Root root = new Root();
+        Root rootLoc = new Root();
+        Root rootComp = new Root();
         RootObj post = new RootObj();
 
 
@@ -414,6 +416,11 @@ namespace MSBeverageRecordApp {
                     if (txbCatName.Text == root.Items[i].categoryName) {
                         post.Items[i].categoryName = root.Items[i].id;
                     }
+
+                    if (txbCatName.Text == root.Items[i].categoryName) {
+                        post.Items[i].categoryName = root.Items[i].id;
+                    }
+
                     //post.Items[i].companyName = txbCompName.Text;
                     //post.Items[i].model = txbModel.Text;
                     //post.Items[i].serial = txbSerial.Text;
@@ -471,6 +478,14 @@ namespace MSBeverageRecordApp {
             public int id { get; set; }
             public string categoryName { get; set; }
         }//end class
+        public class Manufacture {
+            public int id { get; set; }
+            public string companyName { get; set; }
+        }//end class
+        public class Location {
+            public int id { get; set; }
+            public string LocationName { get; set; }
+        }//end class
 
         public void Tables() {
 
@@ -493,6 +508,30 @@ namespace MSBeverageRecordApp {
 
                 //Need access globally to 
                 root.Items = JsonSerializer.Deserialize<List<Category>>(dataobjects);
+                CreateCategoryFilterItems(root);
+            }//end if statusOK
+        }
+
+        public void Locations() {
+            //SETTING UP NEW instance of a type of data
+            using HttpClient client = new();
+            //GETTING QUERY API LINK FOR OBJECT DATA 
+            client.BaseAddress = new Uri("http://localhost:4002/api/manufacturer");
+            // Add an Accept header for JSON format.
+
+            client.DefaultRequestHeaders.Accept.Add(
+               new MediaTypeWithQualityHeaderValue("application/json"));
+            //THIS IS VARIABLE TO GET OBJECT DATA FROM API
+
+            var response = client.GetAsync(client.BaseAddress).Result;
+
+            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            if (response.IsSuccessStatusCode) {
+                ////CONVERTING OBJECT "response" variable DATA TO STRING 
+                string dataobjects = response.Content.ReadAsStringAsync().Result;
+
+                //Need access globally to 
+                rootLoc.Items = JsonSerializer.Deserialize<List<Location>>(dataobjects);
                 CreateLocationFilterItems(deserializeObject);
                 CreateCompanyFilterItems(deserializeObject);
                 CreateCategoryFilterItems(root);
