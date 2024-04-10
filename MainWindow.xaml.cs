@@ -100,7 +100,7 @@ namespace MSBeverageRecordApp {
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4002/api/records/recordsreal");
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
             // Add an Accept header for JSON format.
 
             client.DefaultRequestHeaders.Accept.Add(
@@ -508,7 +508,7 @@ namespace MSBeverageRecordApp {
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4002/api/category");
+            client.BaseAddress = new Uri("http://localhost:4001/api/category");
             // Add an Accept header for JSON format.
 
             client.DefaultRequestHeaders.Accept.Add(
@@ -547,8 +547,15 @@ namespace MSBeverageRecordApp {
                 string dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //Need access globally to 
+<<<<<<< Updated upstream
                 rootLoc.Items = JsonSerializer.Deserialize<List<Location>>(dataobjects);
                 CreateLocationFilterItems(rootLoc);                
+=======
+                //rootLoc.Items = JsonSerializer.Deserialize<List<Location>>(dataobjects);
+                CreateLocationFilterItems(deserializeObject);
+                CreateCompanyFilterItems(deserializeObject);
+                CreateCategoryFilterItems(root);
+>>>>>>> Stashed changes
             }//end if statusOK
         }
 
