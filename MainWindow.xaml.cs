@@ -68,6 +68,16 @@ namespace MSBeverageRecordApp {
 
             public List<Category> Items { get; set; }
         }//end class
+        public class RootLoc {
+            public int id { get; set; }
+
+            public List<Location> Items { get; set; }
+        }//end class
+        public class RootComp {
+            public int id { get; set; }
+
+            public List<Manufacture> Items { get; set; }
+        }//end class
 
 
         //GLOBAL VARIABLE
@@ -77,8 +87,8 @@ namespace MSBeverageRecordApp {
         public RootObject deserializeObject = new RootObject();
         string c = "";
         Root root = new Root();
-        Root rootLoc = new Root();
-        Root rootComp = new Root();
+        RootLoc rootLoc = new RootLoc();
+        RootComp rootComp = new RootComp();
         RootObj post = new RootObj();
 
 
@@ -111,8 +121,8 @@ namespace MSBeverageRecordApp {
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
                 Tables();
-                //CreateLocationFilterItems(deserializeObject);
-
+                Locations();
+                Companies();
                 //create csv array why did we do this here?
                 #region csv
                 //StringBuilder sb = new StringBuilder();
@@ -412,15 +422,21 @@ namespace MSBeverageRecordApp {
                     deserializeObject.Items[i].cost = double.Parse(txbCost.Text);
                     deserializeObject.Items[i].locationName = txbLocation.Text;
                     deserializeObject.Items[i].sub_location = txbSubLocation.Text;
+                    post.Items[i].categoryName = 0;
+                    post.Items[i].locationName = 0;
+                    post.Items[i].companyName = 0;
 
                     if (txbCatName.Text == root.Items[i].categoryName) {
                         post.Items[i].categoryName = root.Items[i].id;
                     }
 
-                    if (txbCatName.Text == root.Items[i].categoryName) {
-                        post.Items[i].categoryName = root.Items[i].id;
+                    if (txbCatName.Text == rootLoc.Items[i].locationName) {
+                        post.Items[i].locationName = rootLoc.Items[i].id;
                     }
 
+                    if (txbCatName.Text == rootComp.Items[i].companyName) {
+                        post.Items[i].companyName = rootComp.Items[i].id;
+                    }
                     //post.Items[i].companyName = txbCompName.Text;
                     //post.Items[i].model = txbModel.Text;
                     //post.Items[i].serial = txbSerial.Text;
@@ -484,7 +500,7 @@ namespace MSBeverageRecordApp {
         }//end class
         public class Location {
             public int id { get; set; }
-            public string LocationName { get; set; }
+            public string locationName { get; set; }
         }//end class
 
         public void Tables() {
@@ -516,7 +532,7 @@ namespace MSBeverageRecordApp {
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4002/api/manufacturer");
+            client.BaseAddress = new Uri("http://localhost:4002/api/location");
             // Add an Accept header for JSON format.
 
             client.DefaultRequestHeaders.Accept.Add(
@@ -532,13 +548,35 @@ namespace MSBeverageRecordApp {
 
                 //Need access globally to 
                 rootLoc.Items = JsonSerializer.Deserialize<List<Location>>(dataobjects);
-                CreateLocationFilterItems(deserializeObject);
-                CreateCompanyFilterItems(deserializeObject);
-                CreateCategoryFilterItems(root);
+                CreateLocationFilterItems(rootLoc);                
             }//end if statusOK
         }
 
-        private void CreateLocationFilterItems(RootObject list) {
+        public void Companies() {
+            //SETTING UP NEW instance of a type of data
+            using HttpClient client = new();
+            //GETTING QUERY API LINK FOR OBJECT DATA 
+            client.BaseAddress = new Uri("http://localhost:4002/api/manufacturer");
+            // Add an Accept header for JSON format.
+
+            client.DefaultRequestHeaders.Accept.Add(
+               new MediaTypeWithQualityHeaderValue("application/json"));
+            //THIS IS VARIABLE TO GET OBJECT DATA FROM API
+
+            var response = client.GetAsync(client.BaseAddress).Result;
+
+            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            if (response.IsSuccessStatusCode) {
+                ////CONVERTING OBJECT "response" variable DATA TO STRING 
+                string dataobjects = response.Content.ReadAsStringAsync().Result;
+
+                //Need access globally to 
+                rootComp.Items = JsonSerializer.Deserialize<List<Manufacture>>(dataobjects);
+                CreateCompanyFilterItems(rootComp);
+            }
+        }
+
+        private void CreateLocationFilterItems(RootLoc list) {
 
             bool contains = false;
 
@@ -568,7 +606,7 @@ namespace MSBeverageRecordApp {
 
         }//end method
 
-        private void CreateCompanyFilterItems(RootObject list) {
+        private void CreateCompanyFilterItems(RootComp list) {
 
             bool contains = false;
 
@@ -594,7 +632,6 @@ namespace MSBeverageRecordApp {
             }//end for
 
         }//end for
-
 
         private void CreateCategoryFilterItems(Root list) {
 
