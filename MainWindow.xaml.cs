@@ -35,6 +35,7 @@ using PrintDialogX.PrintDialog;
 using ChoETL;
 using System.Reflection.PortableExecutable;
 using System.Collections.Generic;
+using System.Numerics;
 
 //TODO
 //add print whole data grid function so raw csv data and report are both options
@@ -98,7 +99,7 @@ namespace MSBeverageRecordApp {
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
+            client.BaseAddress = new Uri("http://localhost:4002/api/records/recordsreal");
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
@@ -297,9 +298,7 @@ namespace MSBeverageRecordApp {
 
         //SET post request here then call in the edit window save button click event
         private void UpdateDataBase() {
-           Records reports = rep;
-
-
+           //Records reports = rep;
 
             var postRec = new PostRecords {
                 record_id     = post.record_id,
@@ -307,7 +306,7 @@ namespace MSBeverageRecordApp {
                 companyName   = post.companyName,
                 model         = post.model,
                 serial        = post.serial,
-                purchase_date = post.purchase_date,
+                purchase_date = post.purchase_date, //date wrong format
                 cost          = post.cost,
                 locationName  = post.locationName,
                 sub_location  = post.sub_location
@@ -321,7 +320,7 @@ namespace MSBeverageRecordApp {
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             //no status code?
-            var response = client.PostAsync("modifyid", content).Result;
+            var response = client.PostAsync("", content).Result;
 
             if (response.IsSuccessStatusCode) {
                 var responseContent = response.Content.ReadAsStringAsync().Result;
@@ -329,10 +328,10 @@ namespace MSBeverageRecordApp {
                 MessageBox.Show("CatName:" + postResponse.categoryName);
 
             } else {
-                MessageBox.Show("Error " + response.StatusCode);
+                //MessageBox.Show("Error " + response.StatusCode);
             }
-
         }//ef
+
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
         public class Records {
@@ -408,20 +407,51 @@ namespace MSBeverageRecordApp {
 
 
             
-            //fill post records
-            post.companyName = 0;
-            post.categoryName = 0;
-            post.model = txbModel.Text;
-            post.serial = txbSerial.Text;
-            post.purchase_date = txbPurchaseDate.Text;
-            post.cost = double.Parse(txbCost.Text);
-            post.locationName = 0;
-            post.sub_location = txbSubLocation.Text;
+            ////fill post records
+            ////set corresponding id's here somehow
+            //post.companyName = rootComp.id;
+            //post.categoryName = root.id;
+            //post.model = txbModel.Text;
+            //post.serial = txbSerial.Text;
+            //post.purchase_date = txbPurchaseDate.Text;
+            //post.cost = double.Parse(txbCost.Text);
+            //post.locationName = rootLoc.id;
+            //post.sub_location = txbSubLocation.Text;
+
+            //for (int i =0; i <= root.Items.Count; i++) {
+            //    if (txbCatName.SelectedItem != root.Items[i].categoryName) {
+            //        post.categoryName = root.Items[i].id;
+            //    }
+            //}
+
+            //for (int i = 0; i <= rootComp.Items.Count; i++) {
+
+            //}
+
+            //for (int i = 0; i <= rootLoc.Items.Count; i++) {
+            //    if (txbLocation.SelectedItem != rootLoc.Items[i].locationName) {
+            //        post.locationName = rootComp.Items[i].id;
+            //    }
+            //}
+
+
 
             for (int i = 0; i < deserializeObject.Items.Count; i++) {
 
 
                 if (deserializeObject.Items[i].record_id == Reports.record_id) {
+
+                    post.record_id = Reports.record_id;
+                    post.companyName = rootComp.Items[i].id;
+                    post.categoryName = root.Items[i].id;
+                    post.model = txbModel.Text;
+                    post.serial = txbSerial.Text;
+                    post.purchase_date = txbPurchaseDate.Text;
+                    post.cost = double.Parse(txbCost.Text);
+                    post.locationName = rootLoc.Items[i].ID;
+                    post.sub_location = txbSubLocation.Text;
+
+
                     deserializeObject.Items[i].categoryName = txbCatName.Text;
                     deserializeObject.Items[i].companyName = txbCompName.Text;
                     deserializeObject.Items[i].model = txbModel.Text;
@@ -430,23 +460,20 @@ namespace MSBeverageRecordApp {
                     deserializeObject.Items[i].cost = double.Parse(txbCost.Text);
                     deserializeObject.Items[i].locationName = txbLocation.Text;
                     deserializeObject.Items[i].sub_location = txbSubLocation.Text;
-                
-
-                    if (txbCatName.Text == root.Items[i].categoryName) {
-                        post.categoryName = root.Items[i].id;
-                    }
-
-                    if (txbLocation.Text == rootLoc.Items[i].locationName) {
-                        post.locationName = rootLoc.Items[i].id;
-                    }
-
-                    if (txbCompName.Text == rootComp.Items[i].companyName) {
-                        post.companyName = rootComp.Items[i].id;
-                    }
-
-
                 }
 
+                if (txbCatName.SelectedItem == root.Items[i].categoryName) {
+                    post.categoryName = root.Items[i].id;
+                }
+
+                if (txbCompName.SelectedItem == rootComp.Items[i].companyName) {
+                    post.companyName = rootComp.Items[i].id;
+                }
+                    
+                if (txbLocation.SelectedItem == rootLoc.Items[i].locationName) {
+                    post.locationName = rootLoc.Items[i].ID;
+                    //why all cap work and lowercase no work
+                }
 
                 MSBeverageRecordGrid.ItemsSource = null;
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
@@ -471,6 +498,7 @@ namespace MSBeverageRecordApp {
 
 
             //call update database here
+
             UpdateDataBase();
         }
 
@@ -499,7 +527,7 @@ namespace MSBeverageRecordApp {
             public string companyName { get; set; }
         }//end class
         public class Location {
-            public int id { get; set; }
+            public int ID { get; set; }
             public string locationName { get; set; }
         }//end class
 
@@ -508,7 +536,7 @@ namespace MSBeverageRecordApp {
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/category");
+            client.BaseAddress = new Uri("http://localhost:4002/api/category");
             // Add an Accept header for JSON format.
 
             client.DefaultRequestHeaders.Accept.Add(
@@ -547,15 +575,8 @@ namespace MSBeverageRecordApp {
                 string dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //Need access globally to 
-<<<<<<< Updated upstream
                 rootLoc.Items = JsonSerializer.Deserialize<List<Location>>(dataobjects);
                 CreateLocationFilterItems(rootLoc);                
-=======
-                //rootLoc.Items = JsonSerializer.Deserialize<List<Location>>(dataobjects);
-                CreateLocationFilterItems(deserializeObject);
-                CreateCompanyFilterItems(deserializeObject);
-                CreateCategoryFilterItems(root);
->>>>>>> Stashed changes
             }//end if statusOK
         }
 
