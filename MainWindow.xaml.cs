@@ -49,8 +49,6 @@ namespace MSBeverageRecordApp {
     //find library to give option print out datagrid records instead of raw csv
     public partial class MainWindow : Window {
 
-
-
         public class RootObject {
             public int id { get; set; }
 
@@ -59,8 +57,7 @@ namespace MSBeverageRecordApp {
 
         public class RootObj {
             public int id { get; set; }
-
-            public List<PostRecords> Items { get; set; }
+            public PostRecords Items { get; set; }
         }//end class
 
         public class Root {
@@ -89,12 +86,13 @@ namespace MSBeverageRecordApp {
         Root root = new Root();
         RootLoc rootLoc = new RootLoc();
         RootComp rootComp = new RootComp();
-        RootObj post = new RootObj();
-
+        //RootObj postObj = new RootObj();
+        PostRecords post = new PostRecords();
 
         public class urlResult {
             public string[] results { get; set; }
         }
+
         public MainWindow() {
             InitializeComponent();
             //SETTING UP NEW instance of a type of data
@@ -102,28 +100,23 @@ namespace MSBeverageRecordApp {
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
             // Add an Accept header for JSON format.
-
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
-
             var response = client.GetAsync(client.BaseAddress).Result;
-
             //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode) {
                 ////CONVERTING OBJECT "response" variable DATA TO STRING 
                 string dataobjects = response.Content.ReadAsStringAsync().Result;
                 c = dataobjects;
-
                 //Need access globally to 
-
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
                 Tables();
                 Locations();
                 Companies();
-                //create csv array why did we do this here?
+                
                 #region csv
                 //StringBuilder sb = new StringBuilder();
                 //decimal totalCost = 0.0m;
@@ -308,21 +301,22 @@ namespace MSBeverageRecordApp {
 
 
 
-            var postRec = new Records {
-                record_id = rep.record_id,
-                categoryName = rep.categoryName,
-                companyName = rep.companyName,
-                model = rep.model,
-                serial = rep.serial,
-                purchase_date = rep.purchase_date,
-                cost = rep.cost,
-                locationName = rep.locationName,
-                sub_location = rep.sub_location
+            var postRec = new PostRecords {
+                record_id     = post.record_id,
+                categoryName  = post.categoryName,
+                companyName   = post.companyName,
+                model         = post.model,
+                serial        = post.serial,
+                purchase_date = post.purchase_date,
+                cost          = post.cost,
+                locationName  = post.locationName,
+                sub_location  = post.sub_location
             };
+
             //http client instance
             var client = new HttpClient();
             //connection url
-            client.BaseAddress = new Uri("http://localhost:4002/api/records/recordsreal");
+            client.BaseAddress = new Uri("http://localhost:4002/api/records/modifyid");
             var json = JsonSerializer.Serialize(postRec);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -408,11 +402,25 @@ namespace MSBeverageRecordApp {
 
         //fix datetime format to just date or a string
         private void btnSaveChange_Click(object sender, RoutedEventArgs e) {
-
-            Records Reports = rep;
             
+            Records Reports = rep;
+            //PostRecords post = new PostRecords();
+
+
+            
+            //fill post records
+            post.companyName = 0;
+            post.categoryName = 0;
+            post.model = txbModel.Text;
+            post.serial = txbSerial.Text;
+            post.purchase_date = txbPurchaseDate.Text;
+            post.cost = double.Parse(txbCost.Text);
+            post.locationName = 0;
+            post.sub_location = txbSubLocation.Text;
 
             for (int i = 0; i < deserializeObject.Items.Count; i++) {
+
+
                 if (deserializeObject.Items[i].record_id == Reports.record_id) {
                     deserializeObject.Items[i].categoryName = txbCatName.Text;
                     deserializeObject.Items[i].companyName = txbCompName.Text;
@@ -422,28 +430,20 @@ namespace MSBeverageRecordApp {
                     deserializeObject.Items[i].cost = double.Parse(txbCost.Text);
                     deserializeObject.Items[i].locationName = txbLocation.Text;
                     deserializeObject.Items[i].sub_location = txbSubLocation.Text;
-                    post.Items[i].categoryName = 0;
-                    post.Items[i].locationName = 0;
-                    post.Items[i].companyName = 0;
+                
 
                     if (txbCatName.Text == root.Items[i].categoryName) {
-                        post.Items[i].categoryName = root.Items[i].id;
+                        post.categoryName = root.Items[i].id;
                     }
 
-                    if (txbCatName.Text == rootLoc.Items[i].locationName) {
-                        post.Items[i].locationName = rootLoc.Items[i].id;
+                    if (txbLocation.Text == rootLoc.Items[i].locationName) {
+                        post.locationName = rootLoc.Items[i].id;
                     }
 
-                    if (txbCatName.Text == rootComp.Items[i].companyName) {
-                        post.Items[i].companyName = rootComp.Items[i].id;
+                    if (txbCompName.Text == rootComp.Items[i].companyName) {
+                        post.companyName = rootComp.Items[i].id;
                     }
-                    //post.Items[i].companyName = txbCompName.Text;
-                    //post.Items[i].model = txbModel.Text;
-                    //post.Items[i].serial = txbSerial.Text;
-                    //post.Items[i].purchase_date = txbPurchaseDate.Text;
-                    //post.Items[i].cost = double.Parse(txbCost.Text);
-                    //post.Items[i].locationName = txbLocation.Text;
-                    //post.Items[i].sub_location = txbSubLocation.Text;
+
 
                 }
 
