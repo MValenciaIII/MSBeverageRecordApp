@@ -146,7 +146,7 @@ namespace MSBeverageRecordApp {
 
         private void Reports_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             //SAVE SELECTED COMBOBOX CATEGORY TO A STRING
-            string selectedCategory = Reports.SelectedItem.ToString();
+            string selectedCategory = Filter.SelectedItem.ToString();
 
             // Create a new list to store filtered records
             List<Records> filteredReports = new List<Records>();
@@ -222,9 +222,7 @@ namespace MSBeverageRecordApp {
 
         #endregion FILTER FUNCTIONS
         private void addRecord(object sender, RoutedEventArgs e) {
-            CreateRecord window = new CreateRecord();
-
-            window.Show();
+            this.NavigationService.Navigate(new Uri("CreateRecord.xaml", UriKind.Relative)); 
         }//end function
 
         private void muiSave_Click(object sender, RoutedEventArgs e) {

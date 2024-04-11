@@ -17,7 +17,7 @@ namespace MSBeverageRecordApp
     /// <summary>
     /// Interaction logic for CreateRecord.xaml
     /// </summary>
-    public partial class CreateRecord : Window
+    public partial class CreateRecord : Page
     {
         public CreateRecord()
         {
