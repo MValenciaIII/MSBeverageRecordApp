@@ -1,22 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MSBeverageRecordApp {
     /// <summary>
@@ -32,23 +18,20 @@ namespace MSBeverageRecordApp {
         class PostResponse {
             public int Id { get; set; }
         }//end class
-        public CategoryTable() {
-    public partial class CategoryTable : Page {
-        //GLOBAL CLASS FOR DATA TO SEND TO API
+         //GLOBAL CLASS FOR DATA TO SEND TO API
         class PostCategory {
-        public string categoryName { get; set; }
-    }//end class
-     class PostLocation {
-        public string locationName { get; set; }
-    }//end class
+            public string categoryName { get; set; }
+        }//end class
+        class PostLocation {
+            public string locationName { get; set; }
+        }//end class
         class PostManufacturer {
             public string companyName { get; set; }
         }//end class
-        public CategoryTable()
-        {
+        public CategoryTable() {
             InitializeComponent();
         }//end main CategoryTable
-        //Post Category
+         //Post Category
         private void Category_Button_Click(object sender, RoutedEventArgs e) {
             var postData = new PostCategory {
                 categoryName = txtCategory.Text.ToUpper() //will link to txtInput
@@ -78,14 +61,14 @@ namespace MSBeverageRecordApp {
                 MessageBox.Show("New Category Created");
             }
 
-            
-            
+
+
             //return to main menu
             this.NavigationService.Navigate(new Uri("MenuPage.xaml", UriKind.Relative));
 
 
         }// END EVENT
-        //POST LOCATION
+         //POST LOCATION
         private void Location_Button_Click(object sender, RoutedEventArgs e) {
             var postData = new PostLocation {
                 locationName = txtLocation.Text.ToUpper() //will link to txtInput
@@ -115,8 +98,8 @@ namespace MSBeverageRecordApp {
                 MessageBox.Show("New Location Added");
             }
 
-            
-            
+
+
             //return to main menu
             this.NavigationService.Navigate(new Uri("MenuPage.xaml", UriKind.Relative));
 

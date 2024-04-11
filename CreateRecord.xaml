@@ -9,15 +9,15 @@
     <Grid Background="#FFFCF4F4">
         <Label FontSize="22px" Content="Create Record" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="45" Width="152"/>
         <TextBox HorizontalAlignment="Left" Margin="160,137,0,0" TextWrapping="Wrap" Text="Record Number" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Center" Margin="0,137,0,0" TextWrapping="Wrap" Text="Category" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
-        <TextBox HorizontalAlignment="Left" Margin="515,137,0,0" TextWrapping="Wrap" Text="Manufacturer" VerticalAlignment="Top" Width="120"/>
         <TextBox HorizontalAlignment="Left" Margin="160,217,0,0" TextWrapping="Wrap" Text="Model " VerticalAlignment="Top" Width="120"/>
         <TextBox HorizontalAlignment="Center" Margin="0,217,0,0" TextWrapping="Wrap" Text="Serial Number" VerticalAlignment="Top" Width="120"/>
         <TextBox HorizontalAlignment="Left" Margin="160,298,0,0" TextWrapping="Wrap" Text="Cost" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Center" Margin="0,298,0,0" TextWrapping="Wrap" Text="Location" VerticalAlignment="Top" Width="120"/>
         <TextBox HorizontalAlignment="Left" Margin="515,298,0,0" TextWrapping="Wrap" Text="Sub Location" VerticalAlignment="Top" Width="120"/>
         <Button Content="Submit" HorizontalAlignment="Left" Margin="640,385,0,0" VerticalAlignment="Top" Height="22" Width="66"/>
-        <DatePicker HorizontalAlignment="Left" Margin="524,214,0,0" VerticalAlignment="Top"/>
+        <DatePicker HorizontalAlignment="Left" Margin="515,0,0,0" VerticalAlignment="Center" Width="120"/>
+        <ComboBox x:Name="Category" HorizontalAlignment="Center" Margin="0,135,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="Location" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="Manufacturer" HorizontalAlignment="Left" Margin="515,135,0,0" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Page>
