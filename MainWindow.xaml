@@ -32,7 +32,7 @@
             </MenuItem>
 
         </Menu>
-        
+        <!-- maybe add a date picker to update the date time type, format will be easier but grid will be off -->
             <DataGrid Visibility="Visible" x:Name="MSBeverageRecordGrid" Margin="10,5,10,13" IsReadOnly="False" CanUserAddRows="False" AutoGenerateColumns="False" Grid.ColumnSpan="3" Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding record_id}"></DataGridTextColumn>
@@ -76,7 +76,7 @@
         <StackPanel x:Name="spLabels" Grid.Row="1" Visibility="Hidden"   HorizontalAlignment="Left" Width="184">
             <Label Content="Category Name" Margin="0,30,0,0" Height="36" Width="176" HorizontalContentAlignment="Center"/>
             <Label Content="Company Name" HorizontalAlignment="Right" Margin="0,30,0,0" Height="36" Visibility="Visible" Width="180"  HorizontalContentAlignment="Center" />
-            <Label Content="Purchase Date" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="180" HorizontalContentAlignment="Center"/>
+            <DatePickerTextBox HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="180" HorizontalContentAlignment="Center"/>
             <Label Content="Location" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Height="36" Width="180" HorizontalContentAlignment="Center"/>
 
 
