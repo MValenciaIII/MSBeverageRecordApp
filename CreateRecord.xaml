@@ -15,9 +15,9 @@
         <TextBox HorizontalAlignment="Left" Margin="515,298,0,0" TextWrapping="Wrap" Text="Sub Location" VerticalAlignment="Top" Width="120"/>
         <Button Content="Submit" HorizontalAlignment="Left" Margin="640,385,0,0" VerticalAlignment="Top" Height="22" Width="66"/>
         <DatePicker HorizontalAlignment="Left" Margin="515,0,0,0" VerticalAlignment="Center" Width="120"/>
-        <ComboBox x:Name="Category" HorizontalAlignment="Center" Margin="0,135,0,0" VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="Location" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="Manufacturer" HorizontalAlignment="Left" Margin="515,135,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="cboCategory" HorizontalAlignment="Center" Margin="0,135,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cboCategory_SelectionChanged" IsEditable="True" IsReadOnly="True" Focusable="False" Text="Category"/>
+        <ComboBox x:Name="cboLocation" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cboLocation_SelectionChanged" IsEditable="True" IsReadOnly="True" Focusable="False" Text="Location"/>
+        <ComboBox x:Name="cboManufacturer" HorizontalAlignment="Left" Margin="515,135,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cboManufacturer_SelectionChanged" IsEditable="True" IsReadOnly="True" Focusable="False" Text="Manufacturer"/>
 
     </Grid>
 </Page>

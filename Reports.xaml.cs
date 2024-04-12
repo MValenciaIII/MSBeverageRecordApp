@@ -1,42 +1,8 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Win32;
-using System;
-using System.IO;
-using System.Net.Http;
+﻿using System.Net.Http;
 //IMPORTING
 using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
-using static System.Net.WebRequestMethods;
-using System.Collections.Generic;
-using System.Net.Http.Json;
-using System.CodeDom.Compiler;
-using System.Text.Json.Serialization;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Collections.ObjectModel;
-
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-
-using System.Windows.Navigation;
-
-//sort filter team adding here
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Collections;
-using System.Runtime.InteropServices;
-using System.Security.Policy;
-using System.Data;
-using static MSBeverageRecordApp.MainWindow;
+using System.Windows.Controls;
 
 namespace MSBeverageRecordApp {
     /// <summary>
@@ -77,29 +43,19 @@ namespace MSBeverageRecordApp {
                 //CHANGE OUR STRING TO OBJECT DATA
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
 
-                //How to set the query data to the DATAGRID element.
+                //SET THE QUERY DATA TO DATAGRID ELEMENT
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
-
                 MSBeverageRecordApp2.ItemsSource = MSBeverageRecordApp.ItemsSource;
-
                 MSBeverageRecordApp3.ItemsSource = MSBeverageRecordApp.ItemsSource;
-
                 MSBeverageRecordApp4.ItemsSource = MSBeverageRecordApp.ItemsSource;
-
                 MSBeverageRecordApp5.ItemsSource = MSBeverageRecordApp.ItemsSource;
 
                 CreateAllDataFilterItemsCat(deserializeObject);
-
                 CreateAllDataFilterItemsManu(deserializeObject);
-
                 CreateAllDataFilterItemsLoco(deserializeObject);
-
                 CreateCategoryFilterItems(deserializeObject);
-
                 CreateManufacturerFilterItems(deserializeObject);
-
                 CreateLocationFilterItems(deserializeObject);
-
                 comboboxSearch(deserializeObject);
             }//end if
         }//end main
@@ -121,164 +77,159 @@ namespace MSBeverageRecordApp {
             public int id { get; set; }
             public List<Records> Items { get; set; }
         }//end class
-         //How to set the query data to the DATAGRID element.
 
-               
         #region Tab alldata
 
         #region sub category
 
         public static List<Records> FilterHotspotRecordsAll(List<Records> records, ComboBox filter) {
-
+            //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL CATEGORIES
             if (filter.SelectedItem.ToString() != "All Categories") {
-
+                //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES CATEGORY NAME
                 return records.FindAll(record => record.categoryName == filter.SelectedItem);
-
             } else {
-
+                //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
-
             }//end if
 
         }//end function
 
         public void Filter_SelectionChangedAllCat(object sender, SelectionChangedEventArgs e) {
-
+            //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
 
+            //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSALL FUNCTION
             MSBeverageRecordApp.ItemsSource = FilterHotspotRecordsAll(record, FilterCategoryAll);
-
         }//end function
 
         private void CreateAllDataFilterItemsCat(RootObject list) {
-
+            //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
+            //ADD STRING 'ALL CATEGORIES' TO TO FILTER
             FilterCategoryAll.Items.Add("All Categories");
 
+            //LOOP THROUGH LIST OF ITEMS
             for (int index = 0; index < list.Items.Count; index++) {
-
+                //LOOP THROUGH FILTER
                 for (int itemIndex = 0; itemIndex < FilterCategoryAll.Items.Count; itemIndex++)
-
+                    
+                    //IF FILTER CONTAINS THE LIST ITEM
                     if (FilterCategoryAll.Items[itemIndex].ToString() == list.Items[index].categoryName) {
-
+                        //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
-
                     }//end if
 
-                if (contains == false) {
-
-                    FilterCategoryAll.Items.Add(list.Items[index].categoryName);
-
-                }//end if
+                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                    if (contains == false) {
+                        //ADD THE LIST ITEM TO THE FILTER
+                        FilterCategoryAll.Items.Add(list.Items[index].categoryName);
+                    }//end if
 
             }//end for
-
-        }//end for
+        }//end function
 
         #endregion sub category
 
         #region sub manufacturer
 
         public static List<Records> FilterHotspotRecordsManufacturerAll(List<Records> records, ComboBox filter) {
-
+            //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL MANUFACTURERS
             if (filter.SelectedItem.ToString() != "All Manufacturers") {
-
+                //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES COMPANY NAME
                 return records.FindAll(record => record.companyName == filter.SelectedItem);
-
             } else {
-
+                //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
-
             }//end if
 
         }//end function
 
         public void Filter_SelectionChangedManufacturerAll(object sender, SelectionChangedEventArgs e) {
-
+            //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
 
+            //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSMANUFACTURERALL FUNCTION
             MSBeverageRecordApp.ItemsSource = FilterHotspotRecordsManufacturerAll(record, FilterManufacturerAll);
 
         }//end function
 
         private void CreateAllDataFilterItemsManu(RootObject list) {
-
+            //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
+            //ADD STRING 'ALL MANUFACTURERS' TO TO FILTER
             FilterManufacturerAll.Items.Add("All Manufacturers");
 
+            //LOOP THROUGH LIST OF ITEMS
             for (int index = 0; index < list.Items.Count; index++) {
-
+                //LOOP THROUGH FILTER
                 for (int itemIndex = 0; itemIndex < FilterManufacturerAll.Items.Count; itemIndex++)
-
+                    //IF FILTER CONTAINS THE LIST ITEM
                     if (FilterManufacturerAll.Items[itemIndex].ToString() == list.Items[index].companyName) {
-
+                        //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
-
                     }//end if
-
-                if (contains == false) {
-
-                    FilterManufacturerAll.Items.Add(list.Items[index].companyName);
-
-                }//end if
-
+                    
+                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                    if (contains == false) {
+                        //ADD THE LIST ITEM TO THE FILTER
+                        FilterManufacturerAll.Items.Add(list.Items[index].companyName);
+                    }//end if
             }//end for
 
-        }//end for
+        }//end function
 
         #endregion sub manufacturer
 
         #region sub location
 
         public static List<Records> FilterHotspotRecordsLocationAll(List<Records> records, ComboBox filter) {
-
+            //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL LOCATIONS
             if (filter.SelectedItem.ToString() != "All Locations") {
-
+                //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES LOCATION NAME
                 return records.FindAll(record => record.locationName == filter.SelectedItem);
-
             } else {
-
+                //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
-
             }//end if
 
         }//end function
 
         public void Filter_SelectionChangedLocationAll(object sender, SelectionChangedEventArgs e) {
-
+            //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
 
+            //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSLOCATIONALL FUNCTION
             MSBeverageRecordApp.ItemsSource = FilterHotspotRecordsLocationAll(record, FilterLocationAll);
 
         }//end function
 
         private void CreateAllDataFilterItemsLoco(RootObject list) {
-
+            //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
+            //ADD STRING 'ALL LOCATIONS' TO TO FILTER
             FilterLocationAll.Items.Add("All Locations");
 
+            //LOOP THROUGH LIST OF ITEMS
             for (int index = 0; index < list.Items.Count; index++) {
-
+                //LOOP THROUGH FILTER
                 for (int itemIndex = 0; itemIndex < FilterLocationAll.Items.Count; itemIndex++)
-
+                    //IF FILTER CONTAINS THE LIST ITEM
                     if (FilterLocationAll.Items[itemIndex].ToString() == list.Items[index].locationName) {
-
+                        //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
-
                     }//end if
 
-                if (contains == false) {
-
-                    FilterLocationAll.Items.Add(list.Items[index].locationName);
-
-                }//end if
-
+                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                    if (contains == false) {
+                        //ADD THE LIST ITEM TO THE FILTER
+                        FilterLocationAll.Items.Add(list.Items[index].locationName);
+                    }//end if
             }//end for
 
-        }//end for
+        }//end function
 
         #endregion sub location
 
@@ -289,10 +240,6 @@ namespace MSBeverageRecordApp {
             Filterby.ItemsSource = deserializedObjectList.Items;
 
             Filterby.ItemsSource = new string[] { "RecordID", "Category", "Manufacturer", "Model", "SerialNumber", "Location" };
-
-            //Filterby.ItemsSource = typeof(Records).GetProperties().Select((o) => o.Name);
-
-            //MSBeverageRecordApp.Items.Filter = RecordIDFilter;
 
         }//end comboBoxSearch
 
@@ -324,7 +271,7 @@ namespace MSBeverageRecordApp {
 
                     return LocationFilter;
 
-            }
+            }//end switch
 
             return RecordIDFilter;
 
@@ -336,7 +283,7 @@ namespace MSBeverageRecordApp {
 
             return Filterobj.record_id.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
-        }
+        }//end function
 
         private bool CategoryFilter(object obj) {
 
@@ -344,7 +291,7 @@ namespace MSBeverageRecordApp {
 
             return Filterobj.categoryName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
-        }
+        }//end function
 
         private bool ManufacturerFilter(object obj) {
 
@@ -352,7 +299,7 @@ namespace MSBeverageRecordApp {
 
             return Filterobj.companyName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
-        }
+        }//end function
 
         private bool ModelFilter(object obj) {
 
@@ -360,7 +307,7 @@ namespace MSBeverageRecordApp {
 
             return Filterobj.model.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
-        }
+        }//end function
 
         private bool SerialNumberFilter(object obj) {
 
@@ -368,7 +315,7 @@ namespace MSBeverageRecordApp {
 
             return Filterobj.serial.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
-        }
+        }//end function
 
         private bool LocationFilter(object obj) {
 
@@ -376,7 +323,7 @@ namespace MSBeverageRecordApp {
 
             return Filterobj.locationName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
-        }
+        }//end function
 
         private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) {
 
@@ -388,15 +335,15 @@ namespace MSBeverageRecordApp {
 
                 MSBeverageRecordApp.Items.Filter = GetFilter();
 
-            }
+            }//end if
 
-        }
+        }//end function
 
         private void Filterby_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             MSBeverageRecordApp.Items.Filter = GetFilter();
 
-        }
+        }//end function
 
 
         #endregion sub combobox search
@@ -406,152 +353,148 @@ namespace MSBeverageRecordApp {
         #region Tab category
 
         public static List<Records> FilterHotspotRecordsCategory(List<Records> records, ComboBox filter) {
-
+            //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL CATEGORIES
             if (filter.SelectedItem.ToString() != "All Categories") {
-
+                //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES CATEGORY NAME
                 return records.FindAll(record => record.categoryName == filter.SelectedItem);
-
             } else {
-
+                //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
-
             }//end if
 
         }//end function
 
         public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-
+            //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
 
+            //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSCATEGORY FUNCTION
             MSBeverageRecordApp2.ItemsSource = FilterHotspotRecordsCategory(record, FilterCategory);
 
         }//end function
 
         private void CreateCategoryFilterItems(RootObject list) {
-
+            //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
+            //ADD STRING 'ALL CATEGORIES' TO TO FILTER
             FilterCategory.Items.Add("All Categories");
 
+            //LOOP THROUGH LIST OF ITEMS
             for (int index = 0; index < list.Items.Count; index++) {
-
+                //LOOP THROUGH FILTER
                 for (int itemIndex = 0; itemIndex < FilterCategory.Items.Count; itemIndex++)
-
+                    //IF FILTER CONTAINS THE LIST ITEM
                     if (FilterCategory.Items[itemIndex].ToString() == list.Items[index].categoryName) {
-
+                        //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
-
                     }//end if
-
-                if (contains == false) {
-
-                    FilterCategory.Items.Add(list.Items[index].categoryName);
-
-                }//end if
-
+                
+                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                    if (contains == false) {
+                        //ADD THE LIST ITEM TO THE FILTER
+                        FilterCategory.Items.Add(list.Items[index].categoryName);
+                    }//end if
             }//end for
 
-        }//end for
+        }//end function
 
         #endregion Tab category
         #region Tab manufacturer
 
         public static List<Records> FilterHotspotRecordsManufacturer(List<Records> records, ComboBox filter) {
-
+            //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL MANUFACTURERS
             if (filter.SelectedItem.ToString() != "All Manufacturers") {
-
+                //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES COMPANY NAME
                 return records.FindAll(record => record.companyName == filter.SelectedItem);
-
             } else {
-
+                //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
-
             }//end if
 
         }//end function
 
         public void Filter_SelectionChangedManufacturer(object sender, SelectionChangedEventArgs e) {
-
+            //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
 
+            //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSMANUFACTURER FUNCTION
             MSBeverageRecordApp3.ItemsSource = FilterHotspotRecordsManufacturer(record, FilterManufacturer);
 
         }//end function
 
         private void CreateManufacturerFilterItems(RootObject list) {
-
+            //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
+            //ADD STRING 'ALL MANUFACTURERS' TO TO FILTER
             FilterManufacturer.Items.Add("All Manufacturers");
 
+            //LOOP THROUGH LIST OF ITEMS
             for (int index = 0; index < list.Items.Count; index++) {
-
+                //LOOP THROUGH FILTER
                 for (int itemIndex = 0; itemIndex < FilterManufacturer.Items.Count; itemIndex++)
-
+                    //IF FILTER CONTAINS THE LIST ITEM
                     if (FilterManufacturer.Items[itemIndex].ToString() == list.Items[index].companyName) {
-
+                        //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
-
                     }//end if
 
-                if (contains == false) {
-
-                    FilterManufacturer.Items.Add(list.Items[index].companyName);
-
-                }//end if
-
+                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                    if (contains == false) {
+                        //ADD THE LIST ITEM TO THE FILTER
+                        FilterManufacturer.Items.Add(list.Items[index].companyName);
+                    }//end if
             }//end for
 
-        }//end for
+        }//end function
 
         #endregion Tab manufacturer
 
         #region Tab location
 
         public static List<Records> FilterHotspotRecordsLocation(List<Records> records, ComboBox filter) {
-
+            //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL LOCATIONS
             if (filter.SelectedItem.ToString() != "All Locations") {
-
+                //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES LOCATION NAME
                 return records.FindAll(record => record.locationName == filter.SelectedItem);
-
             } else {
-
+                //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
-
             }//end if
 
         }//end function
 
         public void Filter_SelectionChangedLocation(object sender, SelectionChangedEventArgs e) {
-
+            //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
 
+            //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSLOCATION FUNCTION
             MSBeverageRecordApp4.ItemsSource = FilterHotspotRecordsLocation(record, FilterLocation);
 
         }//end function
 
         private void CreateLocationFilterItems(RootObject list) {
-
+            //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
+            //ADD STRING 'ALL LOCATIONS' TO TO FILTER
             FilterLocation.Items.Add("All Locations");
 
+            //LOOP THROUGH LIST OF ITEMS
             for (int index = 0; index < list.Items.Count; index++) {
-
+                //LOOP THROUGH FILTER
                 for (int itemIndex = 0; itemIndex < FilterLocation.Items.Count; itemIndex++)
-
+                    //IF FILTER CONTAINS THE LIST ITEM
                     if (FilterLocation.Items[itemIndex].ToString() == list.Items[index].locationName) {
-
+                        //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
-
                     }//end if
-
-                if (contains == false) {
-
-                    FilterLocation.Items.Add(list.Items[index].locationName);
-
-                }//end if
-
+                    
+                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                    if (contains == false) {
+                        FilterLocation.Items.Add(list.Items[index].locationName);
+                    }//end if
             }//end for
 
         }//end function
