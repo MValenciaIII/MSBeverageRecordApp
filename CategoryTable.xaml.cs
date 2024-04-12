@@ -6,7 +6,7 @@ using System.Windows.Controls;
 
 namespace MSBeverageRecordApp {
     /// <summary>
-    /// Interaction logic for CategoryTable.xaml
+    /// INTERACTION LOGIC FOR CategoryTable.xaml
     /// </summary>
     public partial class CategoryTable : Page {
         //GLOBAL CLASS FOR DATA TO SEND TO API

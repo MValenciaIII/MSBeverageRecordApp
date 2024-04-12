@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace MSBeverageRecordApp {
     /// <summary>
-    /// Interaction logic for MenuPage.xaml
+    /// INTERACTION LOGIC FOR MenuPage.xaml
     /// </summary>
     public partial class MenuPage : Page {
         public MenuPage() {

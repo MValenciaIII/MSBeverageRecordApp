@@ -3,25 +3,48 @@ using System.Net.Http;
 using System.Windows.Controls;
 using static MSBeverageRecordApp.Reports;
 using System.Text.Json;
+using System.Text;
+using System.Windows;
 
 namespace MSBeverageRecordApp {
     /// <summary>
-    /// Interaction logic for CreateRecord.xaml
+    /// INTERACTION LOGIC FOR CreateRecord.xaml
     /// </summary>
     public partial class CreateRecord : Page {
         //GLOBAL VARIABLE
         RootObject deserializeObject = new RootObject();
+        //GLOBAL CLASS FOR DATA TO SEND TO API
+        class PostRecordsData {
+            public string categoryName { get; set; }
+            public string companyName { get; set; }
+            public string model { get; set; }
+            public string serial { get; set; }
+            public DateTime purchase_date { get; set; }
+            public decimal cost { get; set; }
+            public string locationName { get; set; }
+            public string sub_location { get; set; }
+        }//end class
+
+        //CLASS TO GET RESPONSE FROM API
+        class PostResponse {
+            public int Id { get; set; }
+        }//end class
+
         public CreateRecord() {
             InitializeComponent();
 
+            //CALL API's FOR EACH TABLE IN DATABASE
+            RecordsAPI();
             CategoryAPI();
             LocationAPI();
             ManufacturerAPI();
 
+            //CALL CREATE COMBO BOX FUNCTIONS
             CreateCategoryComboBox(deserializeObject);
             CreateLocationComboBox(deserializeObject);
             CreateManufacturerComboBox(deserializeObject);
         }//end main
+
         public class Records {
             public int record_id { get; set; }
             public string categoryName { get; set; }
@@ -32,43 +55,41 @@ namespace MSBeverageRecordApp {
             public decimal cost { get; set; }
             public string locationName { get; set; }
             public string sub_location { get; set; }
-
         }//end class
+
         public class Category {
-            public int category_id { get; set; }
+            public int id { get; set; }
             public string categoryName { get; set; }
         }//end class
 
         public class Location {
-            public int location_id { get; set; }
+            public int id { get; set; }
             public string locationName { get; set; }
         }//end class
 
         public class Manufacturer {
-            public int manufacturer_id { get; set; }
+            public int id { get; set; }
             public string companyName { get; set; }
         }//end class
 
         public class RootObject {
             public int id { get; set; }
+            public List<Records> RecordsItems { get; set; }
             public List<Category> CategoryItems { get; set; }
             public List<Location> LocationItems { get; set; }
             public List<Manufacturer> ManufacturerItems { get; set; }
         }//end class
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e) {
 
-        }//end function
 
-        #region Category
-        private void CategoryAPI() {
+        private void RecordsAPI() {
 
-            //SETTING UP NEW instance of a type of data
+            //SETTING UP NEW INSTANCE OF A TYPE OF DATA
             using HttpClient client = new();
 
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/category");
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
 
-            // Add an Accept header for JSON format.
+            //ADD AN "ACCEPT" HEADER FOR JSON FORMAT.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -78,7 +99,38 @@ namespace MSBeverageRecordApp {
             //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode) {
 
-                //CONVERTING OBJECT "response" variable DATA TO STRING 
+                //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
+                var dataobjects = response.Content.ReadAsStringAsync().Result;
+
+                //CHANGE OUR STRING TO OBJECT DATA
+                deserializeObject.RecordsItems = JsonSerializer.Deserialize<List<Records>>(dataobjects);
+
+            }//end if
+        }//end function
+
+
+        #region Category Table Combobox
+
+
+        private void CategoryAPI() {
+
+            //SETTING UP NEW INSTANCE OF A TYPE OF DATA
+            using HttpClient client = new();
+
+            //GETTING QUERY API LINK FOR OBJECT DATA 
+            client.BaseAddress = new Uri("http://localhost:4001/api/category");
+
+            //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
+            client.DefaultRequestHeaders.Accept.Add(
+               new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //THIS IS VARIABLE TO GET OBJECT DATA FROM API
+            var response = client.GetAsync(client.BaseAddress).Result;
+
+            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            if (response.IsSuccessStatusCode) {
+
+                //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //CHANGE OUR STRING TO OBJECT DATA
@@ -86,6 +138,8 @@ namespace MSBeverageRecordApp {
 
             }//end if
         }//end function
+
+
         private void CreateCategoryComboBox (RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
@@ -110,21 +164,27 @@ namespace MSBeverageRecordApp {
             }//end for
         }//end function
 
+
         private void cboCategory_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             
         }//end function
-        #endregion Category
 
-        #region Location
+
+        #endregion Category Table Combobox
+
+
+        #region Location Table Combobox
+
+
         private void LocationAPI() {
 
-            //SETTING UP NEW instance of a type of data
+            //SETTING UP NEW INSTANCE OF A TYPE OF DATA
             using HttpClient client = new();
 
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/location");
 
-            // Add an Accept header for JSON format.
+            //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -134,16 +194,16 @@ namespace MSBeverageRecordApp {
             //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode) {
 
-                //CONVERTING OBJECT "response" variable DATA TO STRING 
+                //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //CHANGE OUR STRING TO OBJECT DATA
                 deserializeObject.LocationItems = JsonSerializer.Deserialize<List<Location>>(dataobjects);
 
-                //SET THE QUERY DATA TO DATAGRID ELEMENT
-                //MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
             }//end if
         }//end function
+
+
         private void CreateLocationComboBox(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
@@ -167,21 +227,28 @@ namespace MSBeverageRecordApp {
 
             }//end for
         }//end function
+
+
         private void cboLocation_SelectionChanged(object sender, SelectionChangedEventArgs e) {
            
         }//end function
-        #endregion Location
 
-        #region Manufacturer
+
+        #endregion Location Table Combobox
+
+
+        #region Manufacturer Table Combobox
+
+
         private void ManufacturerAPI() {
 
-            //SETTING UP NEW instance of a type of data
+            //SETTING UP NEW INSTANCE OF A TYPE OF DATA
             using HttpClient client = new();
 
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/manufacturer");
 
-            // Add an Accept header for JSON format.
+            //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -191,16 +258,16 @@ namespace MSBeverageRecordApp {
             //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode) {
 
-                //CONVERTING OBJECT "response" variable DATA TO STRING 
+                //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //CHANGE OUR STRING TO OBJECT DATA
                 deserializeObject.ManufacturerItems = JsonSerializer.Deserialize<List<Manufacturer>>(dataobjects);
 
-                //SET THE QUERY DATA TO DATAGRID ELEMENT
-                //MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
             }//end if
-        }
+        }//end function
+
+
         private void CreateManufacturerComboBox(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
@@ -224,10 +291,63 @@ namespace MSBeverageRecordApp {
 
             }//end for
         }//end function
-        private void cboManufacturer_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            
-        }//end function
-        #endregion Manufacturer
-    }//end class
 
+
+        private void cboManufacturer_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            //string selectedValue = cboManufacturer.SelectedValue?.ToString();
+        }//end function
+
+
+        #endregion Manufacturer
+
+
+        private void PostNewRecords() {
+            var postData = new PostRecordsData {
+                //record id
+                categoryName = cboCategory.SelectedValue.ToString(),
+                companyName = cboManufacturer.SelectedValue.ToString(),
+                model = txtModel.Text.ToUpper(), 
+                serial = txtSerialNumber.Text.ToUpper(),
+                //purchase_date = PurchaseDate.
+                cost = decimal.Parse(txtCost.Text),
+                locationName = cboLocation.SelectedValue.ToString(),
+                sub_location = txtSubLocation.Text.ToUpper()
+            };//end var postData
+
+            //CREATING A NEW HTTPCLIENT OBJECT
+            var client = new HttpClient();
+
+            //SET BASE ADDRESS OF API--will we need to create a recordscreate like we did categorycreate?
+            client.BaseAddress = new Uri("http://localhost:4001/api/records");
+
+            //SERIALIZE POSTDATA OBJECT TO JSON STRING
+            var json = System.Text.Json.JsonSerializer.Serialize(postData);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            //MAKE POST REQUEST
+            var response = client.PostAsync(" ", content).Result;
+
+            //CHECK STATUS CODE TO SEE IF REQUEST WAS SUCCESSFUL
+            if (response.IsSuccessStatusCode) {
+                var responseContent = response.Content.ReadAsStringAsync().Result;
+                var options = new JsonSerializerOptions {
+                    PropertyNameCaseInsensitive = true
+                };//end var options
+
+                //PROMPT USER THAT A NEW RECORD WAS CREATED
+                MessageBox.Show("New Record Created");
+            }//end if
+
+            //RETURN TO MAIN MENU
+            this.NavigationService.Navigate(new Uri("MenuPage.xaml", UriKind.Relative));
+
+        }//end function
+
+
+        private void btnSubmit_Click(object sender, System.Windows.RoutedEventArgs e) {
+            PostNewRecords();
+        }//end function
+
+
+    }//end class
 }//end namespace

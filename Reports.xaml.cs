@@ -6,8 +6,10 @@ using System.Windows.Controls;
 
 namespace MSBeverageRecordApp {
     /// <summary>
-    /// Interaction logic for Reports.xaml
+    /// INTERACTION LOGIC FOR Reports.xaml
     /// </summary>
+
+
     public partial class Reports : Page {
         //GLOBAL VARIABLE
         RootObject deserializeObject = new RootObject();
@@ -17,17 +19,18 @@ namespace MSBeverageRecordApp {
             public string[] results { get; set; }
         }//end class
 
+
         public Reports() {
 
             InitializeComponent();
 
-            //SETTING UP NEW instance of a type of data
+            //SETTING UP NEW INSTANCE OF A TYPE OF DATA
             using HttpClient client = new();
 
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
 
-            // Add an Accept header for JSON format.
+            //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -37,7 +40,7 @@ namespace MSBeverageRecordApp {
             //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode) {
 
-                //CONVERTING OBJECT "response" variable DATA TO STRING 
+                //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //CHANGE OUR STRING TO OBJECT DATA
@@ -59,6 +62,8 @@ namespace MSBeverageRecordApp {
                 comboboxSearch(deserializeObject);
             }//end if
         }//end main
+
+
         public class Records {
             public int record_id { get; set; }
             public string categoryName { get; set; }
@@ -72,15 +77,19 @@ namespace MSBeverageRecordApp {
 
         }//end class
 
+
         //CALLING THIS AS PARENT OBJECT HOLDER 
         public class RootObject {
             public int id { get; set; }
             public List<Records> Items { get; set; }
         }//end class
 
+
         #region Tab alldata
 
+
         #region sub category
+
 
         public static List<Records> FilterHotspotRecordsAll(List<Records> records, ComboBox filter) {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL CATEGORIES
@@ -94,6 +103,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         public void Filter_SelectionChangedAllCat(object sender, SelectionChangedEventArgs e) {
             //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
@@ -102,11 +112,12 @@ namespace MSBeverageRecordApp {
             MSBeverageRecordApp.ItemsSource = FilterHotspotRecordsAll(record, FilterCategoryAll);
         }//end function
 
+
         private void CreateAllDataFilterItemsCat(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
-            //ADD STRING 'ALL CATEGORIES' TO TO FILTER
+            //ADD STRING "ALL CATEGORIES" TO FILTER
             FilterCategoryAll.Items.Add("All Categories");
 
             //LOOP THROUGH LIST OF ITEMS
@@ -129,9 +140,12 @@ namespace MSBeverageRecordApp {
             }//end for
         }//end function
 
+
         #endregion sub category
 
+
         #region sub manufacturer
+
 
         public static List<Records> FilterHotspotRecordsManufacturerAll(List<Records> records, ComboBox filter) {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL MANUFACTURERS
@@ -145,6 +159,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         public void Filter_SelectionChangedManufacturerAll(object sender, SelectionChangedEventArgs e) {
             //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
@@ -154,11 +169,12 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         private void CreateAllDataFilterItemsManu(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
-            //ADD STRING 'ALL MANUFACTURERS' TO TO FILTER
+            //ADD STRING "ALL MANUFACTURERS" TO FILTER
             FilterManufacturerAll.Items.Add("All Manufacturers");
 
             //LOOP THROUGH LIST OF ITEMS
@@ -180,9 +196,12 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         #endregion sub manufacturer
 
+
         #region sub location
+
 
         public static List<Records> FilterHotspotRecordsLocationAll(List<Records> records, ComboBox filter) {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL LOCATIONS
@@ -196,6 +215,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         public void Filter_SelectionChangedLocationAll(object sender, SelectionChangedEventArgs e) {
             //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
@@ -205,11 +225,12 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         private void CreateAllDataFilterItemsLoco(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
-            //ADD STRING 'ALL LOCATIONS' TO TO FILTER
+            //ADD STRING "ALL LOCATIONS" TO FILTER
             FilterLocationAll.Items.Add("All Locations");
 
             //LOOP THROUGH LIST OF ITEMS
@@ -231,17 +252,19 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         #endregion sub location
+
 
         #region sub combobox search
 
-        private void comboboxSearch(RootObject deserializedObjectList) {
 
+        private void comboboxSearch(RootObject deserializedObjectList) {
             Filterby.ItemsSource = deserializedObjectList.Items;
 
             Filterby.ItemsSource = new string[] { "RecordID", "Category", "Manufacturer", "Model", "SerialNumber", "Location" };
-
         }//end comboBoxSearch
+
 
         public Predicate<object> GetFilter() {
 
@@ -277,6 +300,7 @@ namespace MSBeverageRecordApp {
 
         }//end GetFilter
 
+
         private bool RecordIDFilter(object obj) {
 
             var Filterobj = obj as Records;
@@ -284,6 +308,7 @@ namespace MSBeverageRecordApp {
             return Filterobj.record_id.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
         }//end function
+
 
         private bool CategoryFilter(object obj) {
 
@@ -293,6 +318,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         private bool ManufacturerFilter(object obj) {
 
             var Filterobj = obj as Records;
@@ -300,6 +326,7 @@ namespace MSBeverageRecordApp {
             return Filterobj.companyName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
         }//end function
+
 
         private bool ModelFilter(object obj) {
 
@@ -309,6 +336,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         private bool SerialNumberFilter(object obj) {
 
             var Filterobj = obj as Records;
@@ -317,6 +345,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         private bool LocationFilter(object obj) {
 
             var Filterobj = obj as Records;
@@ -324,6 +353,7 @@ namespace MSBeverageRecordApp {
             return Filterobj.locationName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
         }//end function
+
 
         private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) {
 
@@ -339,6 +369,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         private void Filterby_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             MSBeverageRecordApp.Items.Filter = GetFilter();
@@ -348,9 +379,12 @@ namespace MSBeverageRecordApp {
 
         #endregion sub combobox search
 
+
         #endregion Tab alldata
 
+
         #region Tab category
+
 
         public static List<Records> FilterHotspotRecordsCategory(List<Records> records, ComboBox filter) {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL CATEGORIES
@@ -364,6 +398,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
@@ -373,11 +408,12 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         private void CreateCategoryFilterItems(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
-            //ADD STRING 'ALL CATEGORIES' TO TO FILTER
+            //ADD STRING "ALL CATEGORIES" TO FILTER
             FilterCategory.Items.Add("All Categories");
 
             //LOOP THROUGH LIST OF ITEMS
@@ -399,8 +435,12 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         #endregion Tab category
+
+
         #region Tab manufacturer
+
 
         public static List<Records> FilterHotspotRecordsManufacturer(List<Records> records, ComboBox filter) {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL MANUFACTURERS
@@ -414,6 +454,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         public void Filter_SelectionChangedManufacturer(object sender, SelectionChangedEventArgs e) {
             //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
@@ -423,11 +464,12 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         private void CreateManufacturerFilterItems(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
-            //ADD STRING 'ALL MANUFACTURERS' TO TO FILTER
+            //ADD STRING "ALL MANUFACTURERS" TO FILTER
             FilterManufacturer.Items.Add("All Manufacturers");
 
             //LOOP THROUGH LIST OF ITEMS
@@ -449,9 +491,12 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         #endregion Tab manufacturer
 
+
         #region Tab location
+
 
         public static List<Records> FilterHotspotRecordsLocation(List<Records> records, ComboBox filter) {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL LOCATIONS
@@ -465,6 +510,7 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         public void Filter_SelectionChangedLocation(object sender, SelectionChangedEventArgs e) {
             //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
@@ -474,11 +520,12 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         private void CreateLocationFilterItems(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
-            //ADD STRING 'ALL LOCATIONS' TO TO FILTER
+            //ADD STRING "ALL LOCATIONS" TO FILTER
             FilterLocation.Items.Add("All Locations");
 
             //LOOP THROUGH LIST OF ITEMS
@@ -499,8 +546,9 @@ namespace MSBeverageRecordApp {
 
         }//end function
 
+
         #endregion Tab location
 
-    }//end class
 
+    }//end class
 }//end namespace
