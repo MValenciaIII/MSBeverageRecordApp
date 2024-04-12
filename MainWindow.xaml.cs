@@ -47,7 +47,7 @@ namespace MSBeverageRecordApp {
     //also make new button and click event function to call print class so save PDF and print are separate
 
     public partial class MainWindow : Window {
-        //obj containters
+        //obj containers
 
         //main
         public class RootObject {
@@ -79,10 +79,6 @@ namespace MSBeverageRecordApp {
             public List<Manufacture> Items { get; set; }
 
         }//end class
-        //
-        //public class urlResult {
-        //    public string[] results { get; set; }
-        //}//end class
 
         //GLOBAL VARIABLE
         string file = "";
@@ -95,7 +91,6 @@ namespace MSBeverageRecordApp {
         RootComp rootComp = new RootComp();
         //RootObj postObj = new RootObj();
         PostRecords post = new PostRecords();
-
 
         public MainWindow() {
             InitializeComponent();
@@ -289,7 +284,6 @@ namespace MSBeverageRecordApp {
             }//end if
         }//ef
 
-
         //TODO
         //UPDATE
         private void UpdateDataBase() {
@@ -297,13 +291,13 @@ namespace MSBeverageRecordApp {
            //invalid column names 
             var postRec = new PostRecords {
                 record_id     = post.record_id,
-                category  = post.category,
-                company   = post.company, //invalid field
+                category      = post.category,
+                manufacturer = post.manufacturer,
                 model         = post.model,
                 serial        = post.serial,
-                purchase_date = post.purchase_date, //date wrong format
+                purchase_date = post.purchase_date, 
                 cost          = post.cost,
-                location  = post.location,
+                location      = post.location,
                 sub_location  = post.sub_location
             };
 
@@ -316,11 +310,10 @@ namespace MSBeverageRecordApp {
 
             //no status code?
             var response = client.PostAsync("", content).Result;
-
             if (response.IsSuccessStatusCode) {
                 var responseContent = response.Content.ReadAsStringAsync().Result;
                 var postResponse = JsonSerializer.Deserialize<Records>(responseContent);
-                MessageBox.Show("CatName:" + postResponse.categoryName);
+                
 
             } else {
                 MessageBox.Show("Error " + response.StatusCode);
@@ -345,7 +338,7 @@ namespace MSBeverageRecordApp {
         public class PostRecords {
             public int record_id { get; set; }
             public int category { get; set; }
-            public int company { get; set; }
+            public int manufacturer { get; set; }
             public string model { get; set; }
             public string serial { get; set; }
             public string purchase_date { get; set; } 
@@ -405,7 +398,7 @@ namespace MSBeverageRecordApp {
                 if (deserializeObject.Items[i].record_id == Reports.record_id) {
 
                     post.record_id = Reports.record_id;
-                    post.company = rootComp.Items[i].id;
+                    post.manufacturer = rootComp.Items[i].id;
                     post.category = root.Items[i].id;
                     post.model = txbModel.Text;
                     post.serial = txbSerial.Text;
@@ -429,7 +422,7 @@ namespace MSBeverageRecordApp {
                 }
 
                 if (txbCompName.SelectedItem == rootComp.Items[i].companyName) {
-                    post.company = rootComp.Items[i].id;
+                    post.manufacturer = rootComp.Items[i].id;
                 }
                     
                 if (txbLocation.SelectedItem == rootLoc.Items[i].locationName) {
