@@ -1,12 +1,12 @@
 // Author : Kadi Okba
 using System.Printing;
-using System.Windows.Controls.Primitives;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Xps;
-using System.Windows;
 
 public class PrintDG {
     public const double cm = 37;
