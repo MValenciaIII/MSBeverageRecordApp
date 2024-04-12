@@ -40,43 +40,49 @@ using System.Numerics;
 //TODO
 //add print whole data grid function so raw csv data and report are both options
 namespace MSBeverageRecordApp {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    /// 
+
     //todo
+    //fix invalid column names
+    //re-format the printDG class to fit the cells text/fill page
+    //also make new button and click event function to call print class so save PDF and print are separate
 
-
-    //find library to give option print out datagrid records instead of raw csv
     public partial class MainWindow : Window {
+        //obj containters
 
+        //main
         public class RootObject {
             public int id { get; set; }
 
             public List<Records> Items { get; set; }
         }//end class
-
+        //post obj
         public class RootObj {
             public int id { get; set; }
             public PostRecords Items { get; set; }
         }//end class
-
+        //category
         public class Root {
             public int id { get; set; }
 
             public List<Category> Items { get; set; }
         }//end class
+        //location
         public class RootLoc {
             public int id { get; set; }
 
             public List<Location> Items { get; set; }
         }//end class
+        //manufacturer
         public class RootComp {
             public int id { get; set; }
 
             public List<Manufacture> Items { get; set; }
-        }//end class
 
+        }//end class
+        //
+        //public class urlResult {
+        //    public string[] results { get; set; }
+        //}//end class
 
         //GLOBAL VARIABLE
         string file = "";
@@ -90,9 +96,6 @@ namespace MSBeverageRecordApp {
         //RootObj postObj = new RootObj();
         PostRecords post = new PostRecords();
 
-        public class urlResult {
-            public string[] results { get; set; }
-        }
 
         public MainWindow() {
             InitializeComponent();
@@ -114,6 +117,8 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
+
+                //tables to pull id's/foreign keys
                 Tables();
                 Locations();
                 Companies();
@@ -154,13 +159,11 @@ namespace MSBeverageRecordApp {
                 //} 
                 #endregion
             }//end if statusOK
-             //MessageBox.Show();
 
-
-            //this.DataContext = deserializeObject;
         }//end main
 
-        //save to file
+        //saves 
+        //TODO add print button/function
         public void Saving(string filePath, string[] array, int num) {
             //VARIABLE
             int count = 0;
@@ -172,9 +175,8 @@ namespace MSBeverageRecordApp {
                 count = 0;
 
             }//end for
-        }//end function
+        }//ef
 
-        //test serialize datagrid back to json
         private void btnSave_Click(object sender, RoutedEventArgs e) {
             #region fromfile
             //rows array --> csv
@@ -211,11 +213,7 @@ namespace MSBeverageRecordApp {
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(deserializeObject.Items);
             System.IO.File.AppendAllText(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test2.txt", json);
             #endregion
-        }
-
-
-        //adding function to format the grid and print
-        //saves pdf kind of
+        }//ef
 
         private void savepdf_Click(object sender, RoutedEventArgs e) {
             //how to set the width?
@@ -235,10 +233,8 @@ namespace MSBeverageRecordApp {
             //WORKS BUT ONLY USES HALF THE PAGE AND NO PREVIEW
             //add a show print dialog in class to give print options
             //or add a print button 
-        }
+        }//ef
 
-
-        //file dialog and csv format
         public void savecsv_Click(object sender, RoutedEventArgs e) {
 
             //save to csv
@@ -294,21 +290,20 @@ namespace MSBeverageRecordApp {
         }//ef
 
 
+        //TODO
         //UPDATE
-
-        //SET post request here then call in the edit window save button click event
         private void UpdateDataBase() {
-           //Records reports = rep;
-
+          
+           //invalid column names 
             var postRec = new PostRecords {
                 record_id     = post.record_id,
-                categoryName  = post.categoryName,
-                companyName   = post.companyName,
+                category  = post.category,
+                company   = post.company, //invalid field
                 model         = post.model,
                 serial        = post.serial,
                 purchase_date = post.purchase_date, //date wrong format
                 cost          = post.cost,
-                locationName  = post.locationName,
+                location  = post.location,
                 sub_location  = post.sub_location
             };
 
@@ -328,7 +323,7 @@ namespace MSBeverageRecordApp {
                 MessageBox.Show("CatName:" + postResponse.categoryName);
 
             } else {
-                //MessageBox.Show("Error " + response.StatusCode);
+                MessageBox.Show("Error " + response.StatusCode);
             }
         }//ef
 
@@ -346,15 +341,16 @@ namespace MSBeverageRecordApp {
             public string sub_location { get; set; }
         }//end class
 
+        //records class to hold int values of FK id's
         public class PostRecords {
             public int record_id { get; set; }
-            public int categoryName { get; set; }
-            public int companyName { get; set; }
+            public int category { get; set; }
+            public int company { get; set; }
             public string model { get; set; }
             public string serial { get; set; }
-            public string purchase_date { get; set; }
+            public string purchase_date { get; set; } 
             public double cost { get; set; }
-            public int locationName { get; set; }
+            public int location { get; set; }
             public string sub_location { get; set; }
         }//end class
 
@@ -362,15 +358,17 @@ namespace MSBeverageRecordApp {
             //MSBeverageRecordApp.Visibility = Visibility.Hidden;
             CreateRecord window = new CreateRecord();
             window.Show();
-        }//end function
+        }//ef
+
 
         Records rep = new Records();
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-
+            //selects the row that user double clicks
             Records Reports = new Records();
             var row = sender as DataGridRow;
             rep = row.DataContext as Records;
 
+            //fills edit window values
             Reports = rep;
             txbCatName.Text = $"{Reports.categoryName}";
             txbCompName.Text = $"{Reports.companyName}";
@@ -381,12 +379,11 @@ namespace MSBeverageRecordApp {
             txbLocation.Text = $"{Reports.locationName}";
             txbSubLocation.Text = $"{Reports.sub_location}";
 
-            //switch views
+            //switch views to edit window
             spLabels.Visibility = Visibility.Visible;
             spText.Visibility = Visibility.Visible;
             spLbl.Visibility = Visibility.Visible;
             spTxt.Visibility = Visibility.Visible;
-
 
             btnSave.Visibility = Visibility.Visible;
             btnCancel.Visibility = Visibility.Visible;
@@ -399,58 +396,23 @@ namespace MSBeverageRecordApp {
 
         }//ef
 
-        //fix datetime format to just date or a string
         private void btnSaveChange_Click(object sender, RoutedEventArgs e) {
             
             Records Reports = rep;
-            //PostRecords post = new PostRecords();
-
-
-            
-            ////fill post records
-            ////set corresponding id's here somehow
-            //post.companyName = rootComp.id;
-            //post.categoryName = root.id;
-            //post.model = txbModel.Text;
-            //post.serial = txbSerial.Text;
-            //post.purchase_date = txbPurchaseDate.Text;
-            //post.cost = double.Parse(txbCost.Text);
-            //post.locationName = rootLoc.id;
-            //post.sub_location = txbSubLocation.Text;
-
-            //for (int i =0; i <= root.Items.Count; i++) {
-            //    if (txbCatName.SelectedItem != root.Items[i].categoryName) {
-            //        post.categoryName = root.Items[i].id;
-            //    }
-            //}
-
-            //for (int i = 0; i <= rootComp.Items.Count; i++) {
-
-            //}
-
-            //for (int i = 0; i <= rootLoc.Items.Count; i++) {
-            //    if (txbLocation.SelectedItem != rootLoc.Items[i].locationName) {
-            //        post.locationName = rootComp.Items[i].id;
-            //    }
-            //}
-
-
-
             for (int i = 0; i < deserializeObject.Items.Count; i++) {
 
 
                 if (deserializeObject.Items[i].record_id == Reports.record_id) {
 
                     post.record_id = Reports.record_id;
-                    post.companyName = rootComp.Items[i].id;
-                    post.categoryName = root.Items[i].id;
+                    post.company = rootComp.Items[i].id;
+                    post.category = root.Items[i].id;
                     post.model = txbModel.Text;
                     post.serial = txbSerial.Text;
                     post.purchase_date = txbPurchaseDate.Text;
                     post.cost = double.Parse(txbCost.Text);
-                    post.locationName = rootLoc.Items[i].ID;
+                    post.location = rootLoc.Items[i].ID;
                     post.sub_location = txbSubLocation.Text;
-
 
                     deserializeObject.Items[i].categoryName = txbCatName.Text;
                     deserializeObject.Items[i].companyName = txbCompName.Text;
@@ -463,16 +425,17 @@ namespace MSBeverageRecordApp {
                 }
 
                 if (txbCatName.SelectedItem == root.Items[i].categoryName) {
-                    post.categoryName = root.Items[i].id;
+                    post.category = root.Items[i].id;
                 }
 
                 if (txbCompName.SelectedItem == rootComp.Items[i].companyName) {
-                    post.companyName = rootComp.Items[i].id;
+                    post.company = rootComp.Items[i].id;
                 }
                     
                 if (txbLocation.SelectedItem == rootLoc.Items[i].locationName) {
-                    post.locationName = rootLoc.Items[i].ID;
-                    //why all cap work and lowercase no work
+                    post.location = rootLoc.Items[i].ID;
+                    //why
+                    //all cap work - lowercase no work
                 }
 
                 MSBeverageRecordGrid.ItemsSource = null;
@@ -497,10 +460,9 @@ namespace MSBeverageRecordApp {
             spTxt.Visibility = Visibility.Hidden;
 
 
-            //call update database here
-
+            //call update function when user saves
             UpdateDataBase();
-        }
+        }//ef
 
         private void btnCancel_Click(object sender, RoutedEventArgs e) {
             MSBeverageRecordGrid.Visibility = Visibility.Visible;
@@ -516,7 +478,7 @@ namespace MSBeverageRecordApp {
             spText.Visibility = Visibility.Hidden;
             spLbl.Visibility = Visibility.Hidden;
             spTxt.Visibility = Visibility.Hidden;
-        }//end method
+        }//ef
 
         public class Category {
             public int id { get; set; }
@@ -531,6 +493,7 @@ namespace MSBeverageRecordApp {
             public string locationName { get; set; }
         }//end class
 
+        //pull all tables from db
         public void Tables() {
 
             //SETTING UP NEW instance of a type of data
@@ -604,40 +567,34 @@ namespace MSBeverageRecordApp {
             }
         }
 
+        //fill comboBox values 
         private void CreateLocationFilterItems(RootLoc list) {
 
             bool contains = false;
 
-
             txbLocation.Items.Add("none");
           
-
-
             for (int index = 0; index < list.Items.Count; index++) {
 
                 for (int itemIndex = 0; itemIndex < txbLocation.Items.Count; itemIndex++) 
 
-                    if (txbLocation.Items[itemIndex].ToString() == list.Items[index].locationName) {
+                if (txbLocation.Items[itemIndex].ToString() == list.Items[index].locationName) {
 
-                        contains = true;
+                    contains = true;
 
-                    }//end if
+                }//end if
 
-                    if (contains == false) {
+                if (contains == false) {
 
-                        txbLocation.Items.Add(list.Items[index].locationName);
+                    txbLocation.Items.Add(list.Items[index].locationName);
 
-                    }//end if
-                
-
+                }//end if
             }
-
-        }//end method
+        }//ef
 
         private void CreateCompanyFilterItems(RootComp list) {
 
             bool contains = false;
-
 
             txbCompName.Items.Add("none");
 
@@ -659,7 +616,7 @@ namespace MSBeverageRecordApp {
 
             }//end for
 
-        }//end for
+        }//ef
 
         private void CreateCategoryFilterItems(Root list) {
 
@@ -686,7 +643,7 @@ namespace MSBeverageRecordApp {
 
             }//end for
 
-        }//end for
+        }//ef
 
     }//end class
 }//end namespace
