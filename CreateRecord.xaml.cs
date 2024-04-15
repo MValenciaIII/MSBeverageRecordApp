@@ -5,6 +5,9 @@ using static MSBeverageRecordApp.Reports;
 using System.Text.Json;
 using System.Text;
 using System.Windows;
+using MessageBox = System.Windows.Forms.MessageBox;
+using static MSBeverageRecordApp.CrudWindow;
+
 
 namespace MSBeverageRecordApp {
 
@@ -16,13 +19,14 @@ namespace MSBeverageRecordApp {
         RootObject deserializeObject = new RootObject();
         //GLOBAL CLASS FOR DATA TO SEND TO API
         class PostRecordsData {
-            public string categoryName { get; set; }
-            public string companyName { get; set; }
+            public int record_id {  get; set; }
+            public int category { get; set; }
+            public int manufacturer { get; set; }
             public string model { get; set; }
             public string serial { get; set; }
             public DateTime purchase_date { get; set; }
             public decimal cost { get; set; }
-            public string locationName { get; set; }
+            public int location { get; set; }
             public string sub_location { get; set; }
         }//end class
 
@@ -75,7 +79,7 @@ namespace MSBeverageRecordApp {
 
         public class RootObject {
             public int id { get; set; }
-            public List<Records> RecordsItems { get; set; }
+            public List<Records> Items { get; set; }
             public List<Category> CategoryItems { get; set; }
             public List<Location> LocationItems { get; set; }
             public List<Manufacturer> ManufacturerItems { get; set; }
@@ -88,7 +92,7 @@ namespace MSBeverageRecordApp {
             using HttpClient client = new();
 
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4002/api/records/recordsreal");
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
 
             //ADD AN "ACCEPT" HEADER FOR JSON FORMAT.
             client.DefaultRequestHeaders.Accept.Add(
@@ -104,7 +108,7 @@ namespace MSBeverageRecordApp {
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //CHANGE OUR STRING TO OBJECT DATA
-                deserializeObject.RecordsItems = JsonSerializer.Deserialize<List<Records>>(dataobjects);
+                deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
 
             }//end if
         }//end function
@@ -270,6 +274,8 @@ namespace MSBeverageRecordApp {
 
 
         private void CreateManufacturerComboBox(RootObject list) {
+            PostRecordsData manufacturer = new PostRecordsData();
+            
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
@@ -288,6 +294,7 @@ namespace MSBeverageRecordApp {
                 if (contains == false) {
                     //ADD THE LIST ITEM TO THE COMBOBOX
                     cboManufacturer.Items.Add(list.ManufacturerItems[index].companyName);
+                    int id = deserializeObject.ManufacturerItems[index].id;
                 }//end if
 
             }//end for
@@ -295,31 +302,62 @@ namespace MSBeverageRecordApp {
 
 
         private void cboManufacturer_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            //string selectedValue = cboManufacturer.SelectedValue?.ToString();
+            
+            for (int i = 0; i < deserializeObject.ManufacturerItems.Count; i++) {
+                
+                if (deserializeObject.ManufacturerItems[i].companyName == cboManufacturer.SelectedValue) {
+                    int id = deserializeObject.ManufacturerItems[i].id;
+                }//end if
+            }//end for
+
         }//end function
 
 
         #endregion Manufacturer
 
 
-        private void PostNewRecords() {
+        private void PostNewRecords(RootObject list) {
+            //RETRIEVE ALL INPUTS FROM CREATE RECORD PAGE
             var postData = new PostRecordsData {
-                //record id
-                categoryName = cboCategory.SelectedValue.ToString(),
-                companyName = cboManufacturer.SelectedValue.ToString(),
-                model = txtModel.Text.ToUpper(), 
+                //record_id = 152,
+                //category = 1,
+                //manufacturer = 1,
+                model = txtModel.Text.ToUpper(),
                 serial = txtSerialNumber.Text.ToUpper(),
-                //purchase_date = PurchaseDate.
+                purchase_date = PurchaseDate.SelectedDate.Value,
                 cost = decimal.Parse(txtCost.Text),
-                locationName = cboLocation.SelectedValue.ToString(),
+                //location = 1,
                 sub_location = txtSubLocation.Text.ToUpper()
             };//end var postData
+
+            for (int index = 0; index < cboCategory.Items.Count; index++) {
+                for (int itemIndex = 0; itemIndex < list.CategoryItems.Count; itemIndex++) {
+                    if (cboCategory.Items[index] == list.CategoryItems[itemIndex].categoryName) {
+                        postData.category = list.CategoryItems[itemIndex].id;
+                    }
+                }
+            }
+            for (int index = 0; index < cboManufacturer.Items.Count; index++) {
+                for (int itemIndex = 0; itemIndex < list.ManufacturerItems.Count; itemIndex++) {
+                    if (cboManufacturer.Items[index] == list.ManufacturerItems[itemIndex].companyName) {
+                        postData.manufacturer = list.ManufacturerItems[itemIndex].id;
+                    }
+                }
+            }
+            for (int index = 0; index < cboLocation.Items.Count; index++) {
+                for (int itemIndex = 0; itemIndex < list.LocationItems.Count; itemIndex++) {
+                    if (cboLocation.Items[index] == list.LocationItems[itemIndex].locationName) {
+                        postData.category = list.LocationItems[itemIndex].id;
+                    }
+                }
+            }
+
 
             //CREATING A NEW HTTPCLIENT OBJECT
             var client = new HttpClient();
 
-            //SET BASE ADDRESS OF API--will we need to create a recordscreate like we did categorycreate?
-            client.BaseAddress = new Uri("http://localhost:4001/api/records");
+            //SET BASE ADDRESS OF API
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordscreate");
 
             //SERIALIZE POSTDATA OBJECT TO JSON STRING
             var json = System.Text.Json.JsonSerializer.Serialize(postData);
@@ -336,7 +374,7 @@ namespace MSBeverageRecordApp {
                 };//end var options
 
                 //PROMPT USER THAT A NEW RECORD WAS CREATED
-                //MessageBox.Show("New Record Created");
+                MessageBox.Show("New Record Created");
             }//end if
 
             //RETURN TO MAIN MENU
@@ -346,9 +384,9 @@ namespace MSBeverageRecordApp {
 
 
         private void btnSubmit_Click(object sender, System.Windows.RoutedEventArgs e) {
+            //POST THE NEW RECORD TO API
             PostNewRecords();
         }//end function
-
 
     }//end class
 }//end namespace

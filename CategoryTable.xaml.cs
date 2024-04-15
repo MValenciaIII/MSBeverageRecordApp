@@ -10,11 +10,6 @@ namespace MSBeverageRecordApp {
     /// INTERACTION LOGIC FOR CategoryTable.xaml
     /// </summary>
     public partial class CategoryTable : Page {
-        //GLOBAL CLASS FOR DATA TO SEND TO API
-        class PostData {
-            public string categoryName { get; set; }
-        }//end class
-
         //CLASS TO GET RESPONSE FROM API
         class PostResponse {
             public int Id { get; set; }
@@ -35,7 +30,7 @@ namespace MSBeverageRecordApp {
          //Post Category
         private void Category_Button_Click(object sender, RoutedEventArgs e) {
             var postData = new PostCategory {
-                categoryName = txtCategory.Text.ToUpper() //will link to txtInput
+                categoryName = txtCategory.Text.ToUpper()
             };
 
             //CREATING A NEW HTTPCLIENT OBJECT
@@ -60,7 +55,7 @@ namespace MSBeverageRecordApp {
                 };
                 // Prompt user category is updated
                 MessageBox.Show("New Category Created");
-            }
+            }//end if
 
 
 
@@ -97,7 +92,7 @@ namespace MSBeverageRecordApp {
                 };
                 // Prompt user category is updated
                 MessageBox.Show("New Location Added");
-            }
+            }//end if
 
 
 
@@ -135,7 +130,7 @@ namespace MSBeverageRecordApp {
                 };
                 // Prompt user category is updated
                 MessageBox.Show("New manufacturer Added");
-            }
+            }//end if
 
 
 
