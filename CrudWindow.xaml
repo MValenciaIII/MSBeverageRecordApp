@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MSBeverageRecordApp"
         xmlns:VisualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core" x:Class="MSBeverageRecordApp.CrudWindow"
         mc:Ignorable="d"
-        Title="CrudWindow" Height="510" Width="890" >
+        Title="CrudWindow" Margin="1,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" >
     
     <Grid>
 
@@ -67,33 +67,33 @@
         <Label Name="lblEdit" Content="Edit Record" HorizontalAlignment="Left" FontSize="30" FontWeight="Bold"  Grid.ColumnSpan="1" Width="221" Visibility="Hidden"/>
 
 
-        <StackPanel x:Name="spLabels" Grid.Row="1" Visibility="Hidden"   HorizontalAlignment="Left" Width="184">
-            <Label Content="Category Name" Margin="0,30,0,0" Height="36" Width="176" HorizontalContentAlignment="Center"/>
-            <Label Content="Company Name" HorizontalAlignment="Right" Margin="0,30,0,0" Height="36" Visibility="Visible" Width="180"  HorizontalContentAlignment="Center" />
-            <Label Content="Purchase Date" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="180" HorizontalContentAlignment="Center"/>
+        <StackPanel x:Name="spLabels" Grid.Row="1" Visibility="Hidden"   HorizontalAlignment="Left" Width="184" VerticalAlignment="Top">
+            <Label Content="Category Name" Margin="0,5,0,0" Height="36" Width="176" HorizontalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+            <Label Content="Company Name" HorizontalAlignment="Left" Margin="0,5,0,0" Height="36" Visibility="Visible" Width="180"  HorizontalContentAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+            <Label Content="Purchase Date" HorizontalAlignment="Left" Margin="0,5,0,0" Height="36" Width="180" HorizontalContentAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
 
-            <Label Content="Location" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Height="36" Width="180" HorizontalContentAlignment="Center"/>
+            <Label Content="Location" HorizontalAlignment="Left" Margin="0,5,0,0" VerticalAlignment="Top" Height="36" Width="180" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
         </StackPanel>
-        <StackPanel x:Name="spText" Grid.ColumnSpan="2" Visibility="Hidden" HorizontalAlignment="Left" Width="205" Margin="191,94,0,0" Grid.RowSpan="2">
-            <ComboBox Name="txbCatName"  Margin="0,30,0,0" Text="TextBox" Width="202" Height="36"/>
-            <ComboBox x:Name="txbCompName"  Margin="0,30,0,0" Text="TextBox" Width="198" Height="36"/>
+        <StackPanel x:Name="spText" Grid.ColumnSpan="2" Visibility="Hidden" HorizontalAlignment="Left" Width="205" Margin="191,94,0,0" Grid.RowSpan="2" VerticalAlignment="Top">
+            <ComboBox Name="txbCatName"  Margin="0,5,0,0" Text="TextBox" Width="202" Height="36" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+            <ComboBox x:Name="txbCompName"  Margin="0,5,0,0" Text="TextBox" Width="198" Height="36" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
             <DatePicker
-            SelectedDate="{Binding purchase_date}" HorizontalAlignment="Left" x:Name="txbPurchaseDate" Margin="0,30,0,0" Text="TextBox" Width="203" Height="36"/>
-            <ComboBox HorizontalAlignment="Left" Name="txbLocation" Margin="0,30,0,0" Text="TextBox" VerticalAlignment="Top" Width="203" Height="36"/>
+            SelectedDate="{Binding purchase_date}" HorizontalAlignment="Left" x:Name="txbPurchaseDate" Margin="0,5,0,0" Text="TextBox" Width="203" Height="36" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+            <ComboBox HorizontalAlignment="Left" Name="txbLocation" Margin="0,5,0,0" Text="TextBox" VerticalAlignment="Top" Width="203" Height="36" VerticalContentAlignment="Center"/>
         </StackPanel>
-        <StackPanel x:Name="spLbl" Grid.ColumnSpan="2" Visibility="Hidden"   HorizontalAlignment="Left" Width="170" Margin="134,0,0,0" Grid.Column="1" Grid.Row="1">
-            <Label Content="Model" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="173" FlowDirection="RightToLeft" HorizontalContentAlignment="Center"/>
-            <Label Content="Serial" HorizontalAlignment="Right" Margin="0,30,0,0" Height="36" Width="173" FlowDirection="RightToLeft" HorizontalContentAlignment="Center"/>
-            <Label Content="Cost" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="173" HorizontalContentAlignment="Center"/>
-            <Label Content="Sub-Location" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Height="36" Width="173" HorizontalContentAlignment="Center"/>
+        <StackPanel x:Name="spLbl" Grid.ColumnSpan="2" Visibility="Hidden"   HorizontalAlignment="Left" Margin="134,0,0,0" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top">
+            <Label Content="Model" HorizontalAlignment="Left" Margin="0,5,0,0" Height="36" Width="173" FlowDirection="RightToLeft" HorizontalContentAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+            <Label Content="Serial" HorizontalAlignment="Left" Margin="0,5,0,0" Height="36" Width="173" FlowDirection="RightToLeft" HorizontalContentAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+            <Label Content="Cost" HorizontalAlignment="Left" Margin="0,5,0,0" Height="36" Width="173" HorizontalContentAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+            <Label Content="Sub-Location" HorizontalAlignment="Right" Margin="0,5,0,0" VerticalAlignment="Center" Height="36" Width="173" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
         </StackPanel>
-        <StackPanel x:Name="spTxt" Visibility="Hidden"   HorizontalAlignment="Left" Width="205" Margin="52,4,0,63" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2">
-            <TextBox HorizontalAlignment="Left" Name="txbModel" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="203" Height="36"/>
-            <TextBox HorizontalAlignment="Left" Name="txbSerial" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="203" Height="36"/>
-            <TextBox HorizontalAlignment="Left" Name="txbCost" Margin="0,30,0,0" Height="36" TextWrapping="Wrap" Text="TextBox" Width="203"/>
-            <TextBox HorizontalAlignment="Left" Name="txbSubLocation" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="203" Height="36"/>
+        <StackPanel x:Name="spTxt" Visibility="Hidden"   HorizontalAlignment="Left" Margin="60,4,1,63" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top">
+            <TextBox HorizontalAlignment="Left" Name="txbModel" Margin="0,5,0,0" TextWrapping="Wrap" Text="TextBox" Height="36" VerticalContentAlignment="Center" Width="180"/>
+            <TextBox HorizontalAlignment="Left" Name="txbSerial" Margin="0,5,0,0" TextWrapping="Wrap" Text="TextBox" Height="36" VerticalContentAlignment="Center" Width="180"/>
+            <TextBox HorizontalAlignment="Left" Name="txbCost" Margin="0,5,0,0" Height="36" TextWrapping="Wrap" Text="TextBox" VerticalContentAlignment="Center" Width="180"/>
+            <TextBox HorizontalAlignment="Left" Name="txbSubLocation" Margin="0,5,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Height="36" VerticalContentAlignment="Center" Width="180"/>
         </StackPanel>
         <Button Grid.Column="2" Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="156,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden" Click="btnCancel_Click"/>
         <Button Grid.Column="2" Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="39,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden" Click="btnSaveChange_Click"/>
