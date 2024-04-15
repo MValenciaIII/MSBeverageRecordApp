@@ -9,13 +9,13 @@ using System.Windows.Input;
 
 
 //TODO
-//add print whole data grid function so raw csv data and report are both options
+//re-format the printDG class to fit the cells text/fill page
+//make new button and click event function to call print class so save PDF and print are separate
+//update data grid on all pages on save
+//filter/search inside of update window
+
 namespace MSBeverageRecordApp {
 
-    //todo
-    //fix invalid column names
-    //re-format the printDG class to fit the cells text/fill page
-    //also make new button and click event function to call print class so save PDF and print are separate
 
     public partial class CrudWindow : Page {
         //obj containers
@@ -84,17 +84,14 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
 
-                //DateFormat();
-
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
 
                 for (int i = 0; i > deserializeObject.Items.Count; i++) {
 
-                    
                     deserializeObject.Items[i].purchase_date.ToString("MM/dd/yy");
                     
                 }
-
+                
                 //tables to pull id's/foreign keys
                 Tables();
                 Locations();
@@ -194,24 +191,28 @@ namespace MSBeverageRecordApp {
         }//ef
 
         private void savepdf_Click(object sender, RoutedEventArgs e) {
+            System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
+
+
+        }//ef
+        private void print_Click(object sender, RoutedEventArgs e) {
             //how to set the width?
+            System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
             FrameworkElement head = new FrameworkElement();
             FrameworkElement foot = new FrameworkElement();
 
             //saves but need to add print preview
             //test with more than one page of data
-            //maybe add a header
-
-            //MSBeverageRecordGrid.
-            System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
-            //printDlg.PrintVisual(MSBeverageRecordGrid, "title");
-            //PrintDG print = new PrintDG();
-            //print.PrintDataGrid(head, MSBeverageRecordGrid, foot, printDlg);
+            //add a dated header
+            //MSBeverageRecordGrid
+            printDlg.PrintVisual(MSBeverageRecordGrid, "title");
+            PrintDG print = new PrintDG();
+            print.PrintDataGrid(head, MSBeverageRecordGrid, foot, printDlg);
 
             //WORKS BUT ONLY USES HALF THE PAGE AND NO PREVIEW
             //add a show print dialog in class to give print options
             //or add a print button 
-        }//ef
+        }
 
         public void savecsv_Click(object sender, RoutedEventArgs e) {
 
@@ -338,6 +339,9 @@ namespace MSBeverageRecordApp {
 
         Records rep = new Records();
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+
+            
+
             //selects the row that user double clicks
             Records Reports = new Records();
             var row = sender as DataGridRow;

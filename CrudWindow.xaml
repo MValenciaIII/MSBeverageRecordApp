@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MSBeverageRecordApp"
         xmlns:VisualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core" x:Class="MSBeverageRecordApp.CrudWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="510" Width="890" >
+        Title="CrudWindow" Height="510" Width="890" >
     
     <Grid>
 
@@ -25,7 +25,8 @@
         <Menu Name="fileMenu" Visibility="Visible" DockPanel.Dock="Top" HorizontalAlignment="Left" Width="890" Background="White" Grid.ColumnSpan="3">
             <MenuItem Header="_File">
                 <MenuItem x:Name="muiSave" Header="save csv" Click="savecsv_Click"/>
-                <MenuItem x:Name="printRec" Header="save pdf" Click="savepdf_Click"/>
+                <MenuItem x:Name="savePDF" Header="save pdf" Click="savepdf_Click"/>
+                <MenuItem x:Name="print" Header="print" Click="print_Click" />
             </MenuItem>
 
         </Menu>
@@ -65,6 +66,7 @@
 
         <Label Name="lblEdit" Content="Edit Record" HorizontalAlignment="Left" FontSize="30" FontWeight="Bold"  Grid.ColumnSpan="1" Width="221" Visibility="Hidden"/>
 
+
         <StackPanel x:Name="spLabels" Grid.Row="1" Visibility="Hidden"   HorizontalAlignment="Left" Width="184">
             <Label Content="Category Name" Margin="0,30,0,0" Height="36" Width="176" HorizontalContentAlignment="Center"/>
             <Label Content="Company Name" HorizontalAlignment="Right" Margin="0,30,0,0" Height="36" Visibility="Visible" Width="180"  HorizontalContentAlignment="Center" />
@@ -92,9 +94,7 @@
             <TextBox HorizontalAlignment="Left" Name="txbSerial" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="203" Height="36"/>
             <TextBox HorizontalAlignment="Left" Name="txbCost" Margin="0,30,0,0" Height="36" TextWrapping="Wrap" Text="TextBox" Width="203"/>
             <TextBox HorizontalAlignment="Left" Name="txbSubLocation" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="203" Height="36"/>
-
         </StackPanel>
-
         <Button Grid.Column="2" Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="156,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden" Click="btnCancel_Click"/>
         <Button Grid.Column="2" Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="39,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden" Click="btnSaveChange_Click"/>
 
