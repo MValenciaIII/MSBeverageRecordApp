@@ -84,15 +84,15 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //How to set the query data to the DATAGRID element.
 
-                DateFormat();
+                //DateFormat();
 
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
 
                 for (int i = 0; i > deserializeObject.Items.Count; i++) {
 
-                    if (deserializeObject.Items[i].purchase_date != null) {
-                        deserializeObject.Items[i].purchase_date.ToString("MM/dd/yy");
-                    }
+                    
+                    deserializeObject.Items[i].purchase_date.ToString("MM/dd/yy");
+                    
                 }
 
                 //tables to pull id's/foreign keys
@@ -142,28 +142,6 @@ namespace MSBeverageRecordApp {
 
         //TODO add print button/function, fix print format
 
-        public void DateFormat() {
-            DateTime n = new DateTime();
-            DateTimeOffset fDate = new DateTimeOffset(n);
-
-            //to reset^ use that line in loop and save a separate edit
-
-            //2024-03-25T05:00:00.000Z
-            //format values from ^
-            //only format if length of str is less than 11
-
-            for (int i = 0; i < deserializeObject.Items.Count; i++) {
-                //deserializeObject.Items[i].purchase_date = "2024-03-25T05:00:00.000Z";
-                if (deserializeObject.Items[i].purchase_date.Length > 11) {
-                    //date -> dd/mm/yyyy
-                    string dateString = deserializeObject.Items[i].purchase_date;
-                    DateTimeOffset offsetDate;
-                    // String with date only
-                    offsetDate = DateTimeOffset.Parse(dateString);
-                    deserializeObject.Items[i].purchase_date = offsetDate.ToString("d");
-                }
-            }//end for
-        }
 
         public void Saving(string filePath, string[] array, int num) {
             //VARIABLE
@@ -371,7 +349,7 @@ namespace MSBeverageRecordApp {
             txbCompName.Text = $"{Reports.companyName}";
             txbModel.Text = $"{Reports.model}";
             txbSerial.Text = $"{Reports.serial}";
-            txbPurchaseDate.Text = $"{Reports.purchase_date}";
+            txbPurchaseDate.Text = $"{Reports.purchase_date.ToString("d")}";
             txbCost.Text = $"{Reports.cost}";
             txbLocation.Text = $"{Reports.locationName}";
             txbSubLocation.Text = $"{Reports.sub_location}";
