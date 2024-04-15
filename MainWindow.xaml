@@ -6,114 +6,11 @@
         xmlns:local="clr-namespace:MSBeverageRecordApp"
         xmlns:VisualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core" x:Class="MSBeverageRecordApp.MainWindow"
         mc:Ignorable="d"
-<<<<<<< Updated upstream
+
         Title="MainWindow" Height="450" Width="800">
    
     <Grid OpacityMask="Black">
         <Frame x:Name="MainFrame"></Frame>
-=======
-        Title="MainWindow" Height="510" Width="890" WindowStartupLocation="CenterScreen">
-        
-
-    <Grid>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35*"></RowDefinition>
-            <RowDefinition Height="100*"></RowDefinition>
-            <RowDefinition Height="25*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*"></ColumnDefinition>
-            <ColumnDefinition Width="50*"></ColumnDefinition>
-            <ColumnDefinition Width="50*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-
-
-        <Menu Name="fileMenu" Visibility="Visible" DockPanel.Dock="Top" HorizontalAlignment="Left" Width="890" Background="White" Grid.ColumnSpan="3">
-            <MenuItem Header="_File">
-
-                <MenuItem x:Name="muiSave" Header="save csv" Click="savecsv_Click"/>
-                <MenuItem x:Name="printRec" Header="save pdf" Click="savepdf_Click"/>
-
-            </MenuItem>
-
-        </Menu>
-        
-            <DataGrid Visibility="Visible" x:Name="MSBeverageRecordGrid" Margin="10,5,10,13" IsReadOnly="False" CanUserAddRows="False" AutoGenerateColumns="False" Grid.ColumnSpan="3" Grid.Row="1">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding record_id}"></DataGridTextColumn>
-                <DataGridTextColumn Header="category" Binding="{Binding categoryName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="company" Binding="{Binding companyName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="model" Binding="{Binding model}"></DataGridTextColumn>
-                <DataGridTextColumn Header="serial" Binding="{Binding serial}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Date" Binding="{Binding purchase_date, StringFormat= {}{0: MM/dd/yy}}" />
-                <DataGridTextColumn Header="cost" Binding="{Binding cost}"></DataGridTextColumn>
-                <DataGridTextColumn Header="location" Binding="{Binding locationName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="sub-location" Binding="{Binding sub_location}"></DataGridTextColumn>
-
-            </DataGrid.Columns>
-            <DataGrid.Resources>
-                <Style TargetType="DataGridRow">
-                    <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
-                </Style>
-            </DataGrid.Resources>
-        </DataGrid>
-        
-        
-        <Label Visibility="Visible"  FontSize="22px" Content="Mississippi Beverage Records" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="47" Width="300" Grid.ColumnSpan="3"/>
-        <Button Visibility="Visible" x:Name="btnaddRecord" Content="New Record" HorizontalAlignment="Left" Margin="172,54,0,0" VerticalAlignment="Top" Click="addRecord" Height="23" Width="74" Grid.Column="2"/>
-
-        <TextBox Visibility="Visible" x:Name="consoleOutput" HorizontalAlignment="Left" Margin="95,22,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="654" Grid.ColumnSpan="3" Grid.Row="2" />
-        <ComboBox Visibility="Visible" x:Name="Filter" Margin="29,55,139,28" Grid.Column="0">
-            <ComboBoxItem Content="Select a Filter" IsSelected="True"/>
-            <ComboBoxItem Content="Category 1" />
-            <ComboBoxItem Content="Category 2" />
-            <ComboBoxItem Content="Category 3" />
-            <ComboBoxItem Content="Category 4" />
-            <ComboBoxItem Content="Category 5" />
-        </ComboBox>
-
-
-            
-            
-        <Label Name="lblEdit" Content="Edit Record" HorizontalAlignment="Left" FontSize="30" FontWeight="Bold"  Grid.ColumnSpan="1" Width="221" Visibility="Hidden"/>
-        
-           
-        <StackPanel x:Name="spLabels" Grid.Row="1" Visibility="Hidden"   HorizontalAlignment="Left" Width="184">
-            <Label Content="Category Name" Margin="0,30,0,0" Height="36" Width="176" HorizontalContentAlignment="Center"/>
-            <Label Content="Company Name" HorizontalAlignment="Right" Margin="0,30,0,0" Height="36" Visibility="Visible" Width="180"  HorizontalContentAlignment="Center" />
-            <Label Content="Purchase Date" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="180" HorizontalContentAlignment="Center"/>
-            <Label Content="Location" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Height="36" Width="180" HorizontalContentAlignment="Center"/>
-
-
-        </StackPanel>
-        <StackPanel x:Name="spText" Grid.ColumnSpan="2" Visibility="Hidden" HorizontalAlignment="Left" Width="205" Margin="191,94,0,0" Grid.RowSpan="2">
-            <ComboBox Name="txbCatName"  Margin="0,30,0,0" Text="TextBox" Width="202" Height="36"/>
-            <ComboBox x:Name="txbCompName"  Margin="0,30,0,0" Text="TextBox" Width="198" Height="36"/>
-            <TextBox HorizontalAlignment="Left" Name="txbPurchaseDate" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="203" Height="36"/>
-            <ComboBox HorizontalAlignment="Left" Name="txbLocation" Margin="0,30,0,0" Text="TextBox" VerticalAlignment="Top" Width="203" Height="36"/>
-        </StackPanel>
-        <StackPanel x:Name="spLbl" Grid.ColumnSpan="2" Visibility="Hidden"   HorizontalAlignment="Left" Width="170" Margin="134,0,0,0" Grid.Column="1" Grid.Row="1">
-            <Label Content="Model" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="173" FlowDirection="RightToLeft" HorizontalContentAlignment="Center"/>
-            <Label Content="Serial" HorizontalAlignment="Right" Margin="0,30,0,0" Height="36" Width="173" FlowDirection="RightToLeft" HorizontalContentAlignment="Center"/>
-            <Label Content="Cost" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="173" HorizontalContentAlignment="Center"/>
-            <Label Content="Sub-Location" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Height="36" Width="173" HorizontalContentAlignment="Center"/>
-
-        </StackPanel>
-        <StackPanel x:Name="spTxt" Visibility="Hidden"   HorizontalAlignment="Left" Width="205" Margin="52,4,0,63" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2">
-            <TextBox HorizontalAlignment="Left" Name="txbModel" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="203" Height="36"/>
-            <TextBox HorizontalAlignment="Left" Name="txbSerial" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" Width="203" Height="36"/>
-            <TextBox HorizontalAlignment="Left" Name="txbCost" Margin="0,30,0,0" Height="36" TextWrapping="Wrap" Text="TextBox" Width="203"/>
-            <TextBox HorizontalAlignment="Left" Name="txbSubLocation" Margin="0,30,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="203" Height="36"/>
-
-        </StackPanel>
-
-        <Button Grid.Column="2" Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="156,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden" Click="btnCancel_Click"/>
-        <Button Grid.Column="2" Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="39,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="79" Visibility="Hidden" Click="btnSaveChange_Click"/>
-
-
-
->>>>>>> Stashed changes
     </Grid>
 
 </Window>

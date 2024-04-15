@@ -125,18 +125,18 @@ namespace MSBeverageRecordApp {
             for (int index = 0; index < list.Items.Count; index++) {
                 //LOOP THROUGH FILTER
                 for (int itemIndex = 0; itemIndex < FilterCategoryAll.Items.Count; itemIndex++)
-                    
+
                     //IF FILTER CONTAINS THE LIST ITEM
                     if (FilterCategoryAll.Items[itemIndex].ToString() == list.Items[index].categoryName) {
                         //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
                     }//end if
 
-                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
-                    if (contains == false) {
-                        //ADD THE LIST ITEM TO THE FILTER
-                        FilterCategoryAll.Items.Add(list.Items[index].categoryName);
-                    }//end if
+                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                if (contains == false) {
+                    //ADD THE LIST ITEM TO THE FILTER
+                    FilterCategoryAll.Items.Add(list.Items[index].categoryName);
+                }//end if
 
             }//end for
         }//end function
@@ -187,12 +187,12 @@ namespace MSBeverageRecordApp {
                         //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
                     }//end if
-                    
-                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
-                    if (contains == false) {
-                        //ADD THE LIST ITEM TO THE FILTER
-                        FilterManufacturerAll.Items.Add(list.Items[index].companyName);
-                    }//end if
+
+                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                if (contains == false) {
+                    //ADD THE LIST ITEM TO THE FILTER
+                    FilterManufacturerAll.Items.Add(list.Items[index].companyName);
+                }//end if
             }//end for
 
         }//end function
@@ -244,11 +244,11 @@ namespace MSBeverageRecordApp {
                         contains = true;
                     }//end if
 
-                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
-                    if (contains == false) {
-                        //ADD THE LIST ITEM TO THE FILTER
-                        FilterLocationAll.Items.Add(list.Items[index].locationName);
-                    }//end if
+                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                if (contains == false) {
+                    //ADD THE LIST ITEM TO THE FILTER
+                    FilterLocationAll.Items.Add(list.Items[index].locationName);
+                }//end if
             }//end for
 
         }//end function
@@ -426,12 +426,12 @@ namespace MSBeverageRecordApp {
                         //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
                     }//end if
-                
-                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
-                    if (contains == false) {
-                        //ADD THE LIST ITEM TO THE FILTER
-                        FilterCategory.Items.Add(list.Items[index].categoryName);
-                    }//end if
+
+                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                if (contains == false) {
+                    //ADD THE LIST ITEM TO THE FILTER
+                    FilterCategory.Items.Add(list.Items[index].categoryName);
+                }//end if
             }//end for
 
         }//end function
@@ -483,11 +483,11 @@ namespace MSBeverageRecordApp {
                         contains = true;
                     }//end if
 
-                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
-                    if (contains == false) {
-                        //ADD THE LIST ITEM TO THE FILTER
-                        FilterManufacturer.Items.Add(list.Items[index].companyName);
-                    }//end if
+                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                if (contains == false) {
+                    //ADD THE LIST ITEM TO THE FILTER
+                    FilterManufacturer.Items.Add(list.Items[index].companyName);
+                }//end if
             }//end for
 
         }//end function
@@ -538,11 +538,11 @@ namespace MSBeverageRecordApp {
                         //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
                     }//end if
-                    
-                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
-                    if (contains == false) {
-                        FilterLocation.Items.Add(list.Items[index].locationName);
-                    }//end if
+
+                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                if (contains == false) {
+                    FilterLocation.Items.Add(list.Items[index].locationName);
+                }//end if
             }//end for
 
         }//end function

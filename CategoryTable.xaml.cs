@@ -1,9 +1,8 @@
 ﻿using System.Net.Http;
+using System.Windows;
 using System.Text;
 using System.Text.Json;
-using System.Windows;
 using System.Windows.Controls;
-using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace MSBeverageRecordApp {
     /// <summary>

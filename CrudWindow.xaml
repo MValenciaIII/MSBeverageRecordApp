@@ -40,7 +40,7 @@
                 <DataGridTextColumn Header="company" Binding="{Binding companyName}"></DataGridTextColumn>
                 <DataGridTextColumn Header="model" Binding="{Binding model}"></DataGridTextColumn>
                 <DataGridTextColumn Header="serial" Binding="{Binding serial}"></DataGridTextColumn>
-                <DataGridTextColumn Header="purchase date" Binding="{Binding purchase_date}"></DataGridTextColumn>
+                <DataGridTextColumn Header="purchase date" Binding="{Binding purchase_date, StringFormat= {}{0: MM/dd/yy}}"></DataGridTextColumn>
                 <DataGridTextColumn Header="cost" Binding="{Binding cost}"></DataGridTextColumn>
                 <DataGridTextColumn Header="location" Binding="{Binding locationName}"></DataGridTextColumn>
                 <DataGridTextColumn Header="sub-location" Binding="{Binding sub_location}"></DataGridTextColumn>
@@ -75,7 +75,7 @@
         <StackPanel x:Name="spLabels" Grid.Row="1" Visibility="Hidden"   HorizontalAlignment="Left" Width="184">
             <Label Content="Category Name" Margin="0,30,0,0" Height="36" Width="176" HorizontalContentAlignment="Center"/>
             <Label Content="Company Name" HorizontalAlignment="Right" Margin="0,30,0,0" Height="36" Visibility="Visible" Width="180"  HorizontalContentAlignment="Center" />
-            <DatePickerTextBox HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="180" HorizontalContentAlignment="Center"/>
+            <Label Content="Purchase Date" HorizontalAlignment="Center" Margin="0,30,0,0" Height="36" Width="180" HorizontalContentAlignment="Center"/>
             <Label Content="Location" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Height="36" Width="180" HorizontalContentAlignment="Center"/>
 
 

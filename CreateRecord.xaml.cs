@@ -1,10 +1,8 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Windows.Controls;
-using static MSBeverageRecordApp.Reports;
-using System.Text.Json;
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
-using System.Windows;
+using System.Text.Json;
+using System.Windows.Controls;
 
 namespace MSBeverageRecordApp {
 
@@ -141,7 +139,7 @@ namespace MSBeverageRecordApp {
         }//end function
 
 
-        private void CreateCategoryComboBox (RootObject list) {
+        private void CreateCategoryComboBox(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
@@ -167,7 +165,7 @@ namespace MSBeverageRecordApp {
 
 
         private void cboCategory_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            
+
         }//end function
 
 
@@ -231,7 +229,7 @@ namespace MSBeverageRecordApp {
 
 
         private void cboLocation_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-           
+
         }//end function
 
 
@@ -307,7 +305,7 @@ namespace MSBeverageRecordApp {
                 //record id
                 categoryName = cboCategory.SelectedValue.ToString(),
                 companyName = cboManufacturer.SelectedValue.ToString(),
-                model = txtModel.Text.ToUpper(), 
+                model = txtModel.Text.ToUpper(),
                 serial = txtSerialNumber.Text.ToUpper(),
                 //purchase_date = PurchaseDate.
                 cost = decimal.Parse(txtCost.Text),
