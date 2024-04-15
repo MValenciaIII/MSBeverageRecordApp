@@ -3,6 +3,7 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Windows.Controls;
+using ComboBox = System.Windows.Controls.ComboBox;
 
 namespace MSBeverageRecordApp {
     /// <summary>
@@ -28,7 +29,7 @@ namespace MSBeverageRecordApp {
             using HttpClient client = new();
 
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
+            client.BaseAddress = new Uri("http://localhost:4002/api/records/recordsreal");
 
             //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
             client.DefaultRequestHeaders.Accept.Add(
@@ -70,7 +71,7 @@ namespace MSBeverageRecordApp {
             public string companyName { get; set; }
             public string model { get; set; }
             public string serial { get; set; }
-            public DateTime purchase_date { get; set; }
+            public string purchase_date { get; set; }
             public decimal cost { get; set; }
             public string locationName { get; set; }
             public string sub_location { get; set; }

@@ -370,8 +370,8 @@ namespace MSBeverageRecordApp
         private void addRecord(object sender, RoutedEventArgs e)
         {
             //MSBeverageRecordApp.Visibility = Visibility.Hidden;
-            CreateRecord window = new CreateRecord();
-            window.Show();
+            //CreateRecord window = new CreateRecord();
+            //window.Show();
         }//ef
 
         Records rep = new Records();
@@ -405,7 +405,6 @@ namespace MSBeverageRecordApp
             MSBeverageRecordGrid.Visibility = Visibility.Collapsed;
             consoleOutput.Visibility = Visibility.Collapsed;
             fileMenu.Visibility = Visibility.Collapsed;
-            btnaddRecord.Visibility = Visibility.Collapsed;
             Filter.Visibility = Visibility.Collapsed;
 
         }//ef
@@ -467,7 +466,6 @@ namespace MSBeverageRecordApp
             MSBeverageRecordGrid.Visibility = Visibility.Visible;
             consoleOutput.Visibility = Visibility.Visible;
             fileMenu.Visibility = Visibility.Visible;
-            btnaddRecord.Visibility = Visibility.Visible;
             Filter.Visibility = Visibility.Visible;
 
             btnSave.Visibility = Visibility.Hidden;
@@ -488,7 +486,6 @@ namespace MSBeverageRecordApp
             MSBeverageRecordGrid.Visibility = Visibility.Visible;
             consoleOutput.Visibility = Visibility.Visible;
             fileMenu.Visibility = Visibility.Visible;
-            btnaddRecord.Visibility = Visibility.Visible;
             Filter.Visibility = Visibility.Visible;
 
             btnSave.Visibility = Visibility.Hidden;

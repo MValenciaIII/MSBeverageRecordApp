@@ -22,5 +22,10 @@ namespace MSBeverageRecordApp {
         private void addRecord(object sender, RoutedEventArgs e) {
             this.NavigationService.Navigate(new Uri("CreateRecord.xaml", UriKind.Relative));
         }
+
+        private void btnModifyDeleteRecord_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("CrudWindow.xaml", UriKind.Relative));
+        }
     }
 }

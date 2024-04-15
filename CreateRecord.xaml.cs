@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows;
 
 namespace MSBeverageRecordApp {
+
     /// <summary>
     /// INTERACTION LOGIC FOR CreateRecord.xaml
     /// </summary>
@@ -87,7 +88,7 @@ namespace MSBeverageRecordApp {
             using HttpClient client = new();
 
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
+            client.BaseAddress = new Uri("http://localhost:4002/api/records/recordsreal");
 
             //ADD AN "ACCEPT" HEADER FOR JSON FORMAT.
             client.DefaultRequestHeaders.Accept.Add(
@@ -335,7 +336,7 @@ namespace MSBeverageRecordApp {
                 };//end var options
 
                 //PROMPT USER THAT A NEW RECORD WAS CREATED
-                MessageBox.Show("New Record Created");
+                //MessageBox.Show("New Record Created");
             }//end if
 
             //RETURN TO MAIN MENU

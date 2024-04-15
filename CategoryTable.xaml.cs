@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace MSBeverageRecordApp {
     /// <summary>
@@ -41,7 +42,7 @@ namespace MSBeverageRecordApp {
             var client = new HttpClient();
 
             //SET BASE ADDRESS OF API
-            client.BaseAddress = new Uri("http://localhost:4001/api/category/categorycreate/");
+            client.BaseAddress = new Uri("http://localhost:4002/api/category/categorycreate/");
 
             //SERIALIZE POSTDATA OBJECT TO JSON STRING
             var json = System.Text.Json.JsonSerializer.Serialize(postData);
@@ -78,7 +79,7 @@ namespace MSBeverageRecordApp {
             var client = new HttpClient();
 
             //SET BASE ADDRESS OF API
-            client.BaseAddress = new Uri("http://localhost:4001/api/location/locationcreate/");
+            client.BaseAddress = new Uri("http://localhost:4002/api/location/locationcreate/");
 
             //SERIALIZE POSTDATA OBJECT TO JSON STRING
             var json = System.Text.Json.JsonSerializer.Serialize(postData);
@@ -116,7 +117,7 @@ namespace MSBeverageRecordApp {
             var client = new HttpClient();
 
             //SET BASE ADDRESS OF API
-            client.BaseAddress = new Uri("http://localhost:4001/api/manufacturer/manufacturercreate/");
+            client.BaseAddress = new Uri("http://localhost:4002/api/manufacturer/manufacturercreate/");
 
             //SERIALIZE POSTDATA OBJECT TO JSON STRING
             var json = System.Text.Json.JsonSerializer.Serialize(postData);
