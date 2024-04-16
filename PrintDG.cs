@@ -68,7 +68,7 @@ public class PrintDG {
                 table.FontSize = 13;
                 tableRowGroup = new TableRowGroup();
                 
-                
+                //make this a function to work for each category on filters
                 for (int j = 0; j < obj.Items.Count; j++) {
                     r = new TableRow();
                     int cellNumber = 0;
