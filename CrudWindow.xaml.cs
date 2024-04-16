@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Data;
+using System.Net.Http;
 //IMPORTING
 using System.Net.Http.Headers;
 using System.Text;
@@ -62,7 +63,7 @@ namespace MSBeverageRecordApp {
         RootComp rootComp = new RootComp();
         //RootObj postObj = new RootObj();
         PostRecords post = new PostRecords();
-
+        double equipmentCost = 0.0;
 
         public CrudWindow() {
             InitializeComponent();
@@ -89,7 +90,7 @@ namespace MSBeverageRecordApp {
                 for (int i = 0; i > deserializeObject.Items.Count; i++) {
 
                     deserializeObject.Items[i].purchase_date.ToString("MM/dd/yy");
-                    
+                    equipmentCost += deserializeObject.Items[i].cost;
                 }
                 
                 //tables to pull id's/foreign keys
@@ -196,22 +197,15 @@ namespace MSBeverageRecordApp {
 
         }//ef
         private void print_Click(object sender, RoutedEventArgs e) {
-            //how to set the width?
-            System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
-            FrameworkElement head = new FrameworkElement();
-            FrameworkElement foot = new FrameworkElement();
 
-            //saves but need to add print preview
-            //test with more than one page of data
-            //add a dated header
-            //MSBeverageRecordGrid
-            printDlg.PrintVisual(MSBeverageRecordGrid, "title");
+
+
+
+
             PrintDG print = new PrintDG();
-            print.PrintDataGrid(head, MSBeverageRecordGrid, foot, printDlg);
 
-            //WORKS BUT ONLY USES HALF THE PAGE AND NO PREVIEW
-            //add a show print dialog in class to give print options
-            //or add a print button 
+            print.printDG(MSBeverageRecordGrid, "Title");
+
         }
 
         public void savecsv_Click(object sender, RoutedEventArgs e) {
@@ -341,7 +335,6 @@ namespace MSBeverageRecordApp {
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 
             
-
             //selects the row that user double clicks
             Records Reports = new Records();
             var row = sender as DataGridRow;
