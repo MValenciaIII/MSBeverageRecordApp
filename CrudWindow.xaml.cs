@@ -204,7 +204,7 @@ namespace MSBeverageRecordApp {
 
             PrintDG print = new PrintDG();
 
-            print.printDG(MSBeverageRecordGrid, "Title");
+            print.printDG(deserializeObject, MSBeverageRecordGrid, "Title");
 
         }
 

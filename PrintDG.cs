@@ -5,12 +5,14 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Reflection;
-using static MSBeverageRecordApp.CrudWindow;
 using Syncfusion.UI.Xaml.Grid;
+using ChoETL;
+using static MSBeverageRecordApp.CrudWindow;
+
 
 
 public class PrintDG {
-    public void printDG(DataGrid dataGrid, string title) {
+    public void printDG(RootObject obj, DataGrid dataGrid, string title) {
 
         PrintDialog printDialog = new PrintDialog();
         if (printDialog.ShowDialog() == true) {
@@ -50,9 +52,14 @@ public class PrintDG {
             }
             tableRowGroup.Rows.Add(r);
             table.RowGroups.Add(tableRowGroup);
-            for (int i = 0; i < dataGrid.Items.Count; i++) {
+            Records rep = new Records();
+            //for (int i = 0; i < dataGrid.Items.Count; i++) {
 
-                DataRowView row = (DataRowView)dataGrid.Items[i];
+
+
+                //DataRowView row = (DataRowView)dataGrid.Items[i];
+
+
 
                 table.BorderBrush = Brushes.Gray;
                 table.BorderThickness = new Thickness(1, 1, 0, 0);
@@ -60,21 +67,83 @@ public class PrintDG {
                 table.FontFamily = dataGrid.FontFamily;
                 table.FontSize = 13;
                 tableRowGroup = new TableRowGroup();
-                r = new TableRow();
-                for (int j = 0; j < row.Row.ItemArray.Count(); j++) {
+                
+                
+                for (int j = 0; j < obj.Items.Count; j++) {
+                    r = new TableRow();
+                    int cellNumber = 0;
+                    r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].record_id.ToString()))));
+                    r.Cells[cellNumber].ColumnSpan = 4;
+                    r.Cells[cellNumber].Padding = new Thickness(4);
 
-                    r.Cells.Add(new TableCell(new Paragraph(new Run(row.Row.ItemArray[j].ToString()))));
-                    r.Cells[j].ColumnSpan = 4;
-                    r.Cells[j].Padding = new Thickness(4);
+                    r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+                    r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+                    cellNumber++;
 
-                    r.Cells[j].BorderBrush = Brushes.DarkGray;
-                    r.Cells[j].BorderThickness = new Thickness(0, 0, 1, 1);
+                    r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].categoryName.ToString()))));
+                    r.Cells[cellNumber].ColumnSpan = 4;
+                    r.Cells[cellNumber].Padding = new Thickness(4);
+
+                    r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+                    r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+                    cellNumber++;
+
+                    r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].companyName.ToString()))));
+                    r.Cells[cellNumber].ColumnSpan = 4;
+                    r.Cells[cellNumber].Padding = new Thickness(4);
+
+                    r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+                    r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+                    cellNumber++;
+                    r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].model.ToString()))));
+                    r.Cells[cellNumber].ColumnSpan = 4;
+                    r.Cells[cellNumber].Padding = new Thickness(4);
+
+                    r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+                    r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+                    cellNumber++;
+                    r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].serial.ToString()))));
+                    r.Cells[cellNumber].ColumnSpan = 4;
+                    r.Cells[cellNumber].Padding = new Thickness(4);
+
+                    r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+                    r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+                    cellNumber++;
+                    r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].purchase_date.ToString()))));
+                    r.Cells[cellNumber].ColumnSpan = 4;
+                    r.Cells[cellNumber].Padding = new Thickness(4);
+
+                    r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+                    r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+                    cellNumber++;
+                    r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].cost.ToString()))));
+                    r.Cells[cellNumber].ColumnSpan = 4;
+                    r.Cells[cellNumber].Padding = new Thickness(4);
+
+                    r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+                    r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+                    cellNumber++;
+                    r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].locationName.ToString()))));
+                    r.Cells[cellNumber].ColumnSpan = 4;
+                    r.Cells[cellNumber].Padding = new Thickness(4);
+
+                    r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+                    r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+                    cellNumber++;
+                    r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].sub_location.ToString()))));
+                    r.Cells[cellNumber].ColumnSpan = 4;
+                    r.Cells[cellNumber].Padding = new Thickness(4);
+
+                    r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+                    r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+                    cellNumber++;
+
+                    tableRowGroup.Rows.Add(r);
                 }
 
-                tableRowGroup.Rows.Add(r);
                 table.RowGroups.Add(tableRowGroup);
 
-            }
+           // }
             fd.Blocks.Add(table);
 
             printDialog.PrintDocument(((IDocumentPaginatorSource)fd).DocumentPaginator, "");
