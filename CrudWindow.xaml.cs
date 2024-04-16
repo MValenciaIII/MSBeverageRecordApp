@@ -80,7 +80,7 @@ namespace MSBeverageRecordApp
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4002/api/records/recordsreal");
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
             // Add an Accept header for JSON format.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
@@ -320,7 +320,7 @@ namespace MSBeverageRecordApp
             //http client instance
             var client = new HttpClient();
             //connection url
-            client.BaseAddress = new Uri("http://localhost:4002/api/records/modifyid");
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/modifyid");
             var json = JsonSerializer.Serialize(postRec);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -520,7 +520,7 @@ namespace MSBeverageRecordApp
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4002/api/category");
+            client.BaseAddress = new Uri("http://localhost:4001/api/category");
             // Add an Accept header for JSON format.
 
             client.DefaultRequestHeaders.Accept.Add(
@@ -546,7 +546,7 @@ namespace MSBeverageRecordApp
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4002/api/location");
+            client.BaseAddress = new Uri("http://localhost:4001/api/location");
             // Add an Accept header for JSON format.
 
             client.DefaultRequestHeaders.Accept.Add(
@@ -572,7 +572,7 @@ namespace MSBeverageRecordApp
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4002/api/manufacturer");
+            client.BaseAddress = new Uri("http://localhost:4001/api/manufacturer");
             // Add an Accept header for JSON format.
 
             client.DefaultRequestHeaders.Accept.Add(

@@ -43,6 +43,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="category" Binding="{Binding categoryName}" Width="150"/>
                             <DataGridTextColumn Header="manufacturer" Binding="{Binding companyName}" Width="150"/>
+                            <DataGridTextColumn Header="model" Binding="{Binding model}" Width="150"/>
                             <DataGridTextColumn Header="serial#" Binding="{Binding serial}" Width="150"/>
                             <DataGridTextColumn Header="location" Binding="{Binding locationName}" Width="150"/>
                             <DataGridTextColumn Header="sub_location" Binding="{Binding sub_location}" Width="150"/>
@@ -58,6 +59,7 @@
                     <DataGrid x:Name="MSBeverageRecordApp3" RenderTransformOrigin="1.166,2.071" AutoGenerateColumns="false" Margin="0,40,0,0">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="manufacturer" Binding="{Binding companyName}" Width="150"/>
+                            <DataGridTextColumn Header="model" Binding="{Binding model}" Width="150"/>
                             <DataGridTextColumn Header="serial#" Binding="{Binding serial}" Width="150"/>
                             <DataGridTextColumn Header="location" Binding="{Binding locationName}" Width="150"/>
                             <DataGridTextColumn Header="sub_location" Binding="{Binding sub_location}" Width="150"/>
@@ -75,6 +77,7 @@
                             <DataGridTextColumn Header="location" Binding="{Binding locationName}" Width="150"/>
                             <DataGridTextColumn Header="sub_location" Binding="{Binding sub_location}" Width="150"/>
                             <DataGridTextColumn Header="manufacturer" Binding="{Binding companyName}" Width="150"/>
+                            <DataGridTextColumn Header="model" Binding="{Binding model}" Width="150"/>
                             <DataGridTextColumn Header="serial#" Binding="{Binding serial}" Width="150"/>
                         </DataGrid.Columns>
                     </DataGrid>

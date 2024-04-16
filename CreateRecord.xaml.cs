@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows;
 using MessageBox = System.Windows.Forms.MessageBox;
 using static MSBeverageRecordApp.CrudWindow;
+using System.Runtime.InteropServices;
 
 
 namespace MSBeverageRecordApp {
@@ -14,9 +15,11 @@ namespace MSBeverageRecordApp {
     /// <summary>
     /// INTERACTION LOGIC FOR CreateRecord.xaml
     /// </summary>
+
     public partial class CreateRecord : Page {
         //GLOBAL VARIABLE
         RootObject deserializeObject = new RootObject();
+
         //GLOBAL CLASS FOR DATA TO SEND TO API
         class PostRecordsData {
             public int record_id {  get; set; }
@@ -28,6 +31,46 @@ namespace MSBeverageRecordApp {
             public decimal cost { get; set; }
             public int location { get; set; }
             public string sub_location { get; set; }
+        }//end class
+
+        //GLOBAL CLASS FOR RECORDS TABLE
+        public class Records {
+            public int record_id { get; set; }
+            public string categoryName { get; set; }
+            public string companyName { get; set; }
+            public string model { get; set; }
+            public string serial { get; set; }
+            public DateTime purchase_date { get; set; }
+            public decimal cost { get; set; }
+            public string locationName { get; set; }
+            public string sub_location { get; set; }
+        }//end class
+
+        //GLOBAL CLASS FOR CATEGORY TABLE
+        public class Category {
+            public int id { get; set; }
+            public string categoryName { get; set; }
+        }//end class
+
+        //GLOBAL CLASS FOR LOCATION TABLE
+        public class Location {
+            public int ID { get; set; }//*NOTE- LOCATION ID IS UPPERCASE!
+            public string locationName { get; set; }
+        }//end class
+
+        //GLOBAL CLASS FOR MANUFACTURER TABLE
+        public class Manufacturer {
+            public int id { get; set; }
+            public string companyName { get; set; }
+        }//end class
+
+        //GLOBAL CLASS TO HOLD DATA
+        public class RootObject {
+            public int id { get; set; }
+            public List<Records> Items { get; set; }
+            public List<Category> CategoryItems { get; set; }
+            public List<Location> LocationItems { get; set; }
+            public List<Manufacturer> ManufacturerItems { get; set; }
         }//end class
 
         //CLASS TO GET RESPONSE FROM API
@@ -45,46 +88,11 @@ namespace MSBeverageRecordApp {
             ManufacturerAPI();
 
             //CALL CREATE COMBO BOX FUNCTIONS
+            RecordIDTextBox(deserializeObject);
             CreateCategoryComboBox(deserializeObject);
             CreateLocationComboBox(deserializeObject);
             CreateManufacturerComboBox(deserializeObject);
         }//end main
-
-        public class Records {
-            public int record_id { get; set; }
-            public string categoryName { get; set; }
-            public string companyName { get; set; }
-            public string model { get; set; }
-            public string serial { get; set; }
-            public DateTime purchase_date { get; set; }
-            public decimal cost { get; set; }
-            public string locationName { get; set; }
-            public string sub_location { get; set; }
-        }//end class
-
-        public class Category {
-            public int id { get; set; }
-            public string categoryName { get; set; }
-        }//end class
-
-        public class Location {
-            public int id { get; set; }
-            public string locationName { get; set; }
-        }//end class
-
-        public class Manufacturer {
-            public int id { get; set; }
-            public string companyName { get; set; }
-        }//end class
-
-        public class RootObject {
-            public int id { get; set; }
-            public List<Records> Items { get; set; }
-            public List<Category> CategoryItems { get; set; }
-            public List<Location> LocationItems { get; set; }
-            public List<Manufacturer> ManufacturerItems { get; set; }
-        }//end class
-
 
         private void RecordsAPI() {
 
@@ -115,7 +123,6 @@ namespace MSBeverageRecordApp {
 
 
         #region Category Table Combobox
-
 
         private void CategoryAPI() {
 
@@ -169,17 +176,10 @@ namespace MSBeverageRecordApp {
             }//end for
         }//end function
 
-
-        private void cboCategory_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            
-        }//end function
-
-
         #endregion Category Table Combobox
 
 
         #region Location Table Combobox
-
 
         private void LocationAPI() {
 
@@ -233,17 +233,10 @@ namespace MSBeverageRecordApp {
             }//end for
         }//end function
 
-
-        private void cboLocation_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-           
-        }//end function
-
-
         #endregion Location Table Combobox
 
 
         #region Manufacturer Table Combobox
-
 
         private void ManufacturerAPI() {
 
@@ -294,65 +287,148 @@ namespace MSBeverageRecordApp {
                 if (contains == false) {
                     //ADD THE LIST ITEM TO THE COMBOBOX
                     cboManufacturer.Items.Add(list.ManufacturerItems[index].companyName);
-                    int id = deserializeObject.ManufacturerItems[index].id;
                 }//end if
 
             }//end for
+
         }//end function
 
+        #endregion Manufacturer Table Combobox
 
-        private void cboManufacturer_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+        #region RecordID
+
+        private void RecordIDTextBox(RootObject list) {
+
+            //INITIALIZE BOOL TO FALSE
+
+            bool contains = false;
+
+            int currentRecordID = 0;
+
+            //LOOP THROUGH LIST OF ITEMS
+
+            for (int index = 0; index < list.Items.Count; index++) {
+
+                //LOOP THROUGH 
+
+                int newCurrentRecordID = 0;
+
+                newCurrentRecordID = list.Items[index].record_id;
+
+                if (newCurrentRecordID > currentRecordID) {
+
+                    currentRecordID = newCurrentRecordID;
+
+                    recordNumber.Text = $"{currentRecordID + 1}";
+
+                } else {
+
+                }//end if
+
+            }//end for
+
+        }//end RecordIDTextBox
+
+        private void recordNumber_TextChanged(object sender, TextChangedEventArgs e) {
+          
+                if (recordNumber.Text != "") {
+                    IDtxtSearchPlaceholder.Visibility = Visibility.Hidden;
+                } else {
+                    IDtxtSearchPlaceholder.Visibility = Visibility.Visible;
+                }//end if
+
+        }//end recordNumber_TextChanged
+
+        #endregion RecordID
+
+
+        private void txtModel_TextChanged(object sender, TextChangedEventArgs e) {
             
-            for (int i = 0; i < deserializeObject.ManufacturerItems.Count; i++) {
-                
-                if (deserializeObject.ManufacturerItems[i].companyName == cboManufacturer.SelectedValue) {
-                    int id = deserializeObject.ManufacturerItems[i].id;
+                if (txtModel.Text != "") {
+
+                    modeltxtSearchPlaceholder.Visibility = Visibility.Hidden;
+
+                } else {
+
+                    modeltxtSearchPlaceholder.Visibility = Visibility.Visible;
+
                 }//end if
-            }//end for
+        }//end txtModel_TextChanged
 
-        }//end function
+        private void txtSerialNumber_TextChanged(object sender, TextChangedEventArgs e) {
+           
+                if (txtSerialNumber.Text != "") {
 
+                    serialtxtSearchPlaceholder.Visibility = Visibility.Hidden;
 
-        #endregion Manufacturer
+                } else {
 
+                    serialtxtSearchPlaceholder.Visibility = Visibility.Visible;
+
+                }//end if 
+
+        }//end txtSerialNumber_TextChanged
+
+        private void txtCost_TextChanged(object sender, TextChangedEventArgs e) {
+            
+                if (txtCost.Text != "") {
+
+                    costtxtSearchPlaceholder.Visibility = Visibility.Hidden;
+
+                } else {
+
+                    costtxtSearchPlaceholder.Visibility = Visibility.Visible;
+
+                }//end if
+        }//end txtCost_TextChanged
+
+        private void txtSubLocation_TextChanged(object sender, TextChangedEventArgs e) {
+            if (txtSubLocation.Text != "") {
+                subLocationtxtSearchPlaceholder.Visibility = Visibility.Hidden;
+            } else {
+                subLocationtxtSearchPlaceholder.Visibility = Visibility.Visible;
+            }//end if
+        }//end txtSubLocation_TextChanged
 
         private void PostNewRecords(RootObject list) {
             //RETRIEVE ALL INPUTS FROM CREATE RECORD PAGE
             var postData = new PostRecordsData {
-                //record_id = 152,
-                //category = 1,
-                //manufacturer = 1,
+                record_id = Convert.ToInt32(recordNumber.Text),
                 model = txtModel.Text.ToUpper(),
                 serial = txtSerialNumber.Text.ToUpper(),
                 purchase_date = PurchaseDate.SelectedDate.Value,
                 cost = decimal.Parse(txtCost.Text),
-                //location = 1,
                 sub_location = txtSubLocation.Text.ToUpper()
             };//end var postData
 
-            for (int index = 0; index < cboCategory.Items.Count; index++) {
-                for (int itemIndex = 0; itemIndex < list.CategoryItems.Count; itemIndex++) {
-                    if (cboCategory.Items[index] == list.CategoryItems[itemIndex].categoryName) {
-                        postData.category = list.CategoryItems[itemIndex].id;
-                    }
-                }
-            }
-            for (int index = 0; index < cboManufacturer.Items.Count; index++) {
-                for (int itemIndex = 0; itemIndex < list.ManufacturerItems.Count; itemIndex++) {
-                    if (cboManufacturer.Items[index] == list.ManufacturerItems[itemIndex].companyName) {
-                        postData.manufacturer = list.ManufacturerItems[itemIndex].id;
-                    }
-                }
-            }
-            for (int index = 0; index < cboLocation.Items.Count; index++) {
-                for (int itemIndex = 0; itemIndex < list.LocationItems.Count; itemIndex++) {
-                    if (cboLocation.Items[index] == list.LocationItems[itemIndex].locationName) {
-                        postData.category = list.LocationItems[itemIndex].id;
-                    }
-                }
-            }
+            //LOOP THROUGH CATEGORY TABLE ITEMS
+            for (int itemIndex = 0; itemIndex < list.CategoryItems.Count; itemIndex++) {
+                //IF COMBOBOX SELECTED VALUE IS EQUAL TO CATEGORY NAME AT INDEX
+                if (cboCategory.SelectedValue == list.CategoryItems[itemIndex].categoryName) {
+                    //SAVE ID TO POST DATA FOR CATEGORY
+                    postData.category = list.CategoryItems[itemIndex].id;
+                }//end if
+            }//end for 
 
+            //LOOP THROUGH LOCATION TABLE ITEMS 
+            for (int itemIndex = 0; itemIndex < list.LocationItems.Count; itemIndex++) {
+                //IF COMBOBOX SELECTED VALUE IS EQUAL TO LOCATION NAME AT INDEX
+                if (cboLocation.SelectedValue == list.LocationItems[itemIndex].locationName) {
+                    //SAVE ID TO POST DATA FOR LOCATION
+                    postData.location = list.LocationItems[itemIndex].ID;
+                }//end if
+            }//end for
 
+            //LOOP THROUGH MANUFACTURER TABLE ITEMS
+            for (int itemIndex = 0; itemIndex < list.ManufacturerItems.Count; itemIndex++) {
+                //IF COMBOBOX SELECTED VALUE IS EQUAL TO MANUFACTURER NAME AT INDEX
+                if (cboManufacturer.SelectedValue == list.ManufacturerItems[itemIndex].companyName) {
+                    //SAVE ID TO POST DATA FOR MANUFACTURER
+                    postData.manufacturer = list.ManufacturerItems[itemIndex].id;
+                }//end if
+            }//end for
+           
             //CREATING A NEW HTTPCLIENT OBJECT
             var client = new HttpClient();
 
@@ -384,8 +460,31 @@ namespace MSBeverageRecordApp {
 
 
         private void btnSubmit_Click(object sender, System.Windows.RoutedEventArgs e) {
+
+            //INPUT VALIDATION
+            if (string.IsNullOrEmpty(txtModel.Text)) {
+                //THE TEXTBOX IS EMPTY; DISPLAY AN ERROR MESSAGE OR TAKE APPROPRIATE ACTION.
+                MessageBox.Show("Please enter a value in Model.");
+            } else {
+                txtModel.Text = "";
+            }//end if 
+
+            if (string.IsNullOrEmpty(txtSerialNumber.Text)) {
+                //THE TEXTBOX IS EMPTY; DISPLAY AN ERROR MESSAGE OR TAKE APPROPRIATE ACTION.
+                MessageBox.Show("Please enter a value in Serial Number.");
+            } else {
+                txtSerialNumber.Text = "";
+            }//end if
+
+            if (string.IsNullOrEmpty(txtCost.Text)) {
+                //THE TEXTBOX IS EMPTY; DISPLAY AN ERROR MESSAGE OR TAKE APPROPRIATE ACTION.
+                MessageBox.Show("Please enter a value in cost.");
+            } else {
+                txtCost.Text = "";
+            }//end if
+
             //POST THE NEW RECORD TO API
-            PostNewRecords();
+            PostNewRecords(deserializeObject);
         }//end function
 
     }//end class

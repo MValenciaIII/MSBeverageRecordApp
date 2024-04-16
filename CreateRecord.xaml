@@ -6,18 +6,33 @@
         xmlns:local="clr-namespace:MSBeverageRecordApp"
         mc:Ignorable="d"
         Title="CreateRecord" Height="450" Width="800">
-    <Grid Background="#FFFCF4F4">
-        <Label x:Name="lblCreateRecord" FontSize="22px" Content="Create Record" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="45" Width="152"/>
-        <!--<TextBox x:Name="txtRecordNumber" HorizontalAlignment="Left" Margin="160,137,0,0" TextWrapping="Wrap" Text="Record Number" VerticalAlignment="Top" Width="120"/>-->
-        <TextBox x:Name="txtModel" HorizontalAlignment="Left" Margin="515,137,0,0" TextWrapping="Wrap" Text="Model " VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtSerialNumber" HorizontalAlignment="Left" Margin="160,213,0,0" TextWrapping="Wrap" Text="Serial Number" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtCost" HorizontalAlignment="Left" Margin="515,0,0,0" TextWrapping="Wrap" Text="Cost" VerticalAlignment="Center" Width="120"/>
-        <TextBox x:Name="txtSubLocation" HorizontalAlignment="Center" Margin="0,287,0,0" TextWrapping="Wrap" Text="Sub Location" VerticalAlignment="Top" Width="120" />
-        <Button x:Name="btnSubmit" Content="Submit" HorizontalAlignment="Left" Margin="542,355,0,0" VerticalAlignment="Top" Height="22" Width="66" Click="btnSubmit_Click"/>
-        <DatePicker x:Name="PurchaseDate" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120"/>
-        <ComboBox x:Name="cboCategory" HorizontalAlignment="Left" Margin="160,135,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cboCategory_SelectionChanged" IsEditable="True" IsReadOnly="True" Focusable="False" Text="Category"/>
-        <ComboBox x:Name="cboLocation" HorizontalAlignment="Left" Margin="160,285,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cboLocation_SelectionChanged" IsEditable="True" IsReadOnly="True" Focusable="False" Text="Location"/>
-        <ComboBox x:Name="cboManufacturer" HorizontalAlignment="Center" Margin="0,135,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cboManufacturer_SelectionChanged" IsEditable="True" IsReadOnly="True" Focusable="False" Text="Manufacturer"/>
+    <Grid Background="#FFFFFFFF">
+        <Label FontSize="22px" Content="Create Record" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="45" Width="152"/>
+
+        <TextBox x:Name="recordNumber" TextChanged="recordNumber_TextChanged" HorizontalAlignment="Left" Margin="220,137,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="60" Height="22" VerticalContentAlignment="Center"/>
+        <Label x:Name="IDtxtSearchPlaceholder" Content="ID#" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" HorizontalAlignment="Left" Height="31" Margin="223,135,0,0" VerticalAlignment="Top" Width="49"/>
+
+        <ComboBox x:Name="cboCategory"   HorizontalAlignment="Center" Margin="0,137,0,0"                     Text="Category"       VerticalAlignment="Top" Width="120" IsEditable="True" IsReadOnly="True" Focusable="False"/>
+        <ComboBox x:Name="cboManufacturer"  HorizontalAlignment="Right" Margin="0,137,184,0"                     Text="Manufacturer"   VerticalAlignment="Top" Width="120" IsEditable="True" IsReadOnly="True" Focusable="False"/>
+
+        <TextBox  x:Name="txtModel" TextChanged="txtModel_TextChanged" HorizontalAlignment="Left" Margin="160,217,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Height="21" VerticalContentAlignment="Center"/>
+        <Label x:Name="modeltxtSearchPlaceholder" Content="Model#" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" HorizontalAlignment="Left" Height="31" Margin="164,214,0,0" VerticalAlignment="Top" Width="48"/>
+
+        <TextBox  x:Name="txtSerialNumber" TextChanged="txtSerialNumber_TextChanged"  HorizontalAlignment="Center" Margin="0,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="21" VerticalContentAlignment="Center"/>
+        <Label x:Name="serialtxtSearchPlaceholder" Content="Serial#" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" HorizontalAlignment="Left" Height="31" Margin="344,214,0,0" VerticalAlignment="Top" Width="48"/>
+
+        <DatePicker x:Name="PurchaseDate" HorizontalAlignment="Right" Margin="0,214,200,0" VerticalAlignment="Top"/>
+
+        <TextBox  x:Name="txtCost" TextChanged="txtCost_TextChanged" HorizontalAlignment="Left" Margin="160,298,0,0" TextWrapping="Wrap"    VerticalAlignment="Top" Width="120" Height="22" VerticalContentAlignment="Center"/>
+        <Label x:Name="costtxtSearchPlaceholder" Content="Cost" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" HorizontalAlignment="Left" Height="31" Margin="164,295,0,0" VerticalAlignment="Top" Width="48"/>
+
+        <ComboBox x:Name="cboLocation"      HorizontalAlignment="Center" Margin="0,298,0,0"                     Text="Location"       VerticalAlignment="Top" Width="120" IsEditable="True" IsReadOnly="True" Focusable="False"/>
+
+        <TextBox  x:Name="txtSubLocation" TextChanged="txtSubLocation_TextChanged" HorizontalAlignment="Right" Margin="0,298,184,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="22" VerticalContentAlignment="Center"/>
+        <Label x:Name="subLocationtxtSearchPlaceholder" Content="Sub Location" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" HorizontalAlignment="Left" Height="31" Margin="498,296,0,0" VerticalAlignment="Top" Width="102"/>
+
+        <Button Content="Submit" HorizontalAlignment="Center" Margin="0,360,0,0" VerticalAlignment="Top" Height="22" Width="66" Click="btnSubmit_Click"/>
+        <Label Content="NewRecord ID" HorizontalAlignment="Left" Height="27" Margin="131,134,0,0" VerticalAlignment="Top" Width="89"/>
 
     </Grid>
 </Page>
