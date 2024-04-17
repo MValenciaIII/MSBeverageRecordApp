@@ -1,8 +1,10 @@
-﻿using System.Net.Http;
+﻿using System.ComponentModel;
+using System.Net.Http;
 //IMPORTING
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Windows.Controls;
+using ComboBox = System.Windows.Controls.ComboBox;
 
 namespace MSBeverageRecordApp {
     /// <summary>
@@ -51,8 +53,9 @@ namespace MSBeverageRecordApp {
                 MSBeverageRecordApp2.ItemsSource = MSBeverageRecordApp.ItemsSource;
                 MSBeverageRecordApp3.ItemsSource = MSBeverageRecordApp.ItemsSource;
                 MSBeverageRecordApp4.ItemsSource = MSBeverageRecordApp.ItemsSource;
-                MSBeverageRecordApp5.ItemsSource = MSBeverageRecordApp.ItemsSource;
-
+                MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
+                
+                
                 CreateAllDataFilterItemsCat(deserializeObject);
                 CreateAllDataFilterItemsManu(deserializeObject);
                 CreateAllDataFilterItemsLoco(deserializeObject);
@@ -77,11 +80,18 @@ namespace MSBeverageRecordApp {
 
         }//end class
 
+        public class TotalCostData {
+            public string categoryName { get; set; }
+            public decimal cost { get; set; }
 
+        }
         //CALLING THIS AS PARENT OBJECT HOLDER 
         public class RootObject {
             public int id { get; set; }
             public List<Records> Items { get; set; }
+        }//end class
+         public class ReportObject {
+            public List<TotalCostData> Items { get; set; }
         }//end class
 
 
@@ -549,6 +559,73 @@ namespace MSBeverageRecordApp {
 
         #endregion Tab location
 
+        #region Total Cost Feport
+        //create item for each category
 
+        public static List<TotalCostData> CreateCostReport(RootObject list) {
+                List<TotalCostData> data = new List<TotalCostData>();
+
+            // add first category
+            data.Add(new TotalCostData {
+                categoryName = list.Items[1].categoryName,
+                cost = 0
+            });
+
+            for (int index = 0; index < list.Items.Count; index++) {
+                    bool contains = false;
+                for (int itemIndex = 0; itemIndex < data.Count; itemIndex++) {
+                    //LOOP THROUGH DATA
+
+                    //IF REPORT CONTAINS THE CATEGORY 
+
+                    if (data[itemIndex].categoryName == list.Items[index].categoryName) {
+                        //SET CONTAINS TO TRUE, THE REPORT ALREADY HAS THE LIST ITEM
+                        contains = true;
+                    }//end if
+                //IF THE REPORT DOES NOT CONTAIN THE CATEGORY
+                }//end for
+                    if (contains == false) {
+                        //ADD THE CATEGORY TO THE REPORT
+                        data.Add(new TotalCostData {
+                            categoryName = list.Items[index].categoryName,
+                            cost = 0
+                        });
+                    }//end if
+
+            }//end for
+            
+                
+            
+            //CREATE DATA TO HOLD TOTAL COST OF ALL CATEGORIES
+            
+
+
+            //LOOP THROUGH TO ADD COSTS
+            decimal totalCosts = 0;
+                for (int index = 0; index < list.Items.Count; index++) { 
+            for (int itemIndex = 0; itemIndex < data.Count; itemIndex++) {
+                //LOOP THROUGH DATAindex
+                    //ADDS COST TO TOTAL FOR CATEGORY 
+                    if (data[itemIndex].categoryName == list.Items[index].categoryName) {
+                    data[itemIndex].cost += list.Items[index].cost;
+                    }//end if
+                    
+                
+                }//end for
+                totalCosts += list.Items[index].cost;
+
+            }//end for
+            data.Add(new TotalCostData {
+                categoryName = "Total Cost",
+                cost = totalCosts
+            }) ;
+            
+            return data;
+         
+        }//end function
+
+
+
+        #endregion
     }//end class
 }//end namespace

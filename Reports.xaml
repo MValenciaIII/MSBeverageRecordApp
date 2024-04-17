@@ -85,7 +85,7 @@
                 <DataGrid x:Name="MSBeverageRecordApp5" RenderTransformOrigin="1.166,2.071" AutoGenerateColumns="false" Margin="0,40,0,0">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="category" Binding="{Binding categoryName}" Width="150"/>
-                        <DataGridTextColumn Header="cost" Binding="{Binding cost}" Width="150"/>
+                        <DataGridTextColumn Header="cost" Width="150" Binding="{Binding cost,StringFormat=C}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>

@@ -15,13 +15,13 @@ namespace MSBeverageRecordApp {
         RootObject deserializeObject = new RootObject();
         //GLOBAL CLASS FOR DATA TO SEND TO API
         class PostRecordsData {
-            public string categoryName { get; set; }
-            public string companyName { get; set; }
+            public int category { get; set; }
+            public int manufacturer { get; set; }
             public string model { get; set; }
             public string serial { get; set; }
             public DateTime purchase_date { get; set; }
             public decimal cost { get; set; }
-            public string locationName { get; set; }
+            public int location { get; set; }
             public string sub_location { get; set; }
         }//end class
 
@@ -63,7 +63,7 @@ namespace MSBeverageRecordApp {
         }//end class
 
         public class Location {
-            public int id { get; set; }
+            public int ID { get; set; }
             public string locationName { get; set; }
         }//end class
 
@@ -159,6 +159,7 @@ namespace MSBeverageRecordApp {
                 if (contains == false) {
                     //ADD THE LIST ITEM TO THE COMBOBOX
                     cboCategory.Items.Add(list.CategoryItems[index].categoryName);
+                    
                 }//end if
 
             }//end for
@@ -301,24 +302,53 @@ namespace MSBeverageRecordApp {
         #endregion Manufacturer
 
 
-        private void PostNewRecords() {
+        private void PostNewRecords(RootObject list) {
             var postData = new PostRecordsData {
                 //record id
-                categoryName = cboCategory.SelectedValue.ToString(),
-                companyName = cboManufacturer.SelectedValue.ToString(),
-                model = txtModel.Text.ToUpper(), 
+                //companyName = cboManufacturer.SelectedValue.ToString(),
+                model = txtModel.Text.ToUpper(),
                 serial = txtSerialNumber.Text.ToUpper(),
-                //purchase_date = PurchaseDate.
+                purchase_date = PurchaseDate.SelectedDate.Value,
                 cost = decimal.Parse(txtCost.Text),
-                locationName = cboLocation.SelectedValue.ToString(),
+                //locationName = cboLocation.SelectedValue.ToString(),
                 sub_location = txtSubLocation.Text.ToUpper()
-            };//end var postData
+            };//end var postData    
+
+            // Compare category items to set categoryName Int
+            
+                for (int itemIndex = 0;itemIndex < list.CategoryItems.Count;itemIndex++) {
+                    if (cboCategory.SelectedItem == list.CategoryItems[itemIndex].categoryName) {
+                        postData.category = list.CategoryItems[itemIndex].id;
+                    }
+                
+                
+            }//end for
+
+            // Compare category items to set manufacturer Int
+            
+                for (int itemIndex = 0; itemIndex < list.ManufacturerItems.Count; itemIndex++) {
+                    if (cboManufacturer.SelectedItem == list.ManufacturerItems[itemIndex].companyName) {
+                        postData.manufacturer = list.ManufacturerItems[itemIndex].id;
+                    }
+                
+
+            }//end for
+
+            // Compare category items to set manufacturer Int
+            
+                for (int itemIndex = 0; itemIndex < list.LocationItems.Count; itemIndex++) {
+                    if (cboLocation.SelectedItem == list.LocationItems[itemIndex].locationName) {
+                        postData.location = list.LocationItems[itemIndex].ID;
+                    }
+                
+
+            }//end for
 
             //CREATING A NEW HTTPCLIENT OBJECT
             var client = new HttpClient();
 
             //SET BASE ADDRESS OF API--will we need to create a recordscreate like we did categorycreate?
-            client.BaseAddress = new Uri("http://localhost:4001/api/records");
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordscreate");
 
             //SERIALIZE POSTDATA OBJECT TO JSON STRING
             var json = System.Text.Json.JsonSerializer.Serialize(postData);
@@ -333,7 +363,7 @@ namespace MSBeverageRecordApp {
                 var options = new JsonSerializerOptions {
                     PropertyNameCaseInsensitive = true
                 };//end var options
-
+                System.Windows.MessageBox.Show("created");
                 //PROMPT USER THAT A NEW RECORD WAS CREATED
                 MessageBox.Show("New Record Created");
             }//end if
@@ -345,7 +375,7 @@ namespace MSBeverageRecordApp {
 
 
         private void btnSubmit_Click(object sender, System.Windows.RoutedEventArgs e) {
-            PostNewRecords();
+            PostNewRecords(deserializeObject);
         }//end function
 
 
