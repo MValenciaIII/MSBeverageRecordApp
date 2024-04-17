@@ -38,7 +38,6 @@
             <TabItem x:Name="xcategory" Header="Category" >
                 <Grid>
                     <ComboBox x:Name="FilterCategory" Margin="10,5,0,0" SelectionChanged="Filter_SelectionChanged" VerticalAlignment="Top" HorizontalAlignment="Left" Width="140" Height="30" MaxDropDownHeight="304" VerticalContentAlignment="Center" IsEditable="True" IsReadOnly="True" Focusable="False" Text="Select Category"/>
-
                     <DataGrid x:Name="MSBeverageRecordApp2" RenderTransformOrigin="1.166,2.071" AutoGenerateColumns="false" Margin="0,40,0,0">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="category" Binding="{Binding categoryName}" Width="150"/>

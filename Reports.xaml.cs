@@ -21,6 +21,10 @@ namespace MSBeverageRecordApp {
             public string[] results { get; set; }
         }//end class
 
+        //globals for print
+        RootObject catObj = new RootObject();
+        DataGrid catGrid = new DataGrid();
+
 
         public Reports() {
 
@@ -49,10 +53,21 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
 
                 //SET THE QUERY DATA TO DATAGRID ELEMENT
+                //all data
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+
+                //category
                 MSBeverageRecordApp2.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                catObj = deserializeObject;
+                catGrid.ItemsSource = catObj.Items; 
+
+                //manufacturer
                 MSBeverageRecordApp3.ItemsSource = MSBeverageRecordApp.ItemsSource;
+
+                //location
                 MSBeverageRecordApp4.ItemsSource = MSBeverageRecordApp.ItemsSource;
+
+                //total value
                 MSBeverageRecordApp5.ItemsSource = MSBeverageRecordApp.ItemsSource;
 
                 CreateAllDataFilterItemsCat(deserializeObject);
@@ -62,8 +77,60 @@ namespace MSBeverageRecordApp {
                 CreateManufacturerFilterItems(deserializeObject);
                 CreateLocationFilterItems(deserializeObject);
                 comboboxSearch(deserializeObject);
+
             }//end if
         }//end main
+        
+
+        //set globals grids/objs for 
+        #region print calls
+        private void xtabitems_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (xalldata.IsSelected) {
+                filterName = "allData";
+
+            }
+            if (xcategory.IsSelected) {
+                filterName = "category";
+                catGrid.ItemsSource = MSBeverageRecordApp2.Items;
+
+            }
+            if (xmanufacturer.IsSelected) {
+                filterName = "manufacturer";
+
+            }
+            if (xlocation.IsSelected) {
+                filterName = "location";
+
+            }
+            if (xtotalvalue.IsSelected) {
+              
+                filterName = "totalValue";
+            }
+
+           
+        }//ef
+
+        private void muiPrint_Click(object sender, RoutedEventArgs e) {
+
+            //filter names:
+            //
+            //allData
+            //category
+            //manufacturer
+            //totalValue
+
+            //match datagrid to filter-names
+            //set title, date
+            //switch case on filter names
+            //category test
+            
+            PrintDG p = new PrintDG();
+            p.printDG(catObj, MSBeverageRecordApp2, "[title], [date-here]", filterName);
+
+        } //ef
+        #endregion
+
+
 
 
         public class Records {
@@ -375,6 +442,7 @@ namespace MSBeverageRecordApp {
         private void Filterby_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
             MSBeverageRecordApp.Items.Filter = GetFilter();
+            
 
         }//end function
 
@@ -398,6 +466,8 @@ namespace MSBeverageRecordApp {
                 return records;
             }//end if
 
+
+
         }//end function
 
 
@@ -407,6 +477,7 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSCATEGORY FUNCTION
             MSBeverageRecordApp2.ItemsSource = FilterHotspotRecordsCategory(record, FilterCategory);
+            
 
         }//end function
 
@@ -552,47 +623,6 @@ namespace MSBeverageRecordApp {
         #endregion Tab location
 
 
-        #region print calls
-        private void xtabitems_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (xalldata.IsSelected) {
-                filterName = "allData";
-            }
-            if (xcategory.IsSelected) {
-                
-                filterName = "category";
-            }
-            if (xmanufacturer.IsSelected) {
-               
-                filterName = "manufacturer";
-            }
-            if (xlocation.IsSelected) {
-              
-                filterName = "location";
-            }
-            if (xtotalvalue.IsSelected) {
-              
-                filterName = "totalValue";
-            }
-        }//ef
-
-        private void muiPrint_Click(object sender, RoutedEventArgs e) {
-
-            //filter names:
-            //
-            //allData
-            //category
-            //manufacturer
-            //totalValue
-
-            //match datagrid to filter-names
-            //set title, date
-            //switch case on filter names
-
-            PrintDG p = new PrintDG();
-            p.printDG(deserializeObject, MSBeverageRecordApp2, "[title], [date]", filterName);
-
-        } //ef
-        #endregion
 
         //set string value for filter name to pass to print function
 

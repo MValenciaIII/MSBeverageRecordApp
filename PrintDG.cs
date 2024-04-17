@@ -15,10 +15,10 @@ public class PrintDG {
     //globals
     TableRowGroup tableRowGroup = new TableRowGroup();
     public void printDG(RootObject obj, DataGrid dataGrid, string title, string filter) {
-        obj.Items = (List<Records>)dataGrid.ItemsSource;
         PrintDialog printDialog = new PrintDialog();
         if (printDialog.ShowDialog() == true) {
             FlowDocument fd = new FlowDocument();
+        //obj.Items = (List<Records>)dataGrid.ItemsSource;
 
             Paragraph p = new Paragraph(new Run(title));
             p.FontStyle = dataGrid.FontStyle;
