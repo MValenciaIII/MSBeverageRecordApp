@@ -10,10 +10,14 @@ using System.Windows.Input;
 
 
 //TODO
-//re-format the printDG class to fit the cells text/fill page
+//
 //make new button and click event function to call print class so save PDF and print are separate
+//
 //update data grid on all pages on save
+//
 //filter/search inside of update window
+//
+//write print class methods for each filter/category
 
 namespace MSBeverageRecordApp {
 
@@ -198,14 +202,9 @@ namespace MSBeverageRecordApp {
         }//ef
         private void print_Click(object sender, RoutedEventArgs e) {
 
+            //PrintDG print = new PrintDG();
 
-
-
-
-            PrintDG print = new PrintDG();
-
-            print.printDG(deserializeObject, MSBeverageRecordGrid, "Title");
-
+            //print.printDG(deserializeObject ,MSBeverageRecordGrid, "Title");
         }
 
         public void savecsv_Click(object sender, RoutedEventArgs e) {

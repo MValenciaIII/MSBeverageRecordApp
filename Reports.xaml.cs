@@ -2,6 +2,7 @@
 //IMPORTING
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Windows;
 using System.Windows.Controls;
 using ComboBox = System.Windows.Controls.ComboBox;
 
@@ -14,7 +15,7 @@ namespace MSBeverageRecordApp {
     public partial class Reports : Page {
         //GLOBAL VARIABLE
         RootObject deserializeObject = new RootObject();
-
+        string filterName = "allData";
         public List<Records> allReports;
         public class urlResult {
             public string[] results { get; set; }
@@ -550,6 +551,50 @@ namespace MSBeverageRecordApp {
 
         #endregion Tab location
 
+
+        #region print calls
+        private void xtabitems_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (xalldata.IsSelected) {
+                filterName = "allData";
+            }
+            if (xcategory.IsSelected) {
+                
+                filterName = "category";
+            }
+            if (xmanufacturer.IsSelected) {
+               
+                filterName = "manufacturer";
+            }
+            if (xlocation.IsSelected) {
+              
+                filterName = "location";
+            }
+            if (xtotalvalue.IsSelected) {
+              
+                filterName = "totalValue";
+            }
+        }//ef
+
+        private void muiPrint_Click(object sender, RoutedEventArgs e) {
+
+            //filter names:
+            //
+            //allData
+            //category
+            //manufacturer
+            //totalValue
+
+            //match datagrid to filter-names
+            //set title, date
+            //switch case on filter names
+
+            PrintDG p = new PrintDG();
+            p.printDG(deserializeObject, MSBeverageRecordApp2, "[title], [date]", filterName);
+
+        } //ef
+        #endregion
+
+        //set string value for filter name to pass to print function
 
     }//end class
 }//end namespace
