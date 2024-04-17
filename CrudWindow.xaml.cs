@@ -209,8 +209,6 @@ namespace MSBeverageRecordApp {
 
         private void savepdf_Click(object sender, RoutedEventArgs e) {
             System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
-
-
         }//ef
         private void print_Click(object sender, RoutedEventArgs e) {
 
@@ -334,9 +332,6 @@ namespace MSBeverageRecordApp {
             //switch views to edit window
             spLabels.Visibility = Visibility.Visible;
             spText.Visibility = Visibility.Visible;
-            spLbl.Visibility = Visibility.Visible;
-            spTxt.Visibility = Visibility.Visible;
-
             btnSave.Visibility = Visibility.Visible;
             btnCancel.Visibility = Visibility.Visible;
 
@@ -405,8 +400,6 @@ namespace MSBeverageRecordApp {
 
             spLabels.Visibility = Visibility.Hidden;
             spText.Visibility = Visibility.Hidden;
-            spLbl.Visibility = Visibility.Hidden;
-            spTxt.Visibility = Visibility.Hidden;
 
             //call update function when user saves
 
@@ -424,8 +417,6 @@ namespace MSBeverageRecordApp {
 
             spLabels.Visibility = Visibility.Hidden;
             spText.Visibility = Visibility.Hidden;
-            spLbl.Visibility = Visibility.Hidden;
-            spTxt.Visibility = Visibility.Hidden;
         }//ef
         #endregion
 
