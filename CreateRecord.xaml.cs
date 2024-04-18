@@ -132,7 +132,7 @@ namespace MSBeverageRecordApp {
             using HttpClient client = new();
 
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/category");
+            client.BaseAddress = new Uri("http://localhost:4002/api/category");
 
             //ADD AN "Accept" HEADER FOR JSON FORMAT
             client.DefaultRequestHeaders.Accept.Add(

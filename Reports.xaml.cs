@@ -2,6 +2,7 @@
 //IMPORTING
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Windows;
 using System.Windows.Controls;
 using ComboBox = System.Windows.Controls.ComboBox;
 
@@ -14,13 +15,28 @@ namespace MSBeverageRecordApp {
     public partial class Reports : Page {
         //GLOBAL VARIABLE
         RootObject deserializeObject = new RootObject();
-
+        string filterName = "allData";
         public List<Records> allReports;
         public class urlResult {
             public string[] results { get; set; }
         }//end class
 
+        //globals for print
+        RootObject allObj = new RootObject();
+        DataGrid allGrid = new DataGrid();
 
+        RootObject catObj = new RootObject();
+        DataGrid catGrid = new DataGrid();
+
+        RootObject manuObj = new RootObject();
+        DataGrid manuGrid = new DataGrid();
+
+        RootObject locObj = new RootObject();
+        DataGrid locGrid = new DataGrid();
+
+        RootObject totalObj = new RootObject();
+        DataGrid totalGrid = new DataGrid();
+        string title = "";
         public Reports() {
 
             InitializeComponent();
@@ -48,20 +64,105 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
 
                 //SET THE QUERY DATA TO DATAGRID ELEMENT
+
+                //all data
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+                allObj = deserializeObject;
+                allGrid.ItemsSource = allObj.Items;
+
+                //category
                 MSBeverageRecordApp2.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                catObj = deserializeObject;
+                catGrid.ItemsSource = catObj.Items; 
+
+                //manufacturer
                 MSBeverageRecordApp3.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                manuObj = deserializeObject;
+                manuGrid.ItemsSource = manuObj.Items;
+
+                //location
                 MSBeverageRecordApp4.ItemsSource = MSBeverageRecordApp.ItemsSource;
                 MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
+                locObj = deserializeObject;
+                locGrid.ItemsSource = locObj.Items;
+
+                //total value
+                //MSBeverageRecordApp5.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                totalObj = deserializeObject;
+                totalGrid.ItemsSource = manuObj.Items;
 
                 //CALL COMBO BOX FUNCTIONS
                 CreateCategoryFilterItems(deserializeObject);
                 CreateManufacturerFilterItems(deserializeObject);
                 CreateLocationFilterItems(deserializeObject);
                 comboboxSearch(deserializeObject);
+
             }//end if
         }//end main
+        
 
+        
+        #region print calls
+        //set filter name
+        private void xtabitems_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (xalldata.IsSelected) {
+                filterName = "allData";
+
+            }
+            if (xcategory.IsSelected) {
+                filterName = "category";
+
+
+            }
+            if (xmanufacturer.IsSelected) {
+                filterName = "manufacturer";
+
+            }
+            if (xlocation.IsSelected) {
+                filterName = "location";
+
+            }
+            if (xtotalvalue.IsSelected) {
+              
+                filterName = "totalValue";
+            }
+
+           
+        }//ef
+        
+        //TODO
+        //print total cost on grid, do in printDG class
+        //add updates to grid on comboBox changes
+
+        private void muiPrint_Click(object sender, RoutedEventArgs e) {
+
+            PrintDG p = new PrintDG();
+            
+            switch (filterName) {
+                case "allData":
+                    title = $"report    {DateTime.UtcNow.ToString("d")}";
+                    p.printDG(allObj, MSBeverageRecordApp, title, filterName);
+                    break;
+                case "category":
+                    title = $"category report    {DateTime.UtcNow.ToString("d")}";
+                    p.printDG(catObj, MSBeverageRecordApp2, title, filterName);
+
+                    break;
+                case "manufacturer":
+                    title = $"manufacturers    {DateTime.UtcNow.ToString("d")}";
+                    p.printDG(manuObj, MSBeverageRecordApp3, title, filterName);
+                    break;
+                case "location":
+                    title = $"location report    {DateTime.UtcNow.ToString("d")}";
+                    p.printDG(locObj, MSBeverageRecordApp4, title, filterName);
+                    break;
+                case "totalValue":
+                    title = $"cost report    {DateTime.UtcNow.ToString("d")}";
+                    p.printDG(totalObj, MSBeverageRecordApp5, title, filterName);
+                    break;
+            }
+        } //ef
+        #endregion
 
         public class Records {
             public int record_id { get; set; }
@@ -227,6 +328,7 @@ namespace MSBeverageRecordApp {
             
             //DYNAMICALLY FILTERS DATAGRID USING SELECTION IN GET FILTER FUNCTION
             MSBeverageRecordApp.Items.Filter = GetFilter();
+            
 
         }//end function
 
@@ -250,6 +352,8 @@ namespace MSBeverageRecordApp {
                 return records;
             }//end if
 
+
+
         }//end function
 
 
@@ -259,6 +363,7 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSCATEGORY FUNCTION
             MSBeverageRecordApp2.ItemsSource = FilterHotspotRecordsCategory(record, FilterCategory);
+            catGrid.ItemsSource = MSBeverageRecordApp2.ItemsSource;
 
         }//end function
 
@@ -280,12 +385,12 @@ namespace MSBeverageRecordApp {
                         //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
                     }//end if
-                
-                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
-                    if (contains == false) {
-                        //ADD THE LIST ITEM TO THE FILTER
-                        FilterCategory.Items.Add(list.Items[index].categoryName);
-                    }//end if
+
+                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                if (contains == false) {
+                    //ADD THE LIST ITEM TO THE FILTER
+                    FilterCategory.Items.Add(list.Items[index].categoryName);
+                }//end if
             }//end for
 
         }//end function
@@ -316,7 +421,7 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSMANUFACTURER FUNCTION
             MSBeverageRecordApp3.ItemsSource = FilterHotspotRecordsManufacturer(record, FilterManufacturer);
-
+            manuGrid.ItemsSource = MSBeverageRecordApp3.ItemsSource;
         }//end function
 
 
@@ -338,11 +443,11 @@ namespace MSBeverageRecordApp {
                         contains = true;
                     }//end if
 
-                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
-                    if (contains == false) {
-                        //ADD THE LIST ITEM TO THE FILTER
-                        FilterManufacturer.Items.Add(list.Items[index].companyName);
-                    }//end if
+                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                if (contains == false) {
+                    //ADD THE LIST ITEM TO THE FILTER
+                    FilterManufacturer.Items.Add(list.Items[index].companyName);
+                }//end if
             }//end for
 
         }//end function
@@ -373,7 +478,7 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSLOCATION FUNCTION
             MSBeverageRecordApp4.ItemsSource = FilterHotspotRecordsLocation(record, FilterLocation);
-
+            locGrid.ItemsSource = MSBeverageRecordApp4.ItemsSource;
         }//end function
 
 
@@ -474,6 +579,9 @@ namespace MSBeverageRecordApp {
 
 
         #endregion
+
+
+        //set string value for filter name to pass to print function
 
     }//end class
 }//end namespace
