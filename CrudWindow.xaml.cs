@@ -12,53 +12,56 @@ using System.Runtime;
 
 
 //TODO
-//add print whole data grid function so raw csv data and report are both options
+//ADD PRINT WHOLE DATA GRID FUNCTION SO RAW CSV DATA AND REPORT ARE BOTH OPTIONS
 namespace MSBeverageRecordApp
 {
 
-    //todo
-    //fix invalid column names
-    //re-format the printDG class to fit the cells text/fill page
-    //also make new button and click event function to call print class so save PDF and print are separate
+    //TODO
+    //FIX INVALID COLUMN NAMES
+    //RE-FORMAT THE PRINTDG CLASS TO FIT THE CELLS TEXT/FILL PAGE
+    //ALSO MAKE NEW BUTTON AND CLICK EVENT FUNCTION TO CALL PRINT CLASS SO SAVE PDF AND PRINT ARE SEPARATE
 
     public partial class CrudWindow : Page
     {
-        //obj containers
+        //OBJ CONTAINERS
 
-        //main
+        //MAIN
         public class RootObject
         {
             public int id { get; set; }
 
             public List<Records> Items { get; set; }
         }//end class
-        //post obj
+
+        //POST OBJ
         public class RootObj
         {
             public int id { get; set; }
             public PostRecords Items { get; set; }
         }//end class
-        //category
+
+        //CATEGORY
         public class Root
         {
             public int id { get; set; }
 
             public List<Category> Items { get; set; }
         }//end class
-        //location
+
+        //LOCATION
         public class RootLoc
         {
             public int id { get; set; }
 
             public List<Location> Items { get; set; }
         }//end class
-        //manufacturer
+
+        //MANUFACTURER
         public class RootComp
         {
             public int id { get; set; }
 
             public List<Manufacture> Items { get; set; }
-
         }//end class
 
         //GLOBAL VARIABLE
@@ -81,25 +84,27 @@ namespace MSBeverageRecordApp
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
-            // Add an Accept header for JSON format.
+
+            //ADD AN "Accept" HEADER FOR JSON FORMAT.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
+
             var response = client.GetAsync(client.BaseAddress).Result;
-            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            //IF THE "response" VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode)
             {
-                ////CONVERTING OBJECT "response" variable DATA TO STRING 
+                ////CONVERTING OBJECT "response" VARIABLE DATA TO STRING 
                 string dataobjects = response.Content.ReadAsStringAsync().Result;
                 c = dataobjects;
-                //Need access globally to 
+                //NEED ACCESS GLOBALLY TO 
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
-                //How to set the query data to the DATAGRID element.
+                //HOW TO SET THE QUERY DATA TO THE DATAGRID ELEMENT.
 
                 //DateFormat();
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
 
-                //tables to pull id's/foreign keys
+                //TABLES TO PULL ID'S/FOREIGN KEYS
                 Tables();
                 Locations();
                 Companies();
@@ -142,7 +147,8 @@ namespace MSBeverageRecordApp
             }//end if statusOK
 
         }//end main
-        //saves 
+
+        //SAVES 
 
         //TODO add print button/function, fix print format
 
@@ -170,15 +176,16 @@ namespace MSBeverageRecordApp
         {
             //VARIABLE
             int count = 0;
-            //loop over rows and append lines
+            //LOOP OVER ROWS AND APPEND LINES
             for (int i = 0; i < array.Length; i++)
             {
                 count++;
                 System.IO.File.AppendAllText(file, array[i]);
-                //start new line after printing each cell in a row
+                //START NEW LINE AFTER PRINTING EACH CELL IN A ROW
                 count = 0;
             }//end for
-        }//ef
+        }//end function
+
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
@@ -212,22 +219,24 @@ namespace MSBeverageRecordApp
             //}
             //consoleOutput.Text = listObjResult[0]["id"].ToString(); 
             #endregion
-            //from object
+
+            //FROM OBJECT
             #region from obj
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(deserializeObject.Items);
             System.IO.File.AppendAllText(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test2.txt", json);
             #endregion
-        }//ef
+        }//end function
+
 
         private void savepdf_Click(object sender, RoutedEventArgs e)
         {
-            //how to set the width?
+            //HOW TO SET THE WIDTH?
             FrameworkElement head = new FrameworkElement();
             FrameworkElement foot = new FrameworkElement();
 
-            //saves but need to add print preview
-            //test with more than one page of data
-            //maybe add a header
+            //SAVES BUT NEED TO ADD PRINT PREVIEW
+            //TEST WITH MORE THAN ONE PAGE OF DATA
+            //MAYBE ADD A HEADER
 
             //MSBeverageRecordGrid.
             System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
@@ -236,18 +245,19 @@ namespace MSBeverageRecordApp
             //print.PrintDataGrid(head, MSBeverageRecordGrid, foot, printDlg);
 
             //WORKS BUT ONLY USES HALF THE PAGE AND NO PREVIEW
-            //add a show print dialog in class to give print options
-            //or add a print button 
-        }//ef
+            //ADD A SHOW PRINT DIALOG IN CLASS TO GIVE PRINT OPTIONS
+            //OR ADD A PRINT BUTTON 
+        }//end function
+
 
         public void savecsv_Click(object sender, RoutedEventArgs e)
         {
 
-            //save to csv
-            //create a save file dialog object
+            //SAVE TO CSV
+            //CREATE A SAVE FILE DIALOG OBJECT
             Microsoft.Win32.SaveFileDialog sfdSave = new Microsoft.Win32.SaveFileDialog();
-            //open the dialog and wait for the user to make a selection
-            //fix
+            //OPEN THE DIALOG AND WAIT FOR THE USER TO MAKE A SELECTION
+            //FIX
             sfdSave.InitialDirectory = @"C:\";
             sfdSave.Filter = "CSV file (*.csv)|*.csv|All Files (*.*)|*.*";
             bool fileSelected = (bool)sfdSave.ShowDialog();
@@ -261,14 +271,14 @@ namespace MSBeverageRecordApp
                 string[] cols = headerline.Split(',');
                 colCount = cols.Length;
                 rows = new string[deserializeObject.Items.Count + 3];
-                //set headers as first row
+                //SET HEADERS AS FIRST ROW
                 rows[0] = headerline + "\n";
-                //loop over list and set values of each row into an array
+                //LOOP OVER LIST AND SET VALUES OF EACH ROW INTO AN ARRAY
                 for (int i = 1; i <= deserializeObject.Items.Count; i++)
                 {
-                    //clear string on each iteration
+                    //CLEAR STRING ON EACH ITERATION
                     sb.Clear();
-                    //add values
+                    //ADD VALUES
                     sb.Append(deserializeObject.Items[i - 1].record_id.ToString() + ",");
                     sb.Append(deserializeObject.Items[i - 1].categoryName.ToString() + ",");
                     sb.Append(deserializeObject.Items[i - 1].companyName.ToString() + ",");
@@ -278,14 +288,14 @@ namespace MSBeverageRecordApp
                     sb.Append(deserializeObject.Items[i - 1].cost.ToString() + ",");
                     sb.Append(deserializeObject.Items[i - 1].locationName.ToString() + ",");
                     sb.Append(deserializeObject.Items[i - 1].sub_location.ToString() + "\n");
-                    //get total cost
+                    //GET TOTAL COST
                     totalCost += (decimal)deserializeObject.Items[i - 1].cost;
-                    //remove trailing comma on last row
+                    //REMOVE TRAILING COMMA ON LAST ROW
                     if (i == deserializeObject.Items.Count)
                     {
                         sb.Remove(sb.Length - 2, 1);
                     }
-                    //assign current string value to be one row
+                    //ASSIGN CURRENT STRING VALUE TO BE ONE ROW
                     rows[i] = sb.ToString();
                 }
 
@@ -296,14 +306,15 @@ namespace MSBeverageRecordApp
                 #endregion
                 Saving(file, rows, colCount);
             }//end if
-        }//ef
+        }//end function
+
 
         //TODO
         //UPDATE
         private void UpdateDataBase()
         {
 
-            //invalid column names 
+            //INVALID COLUMN NAMES 
             var postRec = new PostRecords
             {
                 record_id = post.record_id,
@@ -317,14 +328,14 @@ namespace MSBeverageRecordApp
                 sub_location = post.sub_location
             };
 
-            //http client instance
+            //HTTP CLIENT INSTANCE
             var client = new HttpClient();
-            //connection url
+            //CONNECTION URL
             client.BaseAddress = new Uri("http://localhost:4001/api/records/modifyid");
             var json = JsonSerializer.Serialize(postRec);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            //no status code?
+            //NO STATUS CODE?
             var response = client.PostAsync("", content).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -337,7 +348,8 @@ namespace MSBeverageRecordApp
             {
                 System.Windows.MessageBox.Show("Error " + response.StatusCode);
             }
-        }//ef
+        }//end function
+
 
         //THIS IS WHAT IS GOING TO BE THE ITEM SOURCE for the DATAGRID
         //THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
@@ -354,7 +366,7 @@ namespace MSBeverageRecordApp
             public string sub_location { get; set; }
         }//end class
 
-        //records class to hold int values of FK id's
+        //RECORDS CLASS TO HOLD INT VALUES OF FK ID'S
         public class PostRecords
         {
             public int record_id { get; set; }
@@ -367,22 +379,24 @@ namespace MSBeverageRecordApp
             public int location { get; set; }
             public string sub_location { get; set; }
         }//end class
+
         private void addRecord(object sender, RoutedEventArgs e)
         {
             //MSBeverageRecordApp.Visibility = Visibility.Hidden;
             //CreateRecord window = new CreateRecord();
             //window.Show();
-        }//ef
+        }//end function
+
 
         Records rep = new Records();
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //selects the row that user double clicks
+            //SELECTS THE ROW THAT USER DOUBLE CLICKS
             Records Reports = new Records();
             var row = sender as DataGridRow;
             rep = row.DataContext as Records;
 
-            //fills edit window values
+            //FILLS EDIT WINDOW VALUES
             Reports = rep;
             txbCatName.Text = $"{Reports.categoryName}";
             txbCompName.Text = $"{Reports.companyName}";
@@ -393,7 +407,7 @@ namespace MSBeverageRecordApp
             txbLocation.Text = $"{Reports.locationName}";
             txbSubLocation.Text = $"{Reports.sub_location}";
 
-            //switch views to edit window
+            //SWITCH VIEWS TO EDIT WINDOW
             spLabels.Visibility = Visibility.Visible;
             spText.Visibility = Visibility.Visible;
             spLbl.Visibility = Visibility.Visible;
@@ -407,7 +421,8 @@ namespace MSBeverageRecordApp
             fileMenu.Visibility = Visibility.Collapsed;
             Filter.Visibility = Visibility.Collapsed;
 
-        }//ef
+        }//end function
+
 
         private void btnSaveChange_Click(object sender, RoutedEventArgs e)
         {
@@ -452,8 +467,8 @@ namespace MSBeverageRecordApp
                 if (txbLocation.Text == rootLoc.Items[i].locationName)
                 {
                     post.location = rootLoc.Items[i].ID;
-                    //why
-                    //all cap work - lowercase no work
+                    //WHY
+                    //ALL CAP WORK - LOWERCASE NO WORK
                 }
 
                 MSBeverageRecordGrid.ItemsSource = null;
@@ -462,7 +477,7 @@ namespace MSBeverageRecordApp
             }//end for
 
 
-            //switch views
+            //SWITCH VIEWS
             MSBeverageRecordGrid.Visibility = Visibility.Visible;
             consoleOutput.Visibility = Visibility.Visible;
             fileMenu.Visibility = Visibility.Visible;
@@ -476,10 +491,9 @@ namespace MSBeverageRecordApp
             spLbl.Visibility = Visibility.Hidden;
             spTxt.Visibility = Visibility.Hidden;
 
-            //call update function when user saves
-
+            //CALL UPDATE FUNCTION WHEN USER SAVES
             UpdateDataBase();
-        }//ef
+        }//end function
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -495,7 +509,7 @@ namespace MSBeverageRecordApp
             spText.Visibility = Visibility.Hidden;
             spLbl.Visibility = Visibility.Hidden;
             spTxt.Visibility = Visibility.Hidden;
-        }//ef
+        }//end function
 
         public class Category
         {
@@ -513,87 +527,88 @@ namespace MSBeverageRecordApp
             public string locationName { get; set; }
         }//end class
 
-        //pull all tables from db
+        //PULL ALL TABLES FROM DB
         public void Tables()
         {
 
-            //SETTING UP NEW instance of a type of data
+            //SETTING UP NEW INSTANCE OF A TYPE OF DATA
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/category");
-            // Add an Accept header for JSON format.
 
+            //ADD AN "Accept" HEADER FOR JSON FORMAT.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
 
             var response = client.GetAsync(client.BaseAddress).Result;
 
-            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            //IF THE "response" VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode)
             {
-                ////CONVERTING OBJECT "response" variable DATA TO STRING 
+                ////CONVERTING OBJECT "response" VARIABLE DATA TO STRING 
                 string dataobjects = response.Content.ReadAsStringAsync().Result;
 
-                //Need access globally to 
+                //NEED ACCESS GLOBALLY TO 
                 root.Items = JsonSerializer.Deserialize<List<Category>>(dataobjects);
                 CreateCategoryFilterItems(root);
             }//end if statusOK
-        }
+        }//end Tables
 
         public void Locations()
         {
-            //SETTING UP NEW instance of a type of data
+            //SETTING UP NEW INSTANCE OF A TYPE OF DATA
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/location");
-            // Add an Accept header for JSON format.
 
+            //ADD AN "Accept" HEADER FOR JSON FORMAT.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
 
             var response = client.GetAsync(client.BaseAddress).Result;
 
-            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            //IF THE "response" VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode)
             {
-                ////CONVERTING OBJECT "response" variable DATA TO STRING 
+                ////CONVERTING OBJECT "response" VARIABLE DATA TO STRING 
                 string dataobjects = response.Content.ReadAsStringAsync().Result;
 
-                //Need access globally to 
+                //NEED ACCESS GLOBALLY TO 
                 rootLoc.Items = JsonSerializer.Deserialize<List<Location>>(dataobjects);
                 CreateLocationFilterItems(rootLoc);
             }//end if statusOK
-        }
+        }//end Locations
 
         public void Companies()
         {
-            //SETTING UP NEW instance of a type of data
+            //SETTING UP NEW INSTANCE OF A TYPE OF DATA
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/manufacturer");
-            // Add an Accept header for JSON format.
 
+            //ADD AN "Accept" HEADER FOR JSON FORMAT.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
 
             var response = client.GetAsync(client.BaseAddress).Result;
 
-            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            //IF THE "response" VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode)
             {
-                ////CONVERTING OBJECT "response" variable DATA TO STRING 
+                ////CONVERTING OBJECT "response" VARIABLE DATA TO STRING 
                 string dataobjects = response.Content.ReadAsStringAsync().Result;
 
-                //Need access globally to 
+                //NEED ACCESS GLOBALLY TO 
                 rootComp.Items = JsonSerializer.Deserialize<List<Manufacture>>(dataobjects);
                 CreateCompanyFilterItems(rootComp);
-            }
-        }
+            }//end if
+        }//end Companies
 
-        //fill comboBox values 
+
+        //FILL COMBOBOX VALUES 
         private void CreateLocationFilterItems(RootLoc list)
         {
 
@@ -601,26 +616,25 @@ namespace MSBeverageRecordApp
 
             txbLocation.Items.Add("none");
 
-            for (int index = 0; index < list.Items.Count; index++)
-            {
+            for (int index = 0; index < list.Items.Count; index++) {
 
                 for (int itemIndex = 0; itemIndex < txbLocation.Items.Count; itemIndex++)
 
-                    if (txbLocation.Items[itemIndex].ToString() == list.Items[index].locationName)
-                    {
+                    if (txbLocation.Items[itemIndex].ToString() == list.Items[index].locationName) {
 
                         contains = true;
 
                     }//end if
 
-                if (contains == false)
-                {
+                if (contains == false) {
 
                     txbLocation.Items.Add(list.Items[index].locationName);
 
                 }//end if
-            }
-        }//ef
+
+            }//end for loop
+        }//end function
+
 
         private void CreateCompanyFilterItems(RootComp list)
         {
@@ -648,9 +662,9 @@ namespace MSBeverageRecordApp
 
                 }//end if
 
-            }//end for
+            }//end for loop
+        }//end function
 
-        }//ef
 
         private void CreateCategoryFilterItems(Root list)
         {
@@ -679,9 +693,9 @@ namespace MSBeverageRecordApp
 
                 }//end if
 
-            }//end for
+            }//end for loop
+        }//end function
 
-        }//ef
 
     }//end class
 }//end namespace

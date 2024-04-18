@@ -32,6 +32,7 @@ using System.Xml.Linq;
 using System.Collections.ObjectModel;
 
 namespace MSBeverageRecordApp {
+
     /// <summary>
     /// INTERACTION LOGIC FOR MainWindow.xaml
     /// </summary>

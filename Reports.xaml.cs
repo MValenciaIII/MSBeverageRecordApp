@@ -71,7 +71,7 @@ namespace MSBeverageRecordApp {
             public string companyName { get; set; }
             public string model { get; set; }
             public string serial { get; set; }
-            public string purchase_date { get; set; }
+            public DateTime purchase_date { get; set; }
             public decimal cost { get; set; }
             public string locationName { get; set; }
             public string sub_location { get; set; }
@@ -108,7 +108,6 @@ namespace MSBeverageRecordApp {
         public void Filter_SelectionChangedAllCat(object sender, SelectionChangedEventArgs e) {
             //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
             var record = deserializeObject.Items;
-
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSALL FUNCTION
             MSBeverageRecordApp.ItemsSource = FilterHotspotRecordsAll(record, FilterCategoryAll);
         }//end function

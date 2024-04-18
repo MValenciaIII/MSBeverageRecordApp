@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:MSBeverageRecordApp"
         xmlns:VisualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core" x:Class="MSBeverageRecordApp.CrudWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="510" Width="890" >
+        d:DesignHeight="510" d:DesignWidth="890"
+        Title="CrudWindow">
 
-
-    <Grid>
+    <Viewbox>
+    <Grid Height="510" Width="890">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="35*"></RowDefinition>
@@ -41,7 +42,7 @@
                 <DataGridTextColumn Header="model" Binding="{Binding model}"></DataGridTextColumn>
                 <DataGridTextColumn Header="serial" Binding="{Binding serial}"></DataGridTextColumn>
                 <DataGridTextColumn Header="purchase date" Binding="{Binding purchase_date}"></DataGridTextColumn>
-                <DataGridTextColumn Header="cost" Binding="{Binding cost}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="cost" Binding="{Binding cost, StringFormat=N2}"></DataGridTextColumn>
                 <DataGridTextColumn Header="location" Binding="{Binding locationName}"></DataGridTextColumn>
                 <DataGridTextColumn Header="sub-location" Binding="{Binding sub_location}"></DataGridTextColumn>
 
@@ -107,7 +108,7 @@
 
 
     </Grid>
-
+    </Viewbox>
 
 
 

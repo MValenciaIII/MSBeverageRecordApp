@@ -1,13 +1,11 @@
-﻿using System.Net.Http.Headers;
+﻿using ChoETL;
 using System.Net.Http;
-using System.Windows.Controls;
-using static MSBeverageRecordApp.Reports;
-using System.Text.Json;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Windows;
+using System.Windows.Controls;
 using MessageBox = System.Windows.Forms.MessageBox;
-using static MSBeverageRecordApp.CrudWindow;
-using System.Runtime.InteropServices;
 
 
 namespace MSBeverageRecordApp {
@@ -22,7 +20,7 @@ namespace MSBeverageRecordApp {
 
         //GLOBAL CLASS FOR DATA TO SEND TO API
         class PostRecordsData {
-            public int record_id {  get; set; }
+            public int record_id { get; set; }
             public int category { get; set; }
             public int manufacturer { get; set; }
             public string model { get; set; }
@@ -102,17 +100,17 @@ namespace MSBeverageRecordApp {
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
 
-            //ADD AN "ACCEPT" HEADER FOR JSON FORMAT.
+            //ADD AN "Accept" HEADER FOR JSON FORMAT.
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
 
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
             var response = client.GetAsync(client.BaseAddress).Result;
 
-            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            //IF THE "response" VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode) {
 
-                //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
+                //CONVERTING OBJECT "response" VARIABLE DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //CHANGE OUR STRING TO OBJECT DATA
@@ -132,17 +130,17 @@ namespace MSBeverageRecordApp {
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/category");
 
-            //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
+            //ADD AN "Accept" HEADER FOR JSON FORMAT
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
 
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
             var response = client.GetAsync(client.BaseAddress).Result;
 
-            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            //IF THE "response" VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode) {
 
-                //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
+                //CONVERTING OBJECT "response" VARIABLE DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //CHANGE OUR STRING TO OBJECT DATA
@@ -152,7 +150,7 @@ namespace MSBeverageRecordApp {
         }//end function
 
 
-        private void CreateCategoryComboBox (RootObject list) {
+        private void CreateCategoryComboBox(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
@@ -175,12 +173,10 @@ namespace MSBeverageRecordApp {
 
             }//end for
         }//end function
-
         #endregion Category Table Combobox
 
 
         #region Location Table Combobox
-
         private void LocationAPI() {
 
             //SETTING UP NEW INSTANCE OF A TYPE OF DATA
@@ -189,17 +185,17 @@ namespace MSBeverageRecordApp {
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/location");
 
-            //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
+            //ADD AN "Accept" HEADER FOR JSON FORMAT
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
 
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
             var response = client.GetAsync(client.BaseAddress).Result;
 
-            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            //IF THE "response" VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode) {
 
-                //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
+                //CONVERTING OBJECT "response" VARIABLE DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //CHANGE OUR STRING TO OBJECT DATA
@@ -232,12 +228,10 @@ namespace MSBeverageRecordApp {
 
             }//end for
         }//end function
-
         #endregion Location Table Combobox
 
 
         #region Manufacturer Table Combobox
-
         private void ManufacturerAPI() {
 
             //SETTING UP NEW INSTANCE OF A TYPE OF DATA
@@ -246,17 +240,17 @@ namespace MSBeverageRecordApp {
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/manufacturer");
 
-            //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
+            //ADD AN "Accept" HEADER FOR JSON FORMAT
             client.DefaultRequestHeaders.Accept.Add(
                new MediaTypeWithQualityHeaderValue("application/json"));
 
             //THIS IS VARIABLE TO GET OBJECT DATA FROM API
             var response = client.GetAsync(client.BaseAddress).Result;
 
-            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+            //IF THE "response" VARIABLE IS TRUE RUN THIS CODE.
             if (response.IsSuccessStatusCode) {
 
-                //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
+                //CONVERTING OBJECT "response" VARIABLE DATA TO STRING 
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //CHANGE OUR STRING TO OBJECT DATA
@@ -268,7 +262,7 @@ namespace MSBeverageRecordApp {
 
         private void CreateManufacturerComboBox(RootObject list) {
             PostRecordsData manufacturer = new PostRecordsData();
-            
+
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
@@ -292,12 +286,10 @@ namespace MSBeverageRecordApp {
             }//end for
 
         }//end function
-
         #endregion Manufacturer Table Combobox
 
 
         #region RecordID
-
         private void RecordIDTextBox(RootObject list) {
 
             //INITIALIZE BOOL TO FALSE
@@ -331,57 +323,38 @@ namespace MSBeverageRecordApp {
         }//end RecordIDTextBox
 
         private void recordNumber_TextChanged(object sender, TextChangedEventArgs e) {
-          
-                if (recordNumber.Text != "") {
-                    IDtxtSearchPlaceholder.Visibility = Visibility.Hidden;
-                } else {
-                    IDtxtSearchPlaceholder.Visibility = Visibility.Visible;
-                }//end if
-
-        }//end recordNumber_TextChanged
-
+            if (recordNumber.Text != "") {
+                IDtxtSearchPlaceholder.Visibility = Visibility.Hidden;
+            } else {
+                IDtxtSearchPlaceholder.Visibility = Visibility.Visible;
+            }//end if
+        }//end event
         #endregion RecordID
 
 
         private void txtModel_TextChanged(object sender, TextChangedEventArgs e) {
-            
-                if (txtModel.Text != "") {
-
-                    modeltxtSearchPlaceholder.Visibility = Visibility.Hidden;
-
-                } else {
-
-                    modeltxtSearchPlaceholder.Visibility = Visibility.Visible;
-
-                }//end if
-        }//end txtModel_TextChanged
+            if (txtModel.Text != "") {
+                modeltxtSearchPlaceholder.Visibility = Visibility.Hidden;
+            } else {
+                modeltxtSearchPlaceholder.Visibility = Visibility.Visible;
+            }//end if
+        }//end event
 
         private void txtSerialNumber_TextChanged(object sender, TextChangedEventArgs e) {
-           
-                if (txtSerialNumber.Text != "") {
-
-                    serialtxtSearchPlaceholder.Visibility = Visibility.Hidden;
-
-                } else {
-
-                    serialtxtSearchPlaceholder.Visibility = Visibility.Visible;
-
-                }//end if 
-
-        }//end txtSerialNumber_TextChanged
+            if (txtSerialNumber.Text != "") {
+                serialtxtSearchPlaceholder.Visibility = Visibility.Hidden;
+            } else {
+                serialtxtSearchPlaceholder.Visibility = Visibility.Visible;
+            }//end if 
+        }//end event
 
         private void txtCost_TextChanged(object sender, TextChangedEventArgs e) {
-            
-                if (txtCost.Text != "") {
-
-                    costtxtSearchPlaceholder.Visibility = Visibility.Hidden;
-
-                } else {
-
-                    costtxtSearchPlaceholder.Visibility = Visibility.Visible;
-
-                }//end if
-        }//end txtCost_TextChanged
+            if (txtCost.Text != "") {
+                costtxtSearchPlaceholder.Visibility = Visibility.Hidden;
+            } else {
+                costtxtSearchPlaceholder.Visibility = Visibility.Visible;
+            }//end if
+        }//end event
 
         private void txtSubLocation_TextChanged(object sender, TextChangedEventArgs e) {
             if (txtSubLocation.Text != "") {
@@ -389,7 +362,7 @@ namespace MSBeverageRecordApp {
             } else {
                 subLocationtxtSearchPlaceholder.Visibility = Visibility.Visible;
             }//end if
-        }//end txtSubLocation_TextChanged
+        }//end event
 
         private void PostNewRecords(RootObject list) {
             //RETRIEVE ALL INPUTS FROM CREATE RECORD PAGE
@@ -428,7 +401,7 @@ namespace MSBeverageRecordApp {
                     postData.manufacturer = list.ManufacturerItems[itemIndex].id;
                 }//end if
             }//end for
-           
+
             //CREATING A NEW HTTPCLIENT OBJECT
             var client = new HttpClient();
 
@@ -450,11 +423,9 @@ namespace MSBeverageRecordApp {
                 };//end var options
 
                 //PROMPT USER THAT A NEW RECORD WAS CREATED
-                MessageBox.Show("New Record Created");
-            }//end if
+                MessageBox.Show("New Record Created. Please add another record, or return to main menu.");
 
-            //RETURN TO MAIN MENU
-            this.NavigationService.Navigate(new Uri("MenuPage.xaml", UriKind.Relative));
+            }//end if
 
         }//end function
 
@@ -462,30 +433,18 @@ namespace MSBeverageRecordApp {
         private void btnSubmit_Click(object sender, System.Windows.RoutedEventArgs e) {
 
             //INPUT VALIDATION
-            if (string.IsNullOrEmpty(txtModel.Text)) {
+            if (string.IsNullOrEmpty(txtModel.Text) || string.IsNullOrEmpty(txtSerialNumber.Text) || string.IsNullOrEmpty(txtCost.Text) || string.IsNullOrEmpty(PurchaseDate.Text) || cboCategory.SelectedValue == null || cboLocation.SelectedValue == null || cboManufacturer.SelectedValue == null) {
                 //THE TEXTBOX IS EMPTY; DISPLAY AN ERROR MESSAGE OR TAKE APPROPRIATE ACTION.
-                MessageBox.Show("Please enter a value in Model.");
+                MessageBox.Show("Please ensure all fields are completed.");
             } else {
-                txtModel.Text = "";
-            }//end if 
+                //POST THE NEW RECORD TO API
+                PostNewRecords(deserializeObject);
 
-            if (string.IsNullOrEmpty(txtSerialNumber.Text)) {
-                //THE TEXTBOX IS EMPTY; DISPLAY AN ERROR MESSAGE OR TAKE APPROPRIATE ACTION.
-                MessageBox.Show("Please enter a value in Serial Number.");
-            } else {
-                txtSerialNumber.Text = "";
+                //REFRESH THE PAGE
+                this.NavigationService.Refresh();
+
             }//end if
-
-            if (string.IsNullOrEmpty(txtCost.Text)) {
-                //THE TEXTBOX IS EMPTY; DISPLAY AN ERROR MESSAGE OR TAKE APPROPRIATE ACTION.
-                MessageBox.Show("Please enter a value in cost.");
-            } else {
-                txtCost.Text = "";
-            }//end if
-
-            //POST THE NEW RECORD TO API
-            PostNewRecords(deserializeObject);
-        }//end function
+        }//end event
 
     }//end class
 }//end namespace
