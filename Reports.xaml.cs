@@ -22,10 +22,21 @@ namespace MSBeverageRecordApp {
         }//end class
 
         //globals for print
+        RootObject allObj = new RootObject();
+        DataGrid allGrid = new DataGrid();
+
         RootObject catObj = new RootObject();
         DataGrid catGrid = new DataGrid();
 
+        RootObject manuObj = new RootObject();
+        DataGrid manuGrid = new DataGrid();
 
+        RootObject locObj = new RootObject();
+        DataGrid locGrid = new DataGrid();
+
+        RootObject totalObj = new RootObject();
+        DataGrid totalGrid = new DataGrid();
+        string title = "";
         public Reports() {
 
             InitializeComponent();
@@ -53,8 +64,11 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
 
                 //SET THE QUERY DATA TO DATAGRID ELEMENT
+
                 //all data
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+                allObj = deserializeObject;
+                allGrid.ItemsSource = allObj.Items;
 
                 //category
                 MSBeverageRecordApp2.ItemsSource = MSBeverageRecordApp.ItemsSource;
@@ -63,12 +77,18 @@ namespace MSBeverageRecordApp {
 
                 //manufacturer
                 MSBeverageRecordApp3.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                manuObj = deserializeObject;
+                manuGrid.ItemsSource = manuObj.Items;
 
                 //location
                 MSBeverageRecordApp4.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                locObj = deserializeObject;
+                locGrid.ItemsSource = locObj.Items;
 
                 //total value
                 MSBeverageRecordApp5.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                totalObj = deserializeObject;
+                totalGrid.ItemsSource = manuObj.Items;
 
                 CreateAllDataFilterItemsCat(deserializeObject);
                 CreateAllDataFilterItemsManu(deserializeObject);
@@ -82,8 +102,9 @@ namespace MSBeverageRecordApp {
         }//end main
         
 
-        //set globals grids/objs for 
+        
         #region print calls
+        //set filter name
         private void xtabitems_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (xalldata.IsSelected) {
                 filterName = "allData";
@@ -91,7 +112,7 @@ namespace MSBeverageRecordApp {
             }
             if (xcategory.IsSelected) {
                 filterName = "category";
-                catGrid.ItemsSource = MSBeverageRecordApp2.Items;
+
 
             }
             if (xmanufacturer.IsSelected) {
@@ -109,29 +130,40 @@ namespace MSBeverageRecordApp {
 
            
         }//ef
-
+        
+        //TODO
+        //print total cost on grid, do in printDG class
+        //add updates to grid on comboBox changes
         private void muiPrint_Click(object sender, RoutedEventArgs e) {
 
-            //filter names:
-            //
-            //allData
-            //category
-            //manufacturer
-            //totalValue
-
-            //match datagrid to filter-names
-            //set title, date
-            //switch case on filter names
-            //category test
-            
             PrintDG p = new PrintDG();
-            p.printDG(catObj, MSBeverageRecordApp2, "[title], [date-here]", filterName);
+            
+            switch (filterName) {
+                case "allData":
+                    title = $"report    {DateTime.UtcNow.ToString("d")}";
+                    p.printDG(allObj, MSBeverageRecordApp, title, filterName);
+                    break;
+                case "category":
+                    title = $"category report    {DateTime.UtcNow.ToString("d")}";
+                    p.printDG(catObj, MSBeverageRecordApp2, title, filterName);
+
+                    break;
+                case "manufacturer":
+                    title = $"manufacturers    {DateTime.UtcNow.ToString("d")}";
+                    p.printDG(manuObj, MSBeverageRecordApp3, title, filterName);
+                    break;
+                case "location":
+                    title = $"location report    {DateTime.UtcNow.ToString("d")}";
+                    p.printDG(locObj, MSBeverageRecordApp4, title, filterName);
+                    break;
+                case "totalValue":
+                    title = $"cost report    {DateTime.UtcNow.ToString("d")}";
+                    p.printDG(totalObj, MSBeverageRecordApp5, title, filterName);
+                    break;
+            }
 
         } //ef
         #endregion
-
-
-
 
         public class Records {
             public int record_id { get; set; }
@@ -179,6 +211,9 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSALL FUNCTION
             MSBeverageRecordApp.ItemsSource = FilterHotspotRecordsAll(record, FilterCategoryAll);
+            allGrid.ItemsSource = FilterHotspotRecordsAll(allObj.Items, FilterCategoryAll);
+            allObj.Items = FilterHotspotRecordsAll(allObj.Items, FilterCategoryAll);
+
         }//end function
 
 
@@ -209,12 +244,9 @@ namespace MSBeverageRecordApp {
             }//end for
         }//end function
 
-
         #endregion sub category
 
-
         #region sub manufacturer
-
 
         public static List<Records> FilterHotspotRecordsManufacturerAll(List<Records> records, ComboBox filter) {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL MANUFACTURERS
@@ -235,9 +267,9 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSMANUFACTURERALL FUNCTION
             MSBeverageRecordApp.ItemsSource = FilterHotspotRecordsManufacturerAll(record, FilterManufacturerAll);
-
+            manuGrid.ItemsSource = FilterHotspotRecordsAll(manuObj.Items, FilterCategoryAll);
+            manuObj.Items = FilterHotspotRecordsAll(manuObj.Items, FilterCategoryAll);
         }//end function
-
 
         private void CreateAllDataFilterItemsManu(RootObject list) {
             //INITIALIZE BOOL TO FALSE
@@ -291,7 +323,8 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSLOCATIONALL FUNCTION
             MSBeverageRecordApp.ItemsSource = FilterHotspotRecordsLocationAll(record, FilterLocationAll);
-
+            locGrid.ItemsSource = FilterHotspotRecordsAll(locObj.Items, FilterCategoryAll);
+            locObj.Items = FilterHotspotRecordsAll(locObj.Items, FilterCategoryAll);
         }//end function
 
 
@@ -477,7 +510,7 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSCATEGORY FUNCTION
             MSBeverageRecordApp2.ItemsSource = FilterHotspotRecordsCategory(record, FilterCategory);
-            
+            catGrid.ItemsSource = MSBeverageRecordApp2.ItemsSource;
 
         }//end function
 
@@ -534,7 +567,7 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSMANUFACTURER FUNCTION
             MSBeverageRecordApp3.ItemsSource = FilterHotspotRecordsManufacturer(record, FilterManufacturer);
-
+            manuGrid.ItemsSource = MSBeverageRecordApp3.ItemsSource;
         }//end function
 
 
@@ -590,7 +623,7 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSLOCATION FUNCTION
             MSBeverageRecordApp4.ItemsSource = FilterHotspotRecordsLocation(record, FilterLocation);
-
+            locGrid.ItemsSource = MSBeverageRecordApp4.ItemsSource;
         }//end function
 
 

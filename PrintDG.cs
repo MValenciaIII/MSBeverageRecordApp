@@ -14,16 +14,19 @@ using System.Linq.Expressions;
 public class PrintDG {
     //globals
     TableRowGroup tableRowGroup = new TableRowGroup();
+    decimal totalCost = 0.0m;
     public void printDG(RootObject obj, DataGrid dataGrid, string title, string filter) {
+
         PrintDialog printDialog = new PrintDialog();
+        
         if (printDialog.ShowDialog() == true) {
             FlowDocument fd = new FlowDocument();
-        //obj.Items = (List<Records>)dataGrid.ItemsSource;
 
             Paragraph p = new Paragraph(new Run(title));
             p.FontStyle = dataGrid.FontStyle;
             p.FontFamily = dataGrid.FontFamily;
-            p.FontSize = 18;
+            p.FontSize = 12;
+            p.TextAlignment = TextAlignment.Left;
             fd.Blocks.Add(p);
 
             Table table = new Table();
@@ -38,7 +41,7 @@ public class PrintDG {
 
             var headerList = dataGrid.Columns.Select(e => e.Header.ToString()).ToList();
 
-
+            //fix header names
             for (int j = 0; j < headerList.Count; j++) {
 
                 r.Cells.Add(new TableCell(new Paragraph(new Run(headerList[j]))));
@@ -64,44 +67,50 @@ public class PrintDG {
 
             int cellNumber = 0;
 
-            //filter names:
-            //
-            //allData
-            //category
-            //manufacturer
-            //totalValue
-
+            //check filter arg to choose which grid to print
+            //set title in reports.cs
             switch (filter) {
                 case "allData":
-                    //call 
+                    //call
                     AddAllDataRows(obj, r, cellNumber);
+                    
                     break;
                 case "category":
                     //call 
                     AddCategoryRows(obj, r, cellNumber);
+                    
                     break;
                 case "manufacturer":
                     //call
                     AddManuFacturerRows(obj, r, cellNumber);
+                    
+                    break;
+                case "location":
+                    //call
+                    AddManuFacturerRows(obj, r, cellNumber);
+                    
                     break;
                 case "totalValue":
                     //call
                     AddTotalValueRows(obj, r, cellNumber);
+                    
                     break;
             }
-
-            //how to call on specific filters
-            //make this a function to work for each category on filters
 
             table.RowGroups.Add(tableRowGroup);
             fd.Blocks.Add(table);
             printDialog.PrintDocument(((IDocumentPaginatorSource)fd).DocumentPaginator, "");
         }
     }//em
+
+    //print on filter tabs, cut columns depending on filter
     public void AddAllDataRows(RootObject obj, TableRow r, int cellNumber){
         for (int j = 0; j < obj.Items.Count; j++) {
+            
+            totalCost += obj.Items[j].cost;
             r = new TableRow();
             cellNumber = 0;
+
             r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].record_id.ToString()))));
             r.Cells[cellNumber].ColumnSpan = 4;
             r.Cells[cellNumber].Padding = new Thickness(4);
@@ -170,11 +179,11 @@ public class PrintDG {
             tableRowGroup.Rows.Add(r);
         }
     }//ef
-
     private void AddCategoryRows(RootObject obj, TableRow r, int cellNumber) {
         for (int j = 0; j < obj.Items.Count; j++) {
             r = new TableRow();
             cellNumber = 0;
+            totalCost += obj.Items[j].cost;
 
             //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].record_id.ToString()))));
             //r.Cells[cellNumber].ColumnSpan = 4;
@@ -242,13 +251,153 @@ public class PrintDG {
 
             tableRowGroup.Rows.Add(r);
         }
-    }
+    }//ef
     private void AddManuFacturerRows(RootObject obj, TableRow r, int cellNumber) {
-        throw new NotImplementedException();
-    }
+        for (int j = 0; j < obj.Items.Count; j++) {
+            r = new TableRow();
+            cellNumber = 0;
+            totalCost += obj.Items[j].cost;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].record_id.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].categoryName.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].companyName.ToString()))));
+            r.Cells[cellNumber].ColumnSpan = 4;
+            r.Cells[cellNumber].Padding = new Thickness(4);
+            r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            cellNumber++;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].model.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].serial.ToString()))));
+            r.Cells[cellNumber].ColumnSpan = 4;
+            r.Cells[cellNumber].Padding = new Thickness(4);
+            r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            cellNumber++;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].purchase_date.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].cost.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].locationName.ToString()))));
+            r.Cells[cellNumber].ColumnSpan = 4;
+            r.Cells[cellNumber].Padding = new Thickness(4);
+            r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            cellNumber++;
+
+
+            r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].sub_location.ToString()))));
+            r.Cells[cellNumber].ColumnSpan = 4;
+            r.Cells[cellNumber].Padding = new Thickness(4);
+            r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            cellNumber++;
+
+            tableRowGroup.Rows.Add(r);
+        }
+    }//ef
     private void AddTotalValueRows(RootObject obj, TableRow r, int cellNumber) {
-        throw new NotImplementedException();
-    }
+        for (int j = 0; j < obj.Items.Count; j++) {
+            r = new TableRow();
+            cellNumber = 0;
+            totalCost += obj.Items[j].cost;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].record_id.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].categoryName.ToString()))));
+            r.Cells[cellNumber].ColumnSpan = 4;
+            r.Cells[cellNumber].Padding = new Thickness(4);
+            r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            cellNumber++;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].companyName.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].model.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].serial.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].purchase_date.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].cost.ToString()))));
+            r.Cells[cellNumber].ColumnSpan = 4;
+            r.Cells[cellNumber].Padding = new Thickness(4);
+            r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            cellNumber++;
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].locationName.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+
+            //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].sub_location.ToString()))));
+            //r.Cells[cellNumber].ColumnSpan = 4;
+            //r.Cells[cellNumber].Padding = new Thickness(4);
+            //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
+            //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
+            //cellNumber++;
+
+            tableRowGroup.Rows.Add(r);
+        }
+    }//ef
 
 }//ec
 
