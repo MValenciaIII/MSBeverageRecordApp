@@ -40,6 +40,8 @@ namespace MSBeverageRecordApp {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+
+            //SET MAINFRAME TO OPEN MENU PAGE ON STARTUP
             MainFrame.Content = new MenuPage();
         }//end main window
 

@@ -80,7 +80,7 @@ namespace MSBeverageRecordApp
         public CrudWindow()
         {
             InitializeComponent();
-            //SETTING UP NEW instance of a type of data
+            //SETTING UP NEW INSTANCE OF A TYPE OF DATA
             using HttpClient client = new();
             //GETTING QUERY API LINK FOR OBJECT DATA 
             client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
@@ -148,6 +148,7 @@ namespace MSBeverageRecordApp
 
         }//end main
 
+
         //SAVES 
 
         //TODO add print button/function, fix print format
@@ -183,7 +184,7 @@ namespace MSBeverageRecordApp
                 System.IO.File.AppendAllText(file, array[i]);
                 //START NEW LINE AFTER PRINTING EACH CELL IN A ROW
                 count = 0;
-            }//end for
+            }//end for loop
         }//end function
 
 
@@ -225,7 +226,7 @@ namespace MSBeverageRecordApp
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(deserializeObject.Items);
             System.IO.File.AppendAllText(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test2.txt", json);
             #endregion
-        }//end function
+        }//end event
 
 
         private void savepdf_Click(object sender, RoutedEventArgs e)
@@ -247,7 +248,7 @@ namespace MSBeverageRecordApp
             //WORKS BUT ONLY USES HALF THE PAGE AND NO PREVIEW
             //ADD A SHOW PRINT DIALOG IN CLASS TO GIVE PRINT OPTIONS
             //OR ADD A PRINT BUTTON 
-        }//end function
+        }//end event
 
 
         public void savecsv_Click(object sender, RoutedEventArgs e)
@@ -306,7 +307,7 @@ namespace MSBeverageRecordApp
                 #endregion
                 Saving(file, rows, colCount);
             }//end if
-        }//end function
+        }//end event
 
 
         //TODO
@@ -341,8 +342,6 @@ namespace MSBeverageRecordApp
             {
                 var responseContent = response.Content.ReadAsStringAsync().Result;
                 var postResponse = JsonSerializer.Deserialize<Records>(responseContent);
-
-
             }
             else
             {
@@ -385,7 +384,7 @@ namespace MSBeverageRecordApp
             //MSBeverageRecordApp.Visibility = Visibility.Hidden;
             //CreateRecord window = new CreateRecord();
             //window.Show();
-        }//end function
+        }//end event
 
 
         Records rep = new Records();
@@ -421,7 +420,7 @@ namespace MSBeverageRecordApp
             fileMenu.Visibility = Visibility.Collapsed;
             Filter.Visibility = Visibility.Collapsed;
 
-        }//end function
+        }//end event
 
 
         private void btnSaveChange_Click(object sender, RoutedEventArgs e)
@@ -474,8 +473,7 @@ namespace MSBeverageRecordApp
                 MSBeverageRecordGrid.ItemsSource = null;
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
 
-            }//end for
-
+            }//end for loop
 
             //SWITCH VIEWS
             MSBeverageRecordGrid.Visibility = Visibility.Visible;
@@ -493,7 +491,8 @@ namespace MSBeverageRecordApp
 
             //CALL UPDATE FUNCTION WHEN USER SAVES
             UpdateDataBase();
-        }//end function
+        }//end event function
+
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -509,7 +508,8 @@ namespace MSBeverageRecordApp
             spText.Visibility = Visibility.Hidden;
             spLbl.Visibility = Visibility.Hidden;
             spTxt.Visibility = Visibility.Hidden;
-        }//end function
+        }//end event
+
 
         public class Category
         {
@@ -526,6 +526,7 @@ namespace MSBeverageRecordApp
             public int ID { get; set; }
             public string locationName { get; set; }
         }//end class
+
 
         //PULL ALL TABLES FROM DB
         public void Tables()
@@ -553,7 +554,8 @@ namespace MSBeverageRecordApp
                 root.Items = JsonSerializer.Deserialize<List<Category>>(dataobjects);
                 CreateCategoryFilterItems(root);
             }//end if statusOK
-        }//end Tables
+        }//end Tables function
+
 
         public void Locations()
         {
@@ -579,7 +581,8 @@ namespace MSBeverageRecordApp
                 rootLoc.Items = JsonSerializer.Deserialize<List<Location>>(dataobjects);
                 CreateLocationFilterItems(rootLoc);
             }//end if statusOK
-        }//end Locations
+        }//end Locations function
+
 
         public void Companies()
         {
@@ -605,7 +608,7 @@ namespace MSBeverageRecordApp
                 rootComp.Items = JsonSerializer.Deserialize<List<Manufacture>>(dataobjects);
                 CreateCompanyFilterItems(rootComp);
             }//end if
-        }//end Companies
+        }//end Companies funtion
 
 
         //FILL COMBOBOX VALUES 

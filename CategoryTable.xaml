@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CategoryTable">
-    <Viewbox>
+    <Viewbox Stretch="Fill">
         <Grid Background="#FFFBF6F6" Height="450" Width="800">
             <Label Content="Mississippi Beverage Equipment Tracking" FontSize="40" HorizontalAlignment="Left" Margin="42,10,0,0" VerticalAlignment="Top"/>
             <Button Content="Create Category" HorizontalAlignment="Left" Margin="539,143,0,0" VerticalAlignment="Top" Height="44" Width="118" Click="Category_Button_Click" FontSize="14"/>

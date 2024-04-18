@@ -92,6 +92,10 @@ namespace MSBeverageRecordApp {
             CreateManufacturerComboBox(deserializeObject);
         }//end main
 
+
+        //SUMMARY OF "RecordsAPI" METHOD BELOW:
+        //FETCHES DATA FROM THE SPECIFIED API ENDPOINT, ENSURES THAT THE RESPONSE IS SUCCESSFUL,
+        //AND CONVERTS THE JSON DATA INTO A LIST OF RECORDS OBJECTS
         private void RecordsAPI() {
 
             //SETTING UP NEW INSTANCE OF A TYPE OF DATA
@@ -293,77 +297,100 @@ namespace MSBeverageRecordApp {
         private void RecordIDTextBox(RootObject list) {
 
             //INITIALIZE BOOL TO FALSE
-
             bool contains = false;
 
+            //INITIALIZE CURRENT RECORDID TO ZERO
             int currentRecordID = 0;
 
             //LOOP THROUGH LIST OF ITEMS
-
             for (int index = 0; index < list.Items.Count; index++) {
 
-                //LOOP THROUGH 
-
+                //IF CURRENT RECORD ID IS = 0
                 int newCurrentRecordID = 0;
 
+                //SET NEWCURRENTRECORDID TO INDEX OF RECORD ID
                 newCurrentRecordID = list.Items[index].record_id;
 
+                //IF NEWCURRENTRECORD ID IS GREATER THAN CURRENT VALUE OF CURRENTRECORDID
                 if (newCurrentRecordID > currentRecordID) {
-
+                    //UPDATE VALUE OF CURRENTRECORD ID 
                     currentRecordID = newCurrentRecordID;
-
+                    //UPDATE RECORDNUMBER TEXT BOX TO CURRENTRECORDID + 1
                     recordNumber.Text = $"{currentRecordID + 1}";
-
-                } else {
-
                 }//end if
-
             }//end for
 
         }//end RecordIDTextBox
 
         private void recordNumber_TextChanged(object sender, TextChangedEventArgs e) {
+            //IF RECORD NUMBER TEXTBOX IS NOT EMPTY
             if (recordNumber.Text != "") {
+                //HIDE THE PLACEHOLDER TEXT
                 IDtxtSearchPlaceholder.Visibility = Visibility.Hidden;
             } else {
+                //SHOW THE PLACEHOLDER TEXT IF TEXTBOX IS EMPTY
                 IDtxtSearchPlaceholder.Visibility = Visibility.Visible;
             }//end if
         }//end event
         #endregion RecordID
 
 
+        //SUMMARY OF EVENT BELOW: IF THE USER ENTERS TEXT, THE PLACEHOLDER DISAPPEARS; OTHERWISE, IT REAPPEARS.
         private void txtModel_TextChanged(object sender, TextChangedEventArgs e) {
+            //IF MODEL TEXTBOX IS EMPTY
             if (txtModel.Text != "") {
+                //HIDE THE PLACEHOLDER TEXT
                 modeltxtSearchPlaceholder.Visibility = Visibility.Hidden;
             } else {
+                //SHOW THE PLACEHOLDER TEXT IF TEXTBOX IS EMPTY
                 modeltxtSearchPlaceholder.Visibility = Visibility.Visible;
             }//end if
         }//end event
 
+
+        //SUMMARY OF EVENT BELOW: USER INTERACTS WITH THE "txtSerialNumber" TEXTBOX, THE PLACEHOLDER DISAPPEARS; OTHERWISE, IT REAPPEARS.
         private void txtSerialNumber_TextChanged(object sender, TextChangedEventArgs e) {
+            //IF SERIAL NUMBER TEXTBOX IS EMPTY
             if (txtSerialNumber.Text != "") {
+                //HIDE THE PLACEHOLDER TEXT
                 serialtxtSearchPlaceholder.Visibility = Visibility.Hidden;
             } else {
+                //SHOW THE PLACEHOLDER TEXT IF TEXTBOX IS EMPTY
                 serialtxtSearchPlaceholder.Visibility = Visibility.Visible;
             }//end if 
         }//end event
 
+
+        //SUMMARY OF EVENT BELOW: USER INTERACTS WITH THE "txtCost" TEXTBOX, THE PLACEHOLDER DISAPPEARS; OTHERWISE, IT REAPPEARS.
         private void txtCost_TextChanged(object sender, TextChangedEventArgs e) {
+            //IF COST TEXTBOX IS EMPTY
             if (txtCost.Text != "") {
+                //HIDE THE PLACEHOLDER TEXT
                 costtxtSearchPlaceholder.Visibility = Visibility.Hidden;
             } else {
+                //SHOW THE PLACEHOLDER TEXT IF TEXTBOX IS EMPTY
                 costtxtSearchPlaceholder.Visibility = Visibility.Visible;
             }//end if
         }//end event
 
+
+        //SUMMARY OF EVENT BELOW: USER INTERACTS WITH THE "txtSubLocation" TEXTBOX, THE PLACEHOLDER DISAPPEARS; OTHERWISE, IT REAPPEARS.
         private void txtSubLocation_TextChanged(object sender, TextChangedEventArgs e) {
+            //IF SUB LOCATION TEXTBOX IS EMPTY
             if (txtSubLocation.Text != "") {
+                //HIDE THE PLACEHOLDER TEXT
                 subLocationtxtSearchPlaceholder.Visibility = Visibility.Hidden;
             } else {
+                //SHOW THE PLACEHOLDER TEXT IF TEXTBOX IS EMPTY
                 subLocationtxtSearchPlaceholder.Visibility = Visibility.Visible;
             }//end if
         }//end event
 
+
+        //SUMMARY OF "PostNewRecords" METHOD BELOW:
+        //COLLECTS INPUT DATA, ASSOCIATES IT WITH RELEVANT IDS, AND PREPARES IT FOR POSTING TO THE API,
+        //HANDLES POSTING NEW RECORDS TO THE API, INCLUDING INPUT VALIDATION
+        //AND DISPLAYING A SUCCESS MESSAGE TO THE USER
         private void PostNewRecords(RootObject list) {
             //RETRIEVE ALL INPUTS FROM CREATE RECORD PAGE
             var postData = new PostRecordsData {
@@ -430,6 +457,7 @@ namespace MSBeverageRecordApp {
         }//end function
 
 
+        //SUMMARY OF EVENT BELOW: HANDLES INPUT VALIDATION, POSTS DATA TO THE API, AND REFRESHES THE PAGE AFTER SUBMISSION
         private void btnSubmit_Click(object sender, System.Windows.RoutedEventArgs e) {
 
             //INPUT VALIDATION
