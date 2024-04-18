@@ -1,14 +1,14 @@
-﻿using ChoETL;
+﻿//using ChoETL;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
-using MessageBox = System.Windows.Forms.MessageBox;
 
 
-namespace MSBeverageRecordApp {
+namespace MSBeverageRecordApp
+{
 
     /// <summary>
     /// INTERACTION LOGIC FOR CreateRecord.xaml
@@ -132,7 +132,7 @@ namespace MSBeverageRecordApp {
             using HttpClient client = new();
 
             //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4002/api/category");
+            client.BaseAddress = new Uri("http://localhost:4001/api/category");
 
             //ADD AN "Accept" HEADER FOR JSON FORMAT
             client.DefaultRequestHeaders.Accept.Add(

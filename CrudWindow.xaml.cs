@@ -566,7 +566,7 @@ namespace MSBeverageRecordApp {
             }//end for loop
         }//end function
 
-        }//ef
+        
         #endregion
 
     }//end class
