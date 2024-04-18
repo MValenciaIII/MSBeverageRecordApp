@@ -11,16 +11,8 @@ using System.Windows.Input;
 
 //TODO
 //
-//make new button and click event function to call print class so save PDF and print are separate
-//
-//update data grid on all pages on save
-//
-//filter/search inside of update window
-//
-//write print class methods for each filter/category
 
 namespace MSBeverageRecordApp {
-
 
     public partial class CrudWindow : Page {
 
@@ -142,7 +134,6 @@ namespace MSBeverageRecordApp {
                 //How to set the query data to the DATAGRID element.
 
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
-
                 for (int i = 0; i > deserializeObject.Items.Count; i++) {
                    deserializeObject.Items[i].purchase_date.ToString("MM/dd/yy");
                 }//END IF
@@ -152,10 +143,8 @@ namespace MSBeverageRecordApp {
                 Locations();
                 Companies();
             }//end if statusOK
-
         }//end main
 
-        //TODO add print button/function, fix print format
         #region SAVE FUNCTIONS
         public void Saving(string filePath, string[] array, int num) {
             //VARIABLE
@@ -216,7 +205,6 @@ namespace MSBeverageRecordApp {
 
             //print.printDG(deserializeObject ,MSBeverageRecordGrid, "Title");
         }
-
         public void savecsv_Click(object sender, RoutedEventArgs e) {
 
             //save to csv
@@ -272,10 +260,8 @@ namespace MSBeverageRecordApp {
         }//ef
         #endregion
 
-        
         //UPDATE TO THE DATABASE
         private void UpdateDataBase() {
-
             //invalid column names 
             var postRec = new PostRecords {
                 record_id = post.record_id,
@@ -301,7 +287,6 @@ namespace MSBeverageRecordApp {
             if (response.IsSuccessStatusCode) {
                 var responseContent = response.Content.ReadAsStringAsync().Result;
                 var postResponse = JsonSerializer.Deserialize<Records>(responseContent);
-
             }
             else
             {

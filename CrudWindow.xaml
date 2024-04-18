@@ -22,12 +22,12 @@
         </Grid.ColumnDefinitions>
 
 
-        <Menu Name="fileMenu" Visibility="Visible" HorizontalAlignment="Left" Width="956" Background="White" Grid.ColumnSpan="2">
-            <MenuItem Header="_File">
+        <Menu Name="fileMenu" Visibility="Collapsed" HorizontalAlignment="Left" Width="956" Background="White" Grid.ColumnSpan="2">
+            <!--<MenuItem Header="_File">
                 <MenuItem x:Name="muiSave" Header="save csv" Click="savecsv_Click"/>
                 <MenuItem x:Name="savePDF" Header="save pdf" Click="savepdf_Click"/>
                 <MenuItem x:Name="print" Header="print" Click="print_Click" />
-            </MenuItem>
+            </MenuItem>-->
 
         </Menu>
 

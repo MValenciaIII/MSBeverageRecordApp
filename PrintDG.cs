@@ -10,7 +10,6 @@ using ChoETL;
 using static MSBeverageRecordApp.Reports;
 using System.Linq.Expressions;
 
-
 public class PrintDG {
     //globals
     TableRowGroup tableRowGroup = new TableRowGroup();

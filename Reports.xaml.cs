@@ -134,6 +134,7 @@ namespace MSBeverageRecordApp {
         //TODO
         //print total cost on grid, do in printDG class
         //add updates to grid on comboBox changes
+
         private void muiPrint_Click(object sender, RoutedEventArgs e) {
 
             PrintDG p = new PrintDG();
@@ -161,7 +162,6 @@ namespace MSBeverageRecordApp {
                     p.printDG(totalObj, MSBeverageRecordApp5, title, filterName);
                     break;
             }
-
         } //ef
         #endregion
 
@@ -201,7 +201,6 @@ namespace MSBeverageRecordApp {
                 //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
             }//end if
-
         }//end function
 
 
