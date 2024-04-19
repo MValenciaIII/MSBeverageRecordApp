@@ -310,16 +310,18 @@ namespace MSBeverageRecordApp {
         private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) {
 
             //CHECK IF TEXT BOX IS EMPTY
-            if (FilterTextBox.Text == null) {
-
-                //IF EMPTY, REMOVE ANY FILTERING
+            if (FilterTextBox.Text == "") {
+                //IF NO FILTER IS SELECTED
                 MSBeverageRecordApp.Items.Filter = null;
-
+                //SHOW PLACEHOLDER TEXT
+                txtSearchPlaceholder.Visibility = System.Windows.Visibility.Visible;
             } else {
-                //IF NOT EMPTY, SET FILTER TO RESULT OF GET FILTER FUNCTION
+                //IF A FILTER IS SELECTED
                 MSBeverageRecordApp.Items.Filter = GetFilter();
-
-            }//end if
+                //HIDE PLACEHOLDER TEXT
+                txtSearchPlaceholder.Visibility = System.Windows.Visibility.Hidden;
+            
+        }//end if
 
         }//end function
 
