@@ -21,7 +21,7 @@ namespace MSBeverageRecordApp {
             public string[] results { get; set; }
         }//end class
 
-        //globals for print
+        //GLOBALS FOR PRINT
         RootObject allObj = new RootObject();
         DataGrid allGrid = new DataGrid();
 
@@ -63,28 +63,28 @@ namespace MSBeverageRecordApp {
 
                 //CHANGE OUR STRING TO OBJECT DATA
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
-                //all data
+                //ALL DATA
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
                 allObj = deserializeObject;
                 allGrid.ItemsSource = allObj.Items;
 
-                //category
+                //CATEGORY
                 MSBeverageRecordApp2.ItemsSource = MSBeverageRecordApp.ItemsSource;
                 catObj = deserializeObject;
                 catGrid.ItemsSource = catObj.Items;
 
-                //manufacturer
+                //MANUFACTURER
                 MSBeverageRecordApp3.ItemsSource = MSBeverageRecordApp.ItemsSource;
                 manuObj = deserializeObject;
                 manuGrid.ItemsSource = manuObj.Items;
 
-                //location
+                //LOCATION
                 MSBeverageRecordApp4.ItemsSource = MSBeverageRecordApp.ItemsSource;
                 MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
                 locObj = deserializeObject;
                 locGrid.ItemsSource = locObj.Items;
 
-                //total value
+                //TOTAL VALUE
                 //MSBeverageRecordApp5.ItemsSource = MSBeverageRecordApp.ItemsSource;
                 totalObj = deserializeObject;
                 totalGrid.ItemsSource = manuObj.Items;
@@ -103,8 +103,11 @@ namespace MSBeverageRecordApp {
                 #endregion GridRowCustom
             }//end if
         }//end main
+
+
         #region print calls
-        //set filter name
+        //SET FILTER NAME
+        //SETS WHICH GRID TO PULL FROM
         private void xtabitems_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (xalldata.IsSelected) {
                 filterName = "allData";
@@ -127,16 +130,18 @@ namespace MSBeverageRecordApp {
 
                 filterName = "totalValue";
             }
+        }//end function
 
-
-        }//ef
 
         //TODO
-        //print total cost on grid, do in printDG class
-        //add updates to grid on comboBox changes
+        //PRINT TOTAL COST ON GRID, DO IN PRINTDG CLASS
+        //ADD UPDATES TO GRID ON COMBOBOX CHANGES
 
+        //"muiPrint_Click" HANDLES PRINTING DATA GRIDS BASED ON DIFFERENT FILTER CONDITIONS("filterName")
+        //(SUCH AS CATEGORY, MANUFACTURER, LOCATION, ETC.)
         private void muiPrint_Click(object sender, RoutedEventArgs e) {
 
+            //"PrintDG" CLASS IS RESPONSIBLE FOR THE ACTUAL PRINTING PROCESS
             PrintDG p = new PrintDG();
 
             switch (filterName) {
@@ -162,8 +167,9 @@ namespace MSBeverageRecordApp {
                     p.printDG(totalObj, MSBeverageRecordApp5, title, filterName);
                     break;
             }//end switch
-        } //ef
+        } //end function
         #endregion
+
 
         public class Records {
             public int record_id { get; set; }

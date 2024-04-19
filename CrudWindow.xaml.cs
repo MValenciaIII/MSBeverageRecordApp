@@ -230,9 +230,9 @@ namespace MSBeverageRecordApp {
                 rows = new string[deserializeObject.Items.Count + 3];
                 //SET HEADERS AS FIRST ROW
                 rows[0] = headerline + "\n";
-                //loop over list and set values of each row into an array
+                //LOOP OVER LIST AND SET VALUES OF EACH ROW INTO AN ARRAY
                 for (int i = 1; i <= deserializeObject.Items.Count; i++) {
-                    //clear string on each iteration
+                    //CLEAR STRING ON EACH ITERATION
                     sb.Clear();
                     //ADD VALUES
                     sb.Append(deserializeObject.Items[i - 1].record_id.ToString() + ",");
@@ -303,7 +303,7 @@ namespace MSBeverageRecordApp {
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 
             
-            //selects the row that user double clicks
+            //SELECTS THE ROW THAT USER DOUBLE CLICKS
             Records Reports = new Records();
             var row = sender as DataGridRow;
             rep = row.DataContext as Records;
@@ -407,8 +407,9 @@ namespace MSBeverageRecordApp {
 
             spLabels.Visibility = Visibility.Hidden;
             spText.Visibility = Visibility.Hidden;
-        }//ef
+        }//end function
         #endregion
+
 
         #region API PULL FROM DATABASE
         public void Tables() {
@@ -436,7 +437,6 @@ namespace MSBeverageRecordApp {
             }//end if statusOK
         }//end Tables function
 
-
         public void Locations() {
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
@@ -461,7 +461,6 @@ namespace MSBeverageRecordApp {
             }//end if statusOK
         }//end Locations function
 
-
         public void Companies() {
             //SETTING UP NEW instance of a type of data
             using HttpClient client = new();
@@ -483,9 +482,10 @@ namespace MSBeverageRecordApp {
                 //NEED ACCESS GLOBALLY TO 
                 rootComp.Items = JsonSerializer.Deserialize<List<Manufacture>>(dataobjects);
                 CreateCompanyFilterItems(rootComp);
-            }
-        }
+            }//end if
+        }//end Companties function
         #endregion
+
 
         #region THE COMBOBOX FILL UP
         private void CreateLocationFilterItems(RootLoc list) {

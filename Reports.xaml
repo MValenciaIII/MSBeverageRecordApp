@@ -104,7 +104,7 @@
 
             </TabControl>
 
-            <Label  FontSize="22px" Content="Mississippi Beverage Eqipment Tracking" HorizontalAlignment="Center" VerticalAlignment="Top" Height="47" Width="396" Margin="0,-6,0,0"/>
+            <Label  FontSize="22px" Content="Mississippi Beverage Equipment Tracking" HorizontalAlignment="Center" VerticalAlignment="Top" Height="47" Width="410" Margin="0,-6,0,0"/>
 
         </Grid>
     </Viewbox>
