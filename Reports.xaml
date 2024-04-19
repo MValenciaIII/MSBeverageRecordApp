@@ -19,7 +19,7 @@
 
             </Menu>
 
-            <TabControl x:Name="xtabitems" Margin="0,34,0,0">
+            <TabControl x:Name="xtabitems" Margin="0,34,0,0" SelectionChanged="TabControl_SelectionChanged">
 
                 <TabItem x:Name="xalldata" Header="All Data">
                     <Grid>

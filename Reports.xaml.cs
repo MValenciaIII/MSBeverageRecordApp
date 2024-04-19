@@ -69,17 +69,17 @@ namespace MSBeverageRecordApp {
                 allGrid.ItemsSource = allObj.Items;
 
                 //CATEGORY
-                MSBeverageRecordApp2.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                MSBeverageRecordApp2.ItemsSource = deserializeObject.Items;
                 catObj = deserializeObject;
                 catGrid.ItemsSource = catObj.Items;
 
                 //MANUFACTURER
-                MSBeverageRecordApp3.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                MSBeverageRecordApp3.ItemsSource = deserializeObject.Items;
                 manuObj = deserializeObject;
                 manuGrid.ItemsSource = manuObj.Items;
 
                 //LOCATION
-                MSBeverageRecordApp4.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                MSBeverageRecordApp4.ItemsSource = deserializeObject.Items;
                 MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
                 locObj = deserializeObject;
                 locGrid.ItemsSource = locObj.Items;
@@ -516,6 +516,8 @@ namespace MSBeverageRecordApp {
 
 
         #endregion Tab location
+
+
         #region Total Cost Feport
         //create item for each category
 
@@ -584,6 +586,30 @@ namespace MSBeverageRecordApp {
 
 
         #endregion
+        #region tabcontrol testing
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (xalldata.IsSelected) {
 
+            }
+            if (xcategory.IsSelected) {
+                MSBeverageRecordApp.Items.Filter = null;
+
+            }
+            if (xmanufacturer.IsSelected) {
+                MSBeverageRecordApp.Items.Filter = null;
+
+            }
+            if (xlocation.IsSelected) {
+                MSBeverageRecordApp.Items.Filter = null;
+
+            }
+            if (xtotalvalue.IsSelected) {
+                MSBeverageRecordApp.Items.Filter = null;
+            }
+
+        }//end
+
+
+        #endregion tabcontrol testing
     }//end class
 }//end namespace
