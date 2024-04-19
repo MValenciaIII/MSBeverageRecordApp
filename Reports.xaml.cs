@@ -589,7 +589,7 @@ namespace MSBeverageRecordApp {
         #region tabcontrol testing
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (xalldata.IsSelected) {
-
+                MSBeverageRecordApp.Items.Filter = GetFilter();
             }
             if (xcategory.IsSelected) {
                 MSBeverageRecordApp.Items.Filter = null;
@@ -606,10 +606,8 @@ namespace MSBeverageRecordApp {
             if (xtotalvalue.IsSelected) {
                 MSBeverageRecordApp.Items.Filter = null;
             }
+        }//end function
 
-        }//end
-
-
-        #endregion tabcontrol testing
-    }//end class
+                #endregion tabcontrol testing
+            }//end class
 }//end namespace
