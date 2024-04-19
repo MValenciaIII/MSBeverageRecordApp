@@ -37,6 +37,7 @@ namespace MSBeverageRecordApp {
         RootObject totalObj = new RootObject();
         DataGrid totalGrid = new DataGrid();
         string title = "";
+
         public Reports() {
 
             InitializeComponent();
@@ -62,9 +63,6 @@ namespace MSBeverageRecordApp {
 
                 //CHANGE OUR STRING TO OBJECT DATA
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
-
-                //SET THE QUERY DATA TO DATAGRID ELEMENT
-
                 //all data
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
                 allObj = deserializeObject;
@@ -73,7 +71,7 @@ namespace MSBeverageRecordApp {
                 //category
                 MSBeverageRecordApp2.ItemsSource = MSBeverageRecordApp.ItemsSource;
                 catObj = deserializeObject;
-                catGrid.ItemsSource = catObj.Items; 
+                catGrid.ItemsSource = catObj.Items;
 
                 //manufacturer
                 MSBeverageRecordApp3.ItemsSource = MSBeverageRecordApp.ItemsSource;
@@ -90,18 +88,21 @@ namespace MSBeverageRecordApp {
                 //MSBeverageRecordApp5.ItemsSource = MSBeverageRecordApp.ItemsSource;
                 totalObj = deserializeObject;
                 totalGrid.ItemsSource = manuObj.Items;
-
                 //CALL COMBO BOX FUNCTIONS
                 CreateCategoryFilterItems(deserializeObject);
                 CreateManufacturerFilterItems(deserializeObject);
                 CreateLocationFilterItems(deserializeObject);
                 comboboxSearch(deserializeObject);
 
+                #region GridRowCustom
+                MSBeverageRecordApp.CanUserAddRows = false;
+                MSBeverageRecordApp2.CanUserAddRows = false;
+                MSBeverageRecordApp3.CanUserAddRows = false;
+                MSBeverageRecordApp4.CanUserAddRows = false;
+                MSBeverageRecordApp5.CanUserAddRows = false;
+                #endregion GridRowCustom
             }//end if
         }//end main
-        
-
-        
         #region print calls
         //set filter name
         private void xtabitems_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -123,13 +124,13 @@ namespace MSBeverageRecordApp {
 
             }
             if (xtotalvalue.IsSelected) {
-              
+
                 filterName = "totalValue";
             }
 
-           
+
         }//ef
-        
+
         //TODO
         //print total cost on grid, do in printDG class
         //add updates to grid on comboBox changes
@@ -137,7 +138,7 @@ namespace MSBeverageRecordApp {
         private void muiPrint_Click(object sender, RoutedEventArgs e) {
 
             PrintDG p = new PrintDG();
-            
+
             switch (filterName) {
                 case "allData":
                     title = $"report    {DateTime.UtcNow.ToString("d")}";
@@ -160,7 +161,7 @@ namespace MSBeverageRecordApp {
                     title = $"cost report    {DateTime.UtcNow.ToString("d")}";
                     p.printDG(totalObj, MSBeverageRecordApp5, title, filterName);
                     break;
-            }
+            }//end switch
         } //ef
         #endregion
 
@@ -189,7 +190,7 @@ namespace MSBeverageRecordApp {
             public decimal cost { get; set; }
         }//end class
 
-    #region Tab alldata
+        #region Tab alldata
 
 
         #region sub combobox search
@@ -320,17 +321,15 @@ namespace MSBeverageRecordApp {
                 MSBeverageRecordApp.Items.Filter = GetFilter();
                 //HIDE PLACEHOLDER TEXT
                 txtSearchPlaceholder.Visibility = System.Windows.Visibility.Hidden;
-            
-        }//end if
 
+            }//end if
         }//end function
 
 
         private void Filterby_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            
+
             //DYNAMICALLY FILTERS DATAGRID USING SELECTION IN GET FILTER FUNCTION
             MSBeverageRecordApp.Items.Filter = GetFilter();
-            
 
         }//end function
 
@@ -348,13 +347,11 @@ namespace MSBeverageRecordApp {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL CATEGORIES
             if (filter.SelectedItem.ToString() != "All Categories") {
                 //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES CATEGORY NAME
-                return records.FindAll(record => record.categoryName == filter.SelectedItem);
+                return records.FindAll(record => record.categoryName == filter.SelectedItem.ToString());
             } else {
                 //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
             }//end if
-
-
 
         }//end function
 
@@ -366,7 +363,6 @@ namespace MSBeverageRecordApp {
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSCATEGORY FUNCTION
             MSBeverageRecordApp2.ItemsSource = FilterHotspotRecordsCategory(record, FilterCategory);
             catGrid.ItemsSource = MSBeverageRecordApp2.ItemsSource;
-
         }//end function
 
 
@@ -408,7 +404,7 @@ namespace MSBeverageRecordApp {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL MANUFACTURERS
             if (filter.SelectedItem.ToString() != "All Manufacturers") {
                 //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES COMPANY NAME
-                return records.FindAll(record => record.companyName == filter.SelectedItem);
+                return records.FindAll(record => record.companyName == filter.SelectedItem.ToString());
             } else {
                 //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
@@ -423,7 +419,8 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSMANUFACTURER FUNCTION
             MSBeverageRecordApp3.ItemsSource = FilterHotspotRecordsManufacturer(record, FilterManufacturer);
-            manuGrid.ItemsSource = MSBeverageRecordApp3.ItemsSource;
+
+             manuGrid.ItemsSource = MSBeverageRecordApp3.ItemsSource;
         }//end function
 
 
@@ -465,7 +462,7 @@ namespace MSBeverageRecordApp {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL LOCATIONS
             if (filter.SelectedItem.ToString() != "All Locations") {
                 //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES LOCATION NAME
-                return records.FindAll(record => record.locationName == filter.SelectedItem);
+                return records.FindAll(record => record.locationName == filter.SelectedItem.ToString());
             } else {
                 //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
@@ -480,7 +477,7 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSLOCATION FUNCTION
             MSBeverageRecordApp4.ItemsSource = FilterHotspotRecordsLocation(record, FilterLocation);
-            locGrid.ItemsSource = MSBeverageRecordApp4.ItemsSource;
+
         }//end function
 
 
@@ -501,12 +498,12 @@ namespace MSBeverageRecordApp {
                         //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
                     }//end if
-                    
-                    //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
-                    if (contains == false) {
-                        //ADD LOCATION NAME TO THE FILTER
-                        FilterLocation.Items.Add(list.Items[index].locationName);
-                    }//end if
+
+                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
+                if (contains == false) {
+                    //ADD LOCATION NAME TO THE FILTER
+                    FilterLocation.Items.Add(list.Items[index].locationName);
+                }//end if
             }//end for
 
         }//end function
@@ -581,9 +578,6 @@ namespace MSBeverageRecordApp {
 
 
         #endregion
-
-
-        //set string value for filter name to pass to print function
 
     }//end class
 }//end namespace
