@@ -378,7 +378,7 @@ namespace MSBeverageRecordApp {
         #endregion
 
         //UPDATE TO THE DATABASE
-        private void UpdateDataBase() {
+        private void UpdateDataBase(RootObject list) {
             //invalid column names 
             post = new PostRecordsData {
                 record_id = post.record_id,
@@ -392,8 +392,35 @@ namespace MSBeverageRecordApp {
                 sub_location = post.sub_location
             };
 
-            //HTTP CLIENT INSTANCE
-            var client = new HttpClient();
+
+            for (int itemIndex = 0; itemIndex < list.CategoryItems.Count; itemIndex++) {
+                //IF COMBOBOX SELECTED VALUE IS EQUAL TO CATEGORY NAME AT INDEX
+                if (cboCatName.SelectedValue == list.CategoryItems[itemIndex].categoryName) {
+                    //SAVE ID TO POST DATA FOR CATEGORY
+                    post.category = list.CategoryItems[itemIndex].id;
+                }//end if
+            }//end for 
+
+            //LOOP THROUGH LOCATION TABLE ITEMS 
+            for (int itemIndex = 0; itemIndex < list.LocationItems.Count; itemIndex++) {
+                //IF COMBOBOX SELECTED VALUE IS EQUAL TO LOCATION NAME AT INDEX
+                if (cboLocation.SelectedValue == list.LocationItems[itemIndex].locationName) {
+                    //SAVE ID TO POST DATA FOR LOCATION
+                    post.location = list.LocationItems[itemIndex].ID;
+                }//end if
+            }//end for
+
+            //LOOP THROUGH MANUFACTURER TABLE ITEMS
+            for (int itemIndex = 0; itemIndex < list.ManufacturerItems.Count; itemIndex++) {
+                //IF COMBOBOX SELECTED VALUE IS EQUAL TO MANUFACTURER NAME AT INDEX
+                if (cboManufacturer.SelectedValue == list.ManufacturerItems[itemIndex].companyName) {
+                    //SAVE ID TO POST DATA FOR MANUFACTURER
+                    post.manufacturer = list.ManufacturerItems[itemIndex].id;
+                }//end if
+            }
+
+                //HTTP CLIENT INSTANCE
+                var client = new HttpClient();
             //CONNECTION URL
             client.BaseAddress = new Uri("http://localhost:4001/api/records/modifyid");
             var json = JsonSerializer.Serialize(post);
@@ -454,19 +481,20 @@ namespace MSBeverageRecordApp {
 
 
             Records Reports = rep;
-
+            //CALL UPDATE FUNCTION WHEN USER SAVES
+          
             for (int i = 0; i < deserializeObject.Items.Count; i++) {
 
                 if (deserializeObject.Items[i].record_id == Reports.record_id) {
 
                     post.record_id = Reports.record_id;
-                    post.manufacturer = deserializeObject.ManufacturerItems[i].id;
-                    post.category = deserializeObject.CategoryItems[i].id;
+                    //post.manufacturer = deserializeObject.ManufacturerItems[i].id;
+                    //post.category = deserializeObject.CategoryItems[i].id;
                     post.model = txbModel.Text;
                     post.serial = txbSerial.Text;
                     post.purchase_date = DateTime.Parse(txbPurchaseDate.Text);
                     post.cost = decimal.Parse(txbCost.Text);
-                    post.location = deserializeObject.LocationItems[i].ID;
+                    //post.location = deserializeObject.LocationItems[i].ID;
                     post.sub_location = txbSubLocation.Text;
 
                     deserializeObject.Items[i].categoryName = cboCatName.Text;
@@ -479,34 +507,52 @@ namespace MSBeverageRecordApp {
                     deserializeObject.Items[i].sub_location = txbSubLocation.Text;
                 }
 
-                if (cboCatName.Text == deserializeObject.Items[i].categoryName) {
-                    for (int j = 0; j < deserializeObject.CategoryItems.Count; j++) {
-                        post.category = deserializeObject.CategoryItems[i].id;
-                        if(post.category == deserializeObject.CategoryItems[j].id) {
-                            break;
-                        }
-                    }
-                }
+                //doesn't work
+                //if (cboCatName.Text == deserializeObject.Items[i].categoryName) {
+                //    for (int j = 0; j < deserializeObject.CategoryItems.Count; j++) {
+                //        if (i > j) {
+                //            break;
+                //        }
+                //        post.category = deserializeObject.CategoryItems[i].id;
+                //        if(post.category == deserializeObject.CategoryItems[i].id) {
+                //            break;
+                //        }
+                //    }
+                //}
 
-                if (cboManufacturer.Text == deserializeObject.Items[i].companyName) {
-                    for (int j = 0; j < deserializeObject.ManufacturerItems.Count; j++) {
-                        if (post.manufacturer == deserializeObject.ManufacturerItems[j].id) {
-                            break;
-                        }
-                    }
-                }
+                //if (cboManufacturer.Text == deserializeObject.Items[i].companyName) {
 
-                if (cboLocation.Text == deserializeObject.Items[i].locationName) {
-                    for (int j = 0; j < deserializeObject.LocationItems.Count; j++) {
-                        if (post.location == deserializeObject.LocationItems[j].ID) {
-                            break;
-                        }
-                    }
-                }
+                //    for (int j = 0; j < deserializeObject.ManufacturerItems.Count; j++) {
+                //        if (i > j) {
+                //            break;
+                //        }
+                //        post.manufacturer = deserializeObject.ManufacturerItems[i].id;
+                //        if (post.manufacturer == deserializeObject.ManufacturerItems[i].id) {
+                //            break;
+                //        }
+                //    }
+                //}
+
+                //if (cboLocation.Text == deserializeObject.Items[i].locationName) {
+                //    for (int j = 0; j < deserializeObject.LocationItems.Count; j++) {
+                //        if (i > j) {
+                //            break;
+                //        }
+                //        post.location = deserializeObject.LocationItems[i].ID;
+                //        if (post.location == deserializeObject.LocationItems[i].ID) {
+                //            break;
+                //        }
+                //    }
+                //}
+
+
 
                 MSBeverageRecordGrid.ItemsSource = null;
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
+                
             }//end for loop
+             //CALL UPDATE FUNCTION WHEN USER SAVES
+            UpdateDataBase(deserializeObject);
 
 
 
@@ -521,9 +567,6 @@ namespace MSBeverageRecordApp {
 
             spLabels.Visibility = Visibility.Hidden;
             spText.Visibility = Visibility.Hidden;
-
-            //CALL UPDATE FUNCTION WHEN USER SAVES
-            UpdateDataBase();
         }//end event function
 
         private void btnCancel_Click(object sender, RoutedEventArgs e) {
