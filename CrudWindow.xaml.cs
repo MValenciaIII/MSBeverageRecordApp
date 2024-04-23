@@ -248,7 +248,7 @@ namespace MSBeverageRecordApp {
             CategoryAPI();
             LocationAPI();
             ManufacturerAPI();
-
+            comboboxSearch(deserializeObject);
             //CALL CREATE COMBO BOX FUNCTIONS
             //RecordIDTextBox(deserializeObject);
             //CreateCategoryComboBox(deserializeObject);
@@ -276,33 +276,33 @@ namespace MSBeverageRecordApp {
         private void btnSave_Click(object sender, RoutedEventArgs e) {
             #region fromfile
             //rows array --> csv
-            //var csv = new List<string[]>();
-            //var lines = System.IO.File.ReadAllLines(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv"); // csv file location
+            var csv = new List<string[]>();
+            var lines = System.IO.File.ReadAllLines(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv"); // csv file location
 
-            //// loop through all lines and add it in list as string
-            //foreach (string line in lines)
-            //    csv.Add(line.Split(','));
+            // loop through all lines and add it in list as string
+            foreach (string line in lines)
+                csv.Add(line.Split(','));
 
-            ////split string to get first line, header line as JSON properties
-            //var properties = lines[0].Split(',');
+            //split string to get first line, header line as JSON properties
+            var properties = lines[0].Split(',');
 
-            //var listObjResult = new List<Dictionary<string, string>>();
+            var listObjResult = new List<Dictionary<string, string>>();
 
-            ////loop all remaining lines, except header so starting it from 1
-            //// instead of 0
-            //var objResult = new Dictionary<string, string>();
-            //for (int i = 1; i < lines.Length; i++) {
-            //    if (i > 1) {
-            //        objResult.Clear();
-            //    }
-            //    for (int j = 0; j < properties.Length; j++) {
+            //loop all remaining lines, except header so starting it from 1
+            // instead of 0
+            var objResult = new Dictionary<string, string>();
+            for (int i = 1; i < lines.Length; i++) {
+                if (i > 1) {
+                    objResult.Clear();
+                }
+                for (int j = 0; j < properties.Length; j++) {
 
-            //        objResult.Add(properties[j], csv[i][j]);
-            //        //clear duplicates maybe?
-            //         listObjResult.Add(objResult);
-            //    }
-            //}
-            //consoleOutput.Text = listObjResult[0]["id"].ToString(); 
+                    objResult.Add(properties[j], csv[i][j]);
+                    //clear duplicates maybe?
+                    listObjResult.Add(objResult);
+                }
+            }
+            consoleOutput.Text = listObjResult[0]["id"].ToString();
             #endregion
 
             //FROM OBJECT
@@ -316,12 +316,7 @@ namespace MSBeverageRecordApp {
         private void savepdf_Click(object sender, RoutedEventArgs e) {
             System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
         }//ef
-        private void print_Click(object sender, RoutedEventArgs e) {
 
-            //PrintDG print = new PrintDG();
-
-            //print.printDG(deserializeObject ,MSBeverageRecordGrid, "Title");
-        }
         public void savecsv_Click(object sender, RoutedEventArgs e) {
 
             //SAVE TO CSV
@@ -436,7 +431,7 @@ namespace MSBeverageRecordApp {
             }
         }//end function
 
-        #region MODIFY RECORDS EVENT
+
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 
             CreateCategoryComboBox(deserializeObject);
@@ -507,43 +502,7 @@ namespace MSBeverageRecordApp {
                     deserializeObject.Items[i].sub_location = txbSubLocation.Text;
                 }
 
-                //doesn't work
-                //if (cboCatName.Text == deserializeObject.Items[i].categoryName) {
-                //    for (int j = 0; j < deserializeObject.CategoryItems.Count; j++) {
-                //        if (i > j) {
-                //            break;
-                //        }
-                //        post.category = deserializeObject.CategoryItems[i].id;
-                //        if(post.category == deserializeObject.CategoryItems[i].id) {
-                //            break;
-                //        }
-                //    }
-                //}
-
-                //if (cboManufacturer.Text == deserializeObject.Items[i].companyName) {
-
-                //    for (int j = 0; j < deserializeObject.ManufacturerItems.Count; j++) {
-                //        if (i > j) {
-                //            break;
-                //        }
-                //        post.manufacturer = deserializeObject.ManufacturerItems[i].id;
-                //        if (post.manufacturer == deserializeObject.ManufacturerItems[i].id) {
-                //            break;
-                //        }
-                //    }
-                //}
-
-                //if (cboLocation.Text == deserializeObject.Items[i].locationName) {
-                //    for (int j = 0; j < deserializeObject.LocationItems.Count; j++) {
-                //        if (i > j) {
-                //            break;
-                //        }
-                //        post.location = deserializeObject.LocationItems[i].ID;
-                //        if (post.location == deserializeObject.LocationItems[i].ID) {
-                //            break;
-                //        }
-                //    }
-                //}
+              
 
 
 
@@ -581,166 +540,8 @@ namespace MSBeverageRecordApp {
             spLabels.Visibility = Visibility.Hidden;
             spText.Visibility = Visibility.Hidden;
         }//end function
-        #endregion
-
-        //#region API PULL FROM DATABASE
-        //public void Tables() {
-
-        //    //SETTING UP NEW INSTANCE OF A TYPE OF DATA
-        //    using HttpClient client = new();
-        //    //GETTING QUERY API LINK FOR OBJECT DATA 
-        //    client.BaseAddress = new Uri("http://localhost:4001/api/category");
-
-        //    //ADD AN "Accept" HEADER FOR JSON FORMAT.
-        //    client.DefaultRequestHeaders.Accept.Add(
-        //       new MediaTypeWithQualityHeaderValue("application/json"));
-        //    //THIS IS VARIABLE TO GET OBJECT DATA FROM API
-
-        //    var response = client.GetAsync(client.BaseAddress).Result;
-
-        //    //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
-        //    if (response.IsSuccessStatusCode) {
-        //        ////CONVERTING OBJECT "response" variable DATA TO STRING 
-        //        string dataobjects = response.Content.ReadAsStringAsync().Result;
-
-        //        //NEED ACCESS GLOBALLY TO 
-        //        root.Items = JsonSerializer.Deserialize<List<Category>>(dataobjects);
-        //        CreateCategoryFilterItems(root);
-        //    }//end if statusOK
-        //}//end Tables function
 
 
-        //public void Locations() {
-        //    //SETTING UP NEW instance of a type of data
-        //    using HttpClient client = new();
-        //    //GETTING QUERY API LINK FOR OBJECT DATA 
-        //    client.BaseAddress = new Uri("http://localhost:4001/api/location");
-
-        //    //ADD AN "Accept" HEADER FOR JSON FORMAT.
-        //    client.DefaultRequestHeaders.Accept.Add(
-        //       new MediaTypeWithQualityHeaderValue("application/json"));
-        //    //THIS IS VARIABLE TO GET OBJECT DATA FROM API
-
-        //    var response = client.GetAsync(client.BaseAddress).Result;
-
-        //    //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
-        //    if (response.IsSuccessStatusCode) {
-        //        ////CONVERTING OBJECT "response" variable DATA TO STRING 
-        //        string dataobjects = response.Content.ReadAsStringAsync().Result;
-
-        //        //NEED ACCESS GLOBALLY TO 
-        //        rootLoc.Items = JsonSerializer.Deserialize<List<Location>>(dataobjects);
-        //        CreateLocationFilterItems(rootLoc);
-        //    }//end if statusOK
-        //}//end Locations function
-
-
-        //public void Companies() {
-        //    //SETTING UP NEW instance of a type of data
-        //    using HttpClient client = new();
-        //    //GETTING QUERY API LINK FOR OBJECT DATA 
-        //    client.BaseAddress = new Uri("http://localhost:4001/api/manufacturer");
-
-        //    //ADD AN "Accept" HEADER FOR JSON FORMAT.
-        //    client.DefaultRequestHeaders.Accept.Add(
-        //       new MediaTypeWithQualityHeaderValue("application/json"));
-        //    //THIS IS VARIABLE TO GET OBJECT DATA FROM API
-
-        //    var response = client.GetAsync(client.BaseAddress).Result;
-
-        //    //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
-        //    if (response.IsSuccessStatusCode) {
-        //        ////CONVERTING OBJECT "response" variable DATA TO STRING 
-        //        string dataobjects = response.Content.ReadAsStringAsync().Result;
-
-        //        //NEED ACCESS GLOBALLY TO 
-        //        rootComp.Items = JsonSerializer.Deserialize<List<Manufacture>>(dataobjects);
-        //        CreateCompanyFilterItems(rootComp);
-        //    }
-        //}
-        //#endregion
-
-        //#region THE COMBOBOX FILL UP
-        //private void CreateLocationFilterItems(RootLoc list) {
-
-        //    bool contains = false;
-
-        //    txbLocation.Items.Add("none");
-
-        //    for (int index = 0; index < list.Items.Count; index++) {
-
-        //        for (int itemIndex = 0; itemIndex < txbLocation.Items.Count; itemIndex++)
-
-        //            if (txbLocation.Items[itemIndex].ToString() == list.Items[index].locationName) {
-
-        //                contains = true;
-
-        //            }//end if
-
-        //        if (contains == false) {
-
-        //            txbLocation.Items.Add(list.Items[index].locationName);
-
-        //        }//end if
-
-        //    }//end for loop
-        //}//end function
-
-
-        //private void CreateCompanyFilterItems(RootComp list) {
-
-        //    bool contains = false;
-
-        //    txbCompName.Items.Add("none");
-
-        //    for (int index = 0; index < list.Items.Count; index++) {
-
-        //        for (int itemIndex = 0; itemIndex < txbCompName.Items.Count; itemIndex++)
-
-        //            if (txbCompName.Items[itemIndex].ToString() == list.Items[index].companyName) {
-
-        //                contains = true;
-
-        //            }//end if
-
-        //        if (contains == false) {
-
-        //            txbCompName.Items.Add(list.Items[index].companyName);
-
-        //        }//end if
-
-        //    }//end for loop
-        //}//end function
-
-
-        //private void CreateCategoryFilterItems(Root list) {
-
-        //    bool contains = false;
-
-
-        //    txbCatName.Items.Add("none");
-
-        //    for (int index = 0; index < list.Items.Count; index++) {
-
-        //        for (int itemIndex = 0; itemIndex < txbCatName.Items.Count; itemIndex++)
-
-        //            if (txbCatName.Items[itemIndex].ToString() == list.Items[index].categoryName) {
-
-        //                contains = true;
-
-        //            }//end if
-
-        //        if (contains == false) {
-
-        //            txbCatName.Items.Add(list.Items[index].categoryName);
-
-        //        }//end if
-
-        //    }//end for loop
-        //}//end function
-
-
-        //#endregion
         private void RecordsAPI() {
 
             //SETTING UP NEW INSTANCE OF A TYPE OF DATA
@@ -926,73 +727,163 @@ namespace MSBeverageRecordApp {
 
 
 
-        //private void PostNewRecords(RootObject list) {
-        //    //RETRIEVE ALL INPUTS FROM CREATE RECORD PAGE
-        //    var postData = new PostRecordsData {
-        //        record_id = Convert.ToInt32(recordNumber.Text),
-        //        model = txtModel.Text.ToUpper(),
-        //        serial = txtSerialNumber.Text.ToUpper(),
-        //        purchase_date = PurchaseDate.SelectedDate.Value,
-        //        cost = decimal.Parse(txtCost.Text),
-        //        sub_location = txtSubLocation.Text.ToUpper()
-        //    };//end var postData
 
-        //    //LOOP THROUGH CATEGORY TABLE ITEMS
-        //    for (int itemIndex = 0; itemIndex < list.CategoryItems.Count; itemIndex++) {
-        //        //IF COMBOBOX SELECTED VALUE IS EQUAL TO CATEGORY NAME AT INDEX
-        //        if (cboCategory.SelectedValue == list.CategoryItems[itemIndex].categoryName) {
-        //            //SAVE ID TO POST DATA FOR CATEGORY
-        //            postData.category = list.CategoryItems[itemIndex].id;
-        //        }//end if
-        //    }//end for 
-
-        //    //LOOP THROUGH LOCATION TABLE ITEMS 
-        //    for (int itemIndex = 0; itemIndex < list.LocationItems.Count; itemIndex++) {
-        //        //IF COMBOBOX SELECTED VALUE IS EQUAL TO LOCATION NAME AT INDEX
-        //        if (cboLocation.SelectedValue == list.LocationItems[itemIndex].locationName) {
-        //            //SAVE ID TO POST DATA FOR LOCATION
-        //            postData.location = list.LocationItems[itemIndex].ID;
-        //        }//end if
-        //    }//end for
-
-        //    //LOOP THROUGH MANUFACTURER TABLE ITEMS
-        //    for (int itemIndex = 0; itemIndex < list.ManufacturerItems.Count; itemIndex++) {
-        //        //IF COMBOBOX SELECTED VALUE IS EQUAL TO MANUFACTURER NAME AT INDEX
-        //        if (cboManufacturer.SelectedValue == list.ManufacturerItems[itemIndex].companyName) {
-        //            //SAVE ID TO POST DATA FOR MANUFACTURER
-        //            postData.manufacturer = list.ManufacturerItems[itemIndex].id;
-        //        }//end if
-        //    }//end for
-
-        //    //CREATING A NEW HTTPCLIENT OBJECT
-        //    var client = new HttpClient();
-
-        //    //SET BASE ADDRESS OF API
-        //    client.BaseAddress = new Uri("http://localhost:4001/api/records/recordscreate");
-
-        //    //SERIALIZE POSTDATA OBJECT TO JSON STRING
-        //    var json = System.Text.Json.JsonSerializer.Serialize(postData);
-        //    var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        //    //MAKE POST REQUEST
-        //    var response = client.PostAsync(" ", content).Result;
-
-        //    //CHECK STATUS CODE TO SEE IF REQUEST WAS SUCCESSFUL
-        //    if (response.IsSuccessStatusCode) {
-        //        var responseContent = response.Content.ReadAsStringAsync().Result;
-        //        var options = new JsonSerializerOptions {
-        //            PropertyNameCaseInsensitive = true
-        //        };//end var options
-
-        //        //PROMPT USER THAT A NEW RECORD WAS CREATED
-        //        MessageBox.Show("New Record Created. Please add another record, or return to main menu.");
-
-        //    }//end if
-
-        //}//end function
+        #region sub combobox search
 
 
-        //refresh/save
+        private void comboboxSearch(RootObject deserializedObjectList) {
+            //SET FILTERBY ITEM SOURCE TO DESERIALIZED ITEMS LIST
+            Filterby.ItemsSource = deserializedObjectList.Items;
+
+            //INITIALIZE FILTERBY WITH ARRAY OF ITEMS
+            Filterby.ItemsSource = new string[] { "All", "RecordID", "Category", "Manufacturer", "Model", "SerialNumber", "Location" };
+        }//end comboBoxSearch
+
+
+        public Predicate<object> GetFilter() {
+
+            //CHECKS WHAT IS SELECTED ON FILTERBY 
+            switch (Filterby.SelectedItem as string) {
+
+                //IF RECORD ID IS SELECTED
+                case "RecordID":
+                    //RETURN RECORD ID FILTER
+                    return RecordIDFilter;
+
+                //IF CATEGORY IS SELECTED
+                case "Category":
+                    //RETURN CATEGORY FILTER
+                    return CategoryFilter;
+
+                //IF MANUFACTURER IS SELECTED
+                case "Manufacturer":
+                    //RETURN MANUFACTURER FILTER
+                    return ManufacturerFilter;
+
+                //IF MODEL IS SELECTED
+                case "Model":
+                    //RETURN MODEL FILTER
+                    return ModelFilter;
+
+                //IF SERIAL NUMBER IS SELECTED
+                case "SerialNumber":
+                    //RETURN SERIAL NUMBER FILTER
+                    return SerialNumberFilter;
+
+                //IF LOCATION IS SELECTED
+                case "Location":
+                    //RETURN LOCATION FILTER
+                    return LocationFilter;
+
+                //IF All IS SELECTED
+                case "All":
+                    //RETURN RECORD ID FILTER
+                    return NoFilter;
+
+            }//end switch
+
+            //IF NONE OF THE ABOVE ARE SELECTED, RETURN RECORDIDFILTER
+            return RecordIDFilter;
+
+        }//end GetFilter
+
+        private bool NoFilter(object obj) {
+            //SET RECORDS CLASS TO FILTER OBJ
+            var Filterobj = obj as Records;
+
+            //CHECK IF RECORD ID IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT RECORD ID.
+            return Filterobj.record_id.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.categoryName.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.model.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.companyName.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.serial.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.locationName.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.cost.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.sub_location.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.purchase_date.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }//end function
+
+
+        private bool RecordIDFilter(object obj) {
+            //SET RECORDS CLASS TO FILTER OBJ
+            var Filterobj = obj as Records;
+
+            //CHECK IF RECORD ID IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT RECORD ID.
+            return Filterobj.record_id.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }//end function
+
+
+        private bool CategoryFilter(object obj) {
+            //SET RECORDS CLASS TO FILTER OBJ
+            var Filterobj = obj as Records;
+
+            //CHECK IF CATEGORY NAME IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT CATEGORY NAME.
+            return Filterobj.categoryName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }//end function
+
+
+        private bool ManufacturerFilter(object obj) {
+            //SET RECORDS CLASS TO FILTER OBJ
+            var Filterobj = obj as Records;
+
+            //CHECK IF MANUFACTURER NAME IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT MANUFACTURER.
+            return Filterobj.companyName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }//end function
+
+
+        private bool ModelFilter(object obj) {
+            //SET RECORDS CLASS TO FILTER OBJ
+            var Filterobj = obj as Records;
+
+            //CHECK IF MODEL IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT MODEL.
+            return Filterobj.model.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }//end function
+
+
+        private bool SerialNumberFilter(object obj) {
+            //SET RECORDS CLASS TO FILTER OBJ
+            var Filterobj = obj as Records;
+
+            //CHECK IF SERIAL NUMBER IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT SERIAL NUMBER.
+            return Filterobj.serial.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }//end function
+
+
+        private bool LocationFilter(object obj) {
+            //SET RECORDS CLASS TO FILTER OBJ
+            var Filterobj = obj as Records;
+
+            //CHECK IF LOCATION NAME IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT LOCATION.
+            return Filterobj.locationName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }//end function
+
+
+        private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+
+            //CHECK IF TEXT BOX IS EMPTY
+            if (FilterTextBox.Text == "") {
+                //IF NO FILTER IS SELECTED
+                MSBeverageRecordGrid.Items.Filter = null;
+                //SHOW PLACEHOLDER TEXT
+                txtSearchPlaceholder.Visibility = System.Windows.Visibility.Visible;
+            } else {
+                //IF A FILTER IS SELECTED
+                MSBeverageRecordGrid.Items.Filter = GetFilter();
+                //HIDE PLACEHOLDER TEXT
+                txtSearchPlaceholder.Visibility = System.Windows.Visibility.Hidden;
+
+            }//end if
+        }//end function
+
+
+        private void Filterby_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            //DYNAMICALLY FILTERS DATAGRID USING SELECTION IN GET FILTER FUNCTION
+            MSBeverageRecordGrid.Items.Filter = GetFilter();
+
+        }//end function
+
+
+        #endregion sub combobox search
 
     }//end class
 }//end namespace

@@ -12,6 +12,11 @@ namespace MSBeverageRecordApp {
     /// </summary>
 
 
+    //todo
+    //move search bar to crud window
+    //move save functions here
+    //cost reports only show category costs?
+
     public partial class Reports : Page {
         //GLOBAL VARIABLE
         RootObject deserializeObject = new RootObject();
@@ -80,19 +85,21 @@ namespace MSBeverageRecordApp {
 
                 //LOCATION
                 MSBeverageRecordApp4.ItemsSource = deserializeObject.Items;
-                MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
                 locObj = deserializeObject;
                 locGrid.ItemsSource = locObj.Items;
 
-                //TOTAL VALUE
-                //MSBeverageRecordApp5.ItemsSource = MSBeverageRecordApp.ItemsSource;
+                //COST
+                MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
                 totalObj = deserializeObject;
-                totalGrid.ItemsSource = manuObj.Items;
+                totalGrid.ItemsSource = CreateCostReport(totalObj);
+                totalObj.CostItems = (List<TotalCostData>)totalGrid.ItemsSource;
+                //TOTAL VALUE
                 //CALL COMBO BOX FUNCTIONS
+                
                 CreateCategoryFilterItems(deserializeObject);
                 CreateManufacturerFilterItems(deserializeObject);
                 CreateLocationFilterItems(deserializeObject);
-                comboboxSearch(deserializeObject);
+
 
                 #region GridRowCustom
                 MSBeverageRecordApp.CanUserAddRows = false;
@@ -108,29 +115,6 @@ namespace MSBeverageRecordApp {
         #region print calls
         //SET FILTER NAME
         //SETS WHICH GRID TO PULL FROM
-        private void xtabitems_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (xalldata.IsSelected) {
-                filterName = "allData";
-
-            }
-            if (xcategory.IsSelected) {
-                filterName = "category";
-
-
-            }
-            if (xmanufacturer.IsSelected) {
-                filterName = "manufacturer";
-
-            }
-            if (xlocation.IsSelected) {
-                filterName = "location";
-
-            }
-            if (xtotalvalue.IsSelected) {
-
-                filterName = "totalValue";
-            }
-        }//end function
 
 
         //TODO
@@ -146,6 +130,7 @@ namespace MSBeverageRecordApp {
 
             switch (filterName) {
                 case "allData":
+                    
                     title = $"report    {DateTime.UtcNow.ToString("d")}";
                     p.printDG(allObj, MSBeverageRecordApp, title, filterName);
                     break;
@@ -198,146 +183,146 @@ namespace MSBeverageRecordApp {
 
         #region Tab alldata
 
-
+        //moved to crud window
         #region sub combobox search
 
 
-        private void comboboxSearch(RootObject deserializedObjectList) {
-            //SET FILTERBY ITEM SOURCE TO DESERIALIZED ITEMS LIST
-            Filterby.ItemsSource = deserializedObjectList.Items;
+        //private void comboboxSearch(RootObject deserializedObjectList) {
+        //    //SET FILTERBY ITEM SOURCE TO DESERIALIZED ITEMS LIST
+        //    Filterby.ItemsSource = deserializedObjectList.Items;
 
-            //INITIALIZE FILTERBY WITH ARRAY OF ITEMS
-            Filterby.ItemsSource = new string[] { "RecordID", "Category", "Manufacturer", "Model", "SerialNumber", "Location" };
-        }//end comboBoxSearch
-
-
-        public Predicate<object> GetFilter() {
-
-            //CHECKS WHAT IS SELECTED ON FILTERBY 
-            switch (Filterby.SelectedItem as string) {
-
-                //IF RECORD ID IS SELECTED
-                case "RecordID":
-                    //RETURN RECORD ID FILTER
-                    return RecordIDFilter;
-
-                //IF CATEGORY IS SELECTED
-                case "Category":
-                    //RETURN CATEGORY FILTER
-                    return CategoryFilter;
-
-                //IF MANUFACTURER IS SELECTED
-                case "Manufacturer":
-                    //RETURN MANUFACTURER FILTER
-                    return ManufacturerFilter;
-
-                //IF MODEL IS SELECTED
-                case "Model":
-                    //RETURN MODEL FILTER
-                    return ModelFilter;
-
-                //IF SERIAL NUMBER IS SELECTED
-                case "SerialNumber":
-                    //RETURN SERIAL NUMBER FILTER
-                    return SerialNumberFilter;
-
-                //IF LOCATION IS SELECTED
-                case "Location":
-                    //RETURN LOCATION FILTER
-                    return LocationFilter;
-
-            }//end switch
-
-            //IF NONE OF THE ABOVE ARE SELECTED, RETURN RECORDIDFILTER
-            return RecordIDFilter;
-
-        }//end GetFilter
+        //    //INITIALIZE FILTERBY WITH ARRAY OF ITEMS
+        //    Filterby.ItemsSource = new string[] { "RecordID", "Category", "Manufacturer", "Model", "SerialNumber", "Location" };
+        //}//end comboBoxSearch
 
 
-        private bool RecordIDFilter(object obj) {
-            //SET RECORDS CLASS TO FILTER OBJ
-            var Filterobj = obj as Records;
+        //public Predicate<object> GetFilter() {
 
-            //CHECK IF RECORD ID IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT RECORD ID.
-            return Filterobj.record_id.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+        //    //CHECKS WHAT IS SELECTED ON FILTERBY 
+        //    switch (Filterby.SelectedItem as string) {
 
-        }//end function
+        //        //IF RECORD ID IS SELECTED
+        //        case "RecordID":
+        //            //RETURN RECORD ID FILTER
+        //            return RecordIDFilter;
 
+        //        //IF CATEGORY IS SELECTED
+        //        case "Category":
+        //            //RETURN CATEGORY FILTER
+        //            return CategoryFilter;
 
-        private bool CategoryFilter(object obj) {
-            //SET RECORDS CLASS TO FILTER OBJ
-            var Filterobj = obj as Records;
+        //        //IF MANUFACTURER IS SELECTED
+        //        case "Manufacturer":
+        //            //RETURN MANUFACTURER FILTER
+        //            return ManufacturerFilter;
 
-            //CHECK IF CATEGORY NAME IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT CATEGORY NAME.
-            return Filterobj.categoryName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+        //        //IF MODEL IS SELECTED
+        //        case "Model":
+        //            //RETURN MODEL FILTER
+        //            return ModelFilter;
 
-        }//end function
+        //        //IF SERIAL NUMBER IS SELECTED
+        //        case "SerialNumber":
+        //            //RETURN SERIAL NUMBER FILTER
+        //            return SerialNumberFilter;
 
+        //        //IF LOCATION IS SELECTED
+        //        case "Location":
+        //            //RETURN LOCATION FILTER
+        //            return LocationFilter;
 
-        private bool ManufacturerFilter(object obj) {
-            //SET RECORDS CLASS TO FILTER OBJ
-            var Filterobj = obj as Records;
+        //    }//end switch
 
-            //CHECK IF MANUFACTURER NAME IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT MANUFACTURER.
-            return Filterobj.companyName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+        //    //IF NONE OF THE ABOVE ARE SELECTED, RETURN RECORDIDFILTER
+        //    return RecordIDFilter;
 
-        }//end function
-
-
-        private bool ModelFilter(object obj) {
-            //SET RECORDS CLASS TO FILTER OBJ
-            var Filterobj = obj as Records;
-
-            //CHECK IF MODEL IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT MODEL.
-            return Filterobj.model.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
-
-        }//end function
-
-
-        private bool SerialNumberFilter(object obj) {
-            //SET RECORDS CLASS TO FILTER OBJ
-            var Filterobj = obj as Records;
-
-            //CHECK IF SERIAL NUMBER IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT SERIAL NUMBER.
-            return Filterobj.serial.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
-
-        }//end function
+        //}//end GetFilter
 
 
-        private bool LocationFilter(object obj) {
-            //SET RECORDS CLASS TO FILTER OBJ
-            var Filterobj = obj as Records;
+        //private bool RecordIDFilter(object obj) {
+        //    //SET RECORDS CLASS TO FILTER OBJ
+        //    var Filterobj = obj as Records;
 
-            //CHECK IF LOCATION NAME IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT LOCATION.
-            return Filterobj.locationName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+        //    //CHECK IF RECORD ID IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT RECORD ID.
+        //    return Filterobj.record_id.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
-        }//end function
-
-
-        private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) {
-
-            //CHECK IF TEXT BOX IS EMPTY
-            if (FilterTextBox.Text == "") {
-                //IF NO FILTER IS SELECTED
-                MSBeverageRecordApp.Items.Filter = null;
-                //SHOW PLACEHOLDER TEXT
-                txtSearchPlaceholder.Visibility = System.Windows.Visibility.Visible;
-            } else {
-                //IF A FILTER IS SELECTED
-                MSBeverageRecordApp.Items.Filter = GetFilter();
-                //HIDE PLACEHOLDER TEXT
-                txtSearchPlaceholder.Visibility = System.Windows.Visibility.Hidden;
-
-            }//end if
-        }//end function
+        //}//end function
 
 
-        private void Filterby_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        //private bool CategoryFilter(object obj) {
+        //    //SET RECORDS CLASS TO FILTER OBJ
+        //    var Filterobj = obj as Records;
 
-            //DYNAMICALLY FILTERS DATAGRID USING SELECTION IN GET FILTER FUNCTION
-            MSBeverageRecordApp.Items.Filter = GetFilter();
+        //    //CHECK IF CATEGORY NAME IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT CATEGORY NAME.
+        //    return Filterobj.categoryName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
 
-        }//end function
+        //}//end function
+
+
+        //private bool ManufacturerFilter(object obj) {
+        //    //SET RECORDS CLASS TO FILTER OBJ
+        //    var Filterobj = obj as Records;
+
+        //    //CHECK IF MANUFACTURER NAME IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT MANUFACTURER.
+        //    return Filterobj.companyName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        //}//end function
+
+
+        //private bool ModelFilter(object obj) {
+        //    //SET RECORDS CLASS TO FILTER OBJ
+        //    var Filterobj = obj as Records;
+
+        //    //CHECK IF MODEL IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT MODEL.
+        //    return Filterobj.model.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        //}//end function
+
+
+        //private bool SerialNumberFilter(object obj) {
+        //    //SET RECORDS CLASS TO FILTER OBJ
+        //    var Filterobj = obj as Records;
+
+        //    //CHECK IF SERIAL NUMBER IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT SERIAL NUMBER.
+        //    return Filterobj.serial.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        //}//end function
+
+
+        //private bool LocationFilter(object obj) {
+        //    //SET RECORDS CLASS TO FILTER OBJ
+        //    var Filterobj = obj as Records;
+
+        //    //CHECK IF LOCATION NAME IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT LOCATION.
+        //    return Filterobj.locationName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        //}//end function
+
+
+        //private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+
+        //    //CHECK IF TEXT BOX IS EMPTY
+        //    if (FilterTextBox.Text == "") {
+        //        //IF NO FILTER IS SELECTED
+        //        MSBeverageRecordApp.Items.Filter = null;
+        //        //SHOW PLACEHOLDER TEXT
+        //        txtSearchPlaceholder.Visibility = System.Windows.Visibility.Visible;
+        //    } else {
+        //        //IF A FILTER IS SELECTED
+        //        MSBeverageRecordApp.Items.Filter = GetFilter();
+        //        //HIDE PLACEHOLDER TEXT
+        //        txtSearchPlaceholder.Visibility = System.Windows.Visibility.Hidden;
+
+        //    }//end if
+        //}//end function
+
+
+        //private void Filterby_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+        //    //DYNAMICALLY FILTERS DATAGRID USING SELECTION IN GET FILTER FUNCTION
+        //    MSBeverageRecordApp.Items.Filter = GetFilter();
+
+        //}//end function
 
 
         #endregion sub combobox search
@@ -369,6 +354,7 @@ namespace MSBeverageRecordApp {
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSCATEGORY FUNCTION
             MSBeverageRecordApp2.ItemsSource = FilterHotspotRecordsCategory(record, FilterCategory);
             catGrid.ItemsSource = MSBeverageRecordApp2.ItemsSource;
+            catObj.Items = (List<Records>)catGrid.ItemsSource;
         }//end function
 
 
@@ -425,8 +411,8 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSMANUFACTURER FUNCTION
             MSBeverageRecordApp3.ItemsSource = FilterHotspotRecordsManufacturer(record, FilterManufacturer);
-
-             manuGrid.ItemsSource = MSBeverageRecordApp3.ItemsSource;
+            manuGrid.ItemsSource = MSBeverageRecordApp3.ItemsSource;
+            manuObj.Items = (List<Records>)manuGrid.ItemsSource;
         }//end function
 
 
@@ -464,6 +450,8 @@ namespace MSBeverageRecordApp {
         #region Tab location
 
 
+
+
         public static List<Records> FilterHotspotRecordsLocation(List<Records> records, ComboBox filter) {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL LOCATIONS
             if (filter.SelectedItem.ToString() != "All Locations") {
@@ -483,7 +471,8 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSLOCATION FUNCTION
             MSBeverageRecordApp4.ItemsSource = FilterHotspotRecordsLocation(record, FilterLocation);
-
+            locGrid.ItemsSource = MSBeverageRecordApp4.ItemsSource;
+            locObj.Items = (List<Records>)locGrid.ItemsSource;
         }//end function
 
 
@@ -548,16 +537,12 @@ namespace MSBeverageRecordApp {
                     data.Add(new TotalCostData {
                         categoryName = list.Items[index].categoryName,
                         cost = 0
+                        
                     });
                 }//end if
-
             }//end for
 
-
-
             //CREATE DATA TO HOLD TOTAL COST OF ALL CATEGORIES
-
-
 
             //LOOP THROUGH TO ADD COSTS
             decimal totalCosts = 0;
@@ -569,7 +554,6 @@ namespace MSBeverageRecordApp {
                         data[itemIndex].cost += list.Items[index].cost;
                     }//end if
 
-
                 }//end for
                 totalCosts += list.Items[index].cost;
 
@@ -578,7 +562,7 @@ namespace MSBeverageRecordApp {
                 categoryName = "Total Cost",
                 cost = totalCosts
             });
-
+            
             return data;
 
         }//end function
@@ -589,7 +573,7 @@ namespace MSBeverageRecordApp {
         #region tabcontrol testing
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (xalldata.IsSelected) {
-                MSBeverageRecordApp.Items.Filter = GetFilter();
+                //MSBeverageRecordApp.Items.Filter = GetFilter();
             }
             if (xcategory.IsSelected) {
                 MSBeverageRecordApp.Items.Filter = null;
@@ -606,8 +590,73 @@ namespace MSBeverageRecordApp {
             if (xtotalvalue.IsSelected) {
                 MSBeverageRecordApp.Items.Filter = null;
             }
+
+
+            if (xalldata.IsSelected) {
+                filterName = "allData";
+
+            }
+            if (xcategory.IsSelected) {
+                filterName = "category";
+
+
+            }
+            if (xmanufacturer.IsSelected) {
+                filterName = "manufacturer";
+
+            }
+            if (xlocation.IsSelected) {
+                filterName = "location";
+
+            }
+            if (xtotalvalue.IsSelected) {
+
+                filterName = "totalValue";
+            }
+
+
         }//end function
 
-                #endregion tabcontrol testing
-            }//end class
+        #endregion tabcontrol testing
+
+        private void muiSave_Click(object sender, RoutedEventArgs e) {
+            #region fromfile
+            //rows array --> csv
+            var csv = new List<string[]>();
+            var lines = System.IO.File.ReadAllLines(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv"); // csv file location
+
+            // loop through all lines and add it in list as string
+            foreach (string line in lines)
+                csv.Add(line.Split(','));
+
+            //split string to get first line, header line as JSON properties
+            var properties = lines[0].Split(',');
+
+            var listObjResult = new List<Dictionary<string, string>>();
+
+            //loop all remaining lines, except header so starting it from 1
+            // instead of 0
+            var objResult = new Dictionary<string, string>();
+            for (int i = 1; i < lines.Length; i++) {
+                if (i > 1) {
+                    objResult.Clear();
+                }
+                for (int j = 0; j < properties.Length; j++) {
+
+                    objResult.Add(properties[j], csv[i][j]);
+                    //clear duplicates maybe?
+                    listObjResult.Add(objResult);
+                }
+            }
+            //consoleOutput.Text = listObjResult[0]["id"].ToString();
+            #endregion
+
+            //FROM OBJECT
+            
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(deserializeObject.Items);
+            System.IO.File.AppendAllText(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test2.txt", json);
+
+        }//
+    }//end class
 }//end namespace
+

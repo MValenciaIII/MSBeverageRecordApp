@@ -11,10 +11,13 @@ using static MSBeverageRecordApp.Reports;
 using System.Linq.Expressions;
 
 public class PrintDG {
+    
     //globals
     TableRowGroup tableRowGroup = new TableRowGroup();
     decimal totalCost = 0.0m;
     public void printDG(RootObject obj, DataGrid dataGrid, string title, string filter) {
+
+
 
         PrintDialog printDialog = new PrintDialog();
         
@@ -325,10 +328,10 @@ public class PrintDG {
         }
     }//ef
     private void AddTotalValueRows(RootObject obj, TableRow r, int cellNumber) {
-        for (int j = 0; j < obj.Items.Count; j++) {
+        for (int j = 0; j < obj.CostItems.Count; j++) {
             r = new TableRow();
             cellNumber = 0;
-            totalCost += obj.Items[j].cost;
+            totalCost += obj.CostItems[j].cost;
 
             //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].record_id.ToString()))));
             //r.Cells[cellNumber].ColumnSpan = 4;
@@ -372,7 +375,7 @@ public class PrintDG {
             //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
             //cellNumber++;
 
-            r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].cost.ToString()))));
+            r.Cells.Add(new TableCell(new Paragraph(new Run(obj.CostItems[j].cost.ToString()))));
             r.Cells[cellNumber].ColumnSpan = 4;
             r.Cells[cellNumber].Padding = new Thickness(4);
             r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;

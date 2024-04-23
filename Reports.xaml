@@ -14,7 +14,7 @@
                 <MenuItem Header="_File">
                     <MenuItem x:Name="muiPrint" Click="muiPrint_Click" Header="_Print"/>
                     
-                    <MenuItem x:Name="muiSave" Header="_Save"/>
+                    <MenuItem x:Name="muiSave" Header="_Save" Click="muiSave_Click"/>
                 </MenuItem>
 
             </Menu>
@@ -23,9 +23,8 @@
 
                 <TabItem x:Name="xalldata" Header="All Data">
                     <Grid>
-                        <ComboBox x:Name="Filterby" SelectionChanged="Filterby_SelectionChanged" Margin="453,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="135" Height="30" MaxDropDownHeight="304" VerticalContentAlignment="Center" IsEditable="True" IsReadOnly="True" Focusable="False" Text="Select Search By"/>
-                        <TextBox x:Name="FilterTextBox" TextChanged="FilterTextBox_TextChanged" Margin="589,5,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="107" Height="30" VerticalContentAlignment="Center" ></TextBox>
-                        <Label x:Name="txtSearchPlaceholder" Content="Search..." Background="Transparent" Opacity="0.5" IsHitTestVisible="False" Margin="594,8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="54"/>
+
+                      
 
                         <DataGrid x:Name="MSBeverageRecordApp" Margin="0,40,0,0" RenderTransformOrigin="1.166,2.071" AutoGenerateColumns="false">
                             <DataGrid.Columns>
