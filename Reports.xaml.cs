@@ -13,9 +13,8 @@ namespace MSBeverageRecordApp {
 
 
     //todo
-    //move search bar to crud window
-    //move save functions here
-    //cost reports only show category costs?
+    //write filter case function in the SaveReport class
+    //clean & comment & test
 
     public partial class Reports : Page {
         //GLOBAL VARIABLE
@@ -75,6 +74,7 @@ namespace MSBeverageRecordApp {
 
                 //CATEGORY
                 MSBeverageRecordApp2.ItemsSource = deserializeObject.Items;
+
                 catObj = deserializeObject;
                 catGrid.ItemsSource = catObj.Items;
 
@@ -126,6 +126,7 @@ namespace MSBeverageRecordApp {
         private void muiPrint_Click(object sender, RoutedEventArgs e) {
 
             //"PrintDG" CLASS IS RESPONSIBLE FOR THE ACTUAL PRINTING PROCESS
+
             PrintDG p = new PrintDG();
 
             switch (filterName) {
@@ -153,6 +154,89 @@ namespace MSBeverageRecordApp {
                     break;
             }//end switch
         } //end function
+        #endregion
+
+
+        #region save calls
+
+        private void muiSavePDF_Click(object sender, RoutedEventArgs e) {
+
+
+            SaveReport s = new SaveReport();
+
+            //call current report filter
+            switch (filterName) {
+                case "allData":
+                    
+                    title = $"report    {DateTime.UtcNow.ToString("d")}";
+                    s.ExportToPdf(allObj,MSBeverageRecordApp, title, filterName);
+                    //p.printDG(allObj, MSBeverageRecordApp, title, filterName);
+                    break;
+                case "category":
+                    title = $"category report    {DateTime.UtcNow.ToString("d")}";
+                    s.ExportToPdf(catObj, MSBeverageRecordApp2, title, filterName);
+                    //p.printDG(catObj, MSBeverageRecordApp2, title, filterName);
+                    //s.ExportToPdf(catGrid);
+                    break;
+                case "manufacturer":
+                    s.ExportToPdf(manuObj, MSBeverageRecordApp3, title, filterName);
+                    title = $"manufacturers    {DateTime.UtcNow.ToString("d")}";
+                    //p.printDG(manuObj, MSBeverageRecordApp3, title, filterName);
+                    //s.ExportToPdf(manuGrid);
+                    break;
+                case "location":
+                    s.ExportToPdf(locObj, MSBeverageRecordApp4, title, filterName);
+                    title = $"location report    {DateTime.UtcNow.ToString("d")}";
+                    //p.printDG(locObj, MSBeverageRecordApp4, title, filterName);
+                    //s.ExportToPdf(locGrid);
+                    break;
+                case "totalValue":
+                    s.ExportToPdf(totalObj, MSBeverageRecordApp5, title, filterName);
+                    title = $"cost report    {DateTime.UtcNow.ToString("d")}";
+                    // p.printDG(totalObj, MSBeverageRecordApp5, title, filterName);
+                    //s.ExportToPdf(totalGrid);
+                    break;
+            }//end switch
+
+        }
+
+        private void muiSaveCSV_Click(object sender, RoutedEventArgs e) {
+            
+
+            SaveReport s = new SaveReport();
+
+            //call current report filter
+            switch (filterName) {
+                case "allData":
+                    
+                    title = $"report    {DateTime.UtcNow.ToString("d")}";
+                    s.ExportToCsv(allObj,MSBeverageRecordApp, title, filterName);
+                    //p.printDG(allObj, MSBeverageRecordApp, title, filterName);
+                    break;
+                case "category":
+                    title = $"category report    {DateTime.UtcNow.ToString("d")}";
+                    //p.printDG(catObj, MSBeverageRecordApp2, title, filterName);
+                    s.ExportToCsv(catObj, MSBeverageRecordApp2, title, filterName);
+                    break;
+                case "manufacturer":
+                    title = $"manufacturers    {DateTime.UtcNow.ToString("d")}";
+                    //p.printDG(manuObj, MSBeverageRecordApp3, title, filterName);
+                    s.ExportToCsv(manuObj, MSBeverageRecordApp3, title, filterName);
+                    break;
+                case "location":
+                    title = $"location report    {DateTime.UtcNow.ToString("d")}";
+                    //p.printDG(locObj, MSBeverageRecordApp4, title, filterName);
+                    s.ExportToCsv(locObj, MSBeverageRecordApp4, title, filterName);
+                    
+                    break;
+                case "totalValue":
+                    title = $"cost report    {DateTime.UtcNow.ToString("d")}";
+                    // p.printDG(totalObj, MSBeverageRecordApp5, title, filterName);
+                    s.ExportToCsv(totalObj, MSBeverageRecordApp5, title, filterName);
+                    break;
+            }//end switch
+
+        }
         #endregion
 
 
@@ -336,9 +420,9 @@ namespace MSBeverageRecordApp {
 
         public static List<Records> FilterHotspotRecordsCategory(List<Records> records, ComboBox filter) {
             //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL CATEGORIES
-            if (filter.SelectedItem.ToString() != "All Categories") {
+            if (filter.SelectedItem != "All Categories") {
                 //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES CATEGORY NAME
-                return records.FindAll(record => record.categoryName == filter.SelectedItem.ToString());
+                return records.FindAll(record => record.categoryName == filter.SelectedItem);
             } else {
                 //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
                 return records;
@@ -349,12 +433,16 @@ namespace MSBeverageRecordApp {
 
         public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
-            var record = deserializeObject.Items;
+            //var record = deserializeObject.Items;
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSCATEGORY FUNCTION
-            MSBeverageRecordApp2.ItemsSource = FilterHotspotRecordsCategory(record, FilterCategory);
-            catGrid.ItemsSource = MSBeverageRecordApp2.ItemsSource;
-            catObj.Items = (List<Records>)catGrid.ItemsSource;
+            MSBeverageRecordApp2.ItemsSource = FilterHotspotRecordsCategory(deserializeObject.Items, FilterCategory);
+
+
+
+            //catGrid.ItemsSource = MSBeverageRecordApp2.ItemsSource;
+
+            catObj.Items = (List<Records>)MSBeverageRecordApp2.ItemsSource;
         }//end function
 
 
@@ -411,7 +499,7 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSMANUFACTURER FUNCTION
             MSBeverageRecordApp3.ItemsSource = FilterHotspotRecordsManufacturer(record, FilterManufacturer);
-            manuGrid.ItemsSource = MSBeverageRecordApp3.ItemsSource;
+            //manuGrid.ItemsSource = MSBeverageRecordApp3.ItemsSource;
             manuObj.Items = (List<Records>)manuGrid.ItemsSource;
         }//end function
 
@@ -471,7 +559,7 @@ namespace MSBeverageRecordApp {
 
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSLOCATION FUNCTION
             MSBeverageRecordApp4.ItemsSource = FilterHotspotRecordsLocation(record, FilterLocation);
-            locGrid.ItemsSource = MSBeverageRecordApp4.ItemsSource;
+            //locGrid.ItemsSource = MSBeverageRecordApp4.ItemsSource;
             locObj.Items = (List<Records>)locGrid.ItemsSource;
         }//end function
 
@@ -572,46 +660,31 @@ namespace MSBeverageRecordApp {
         #endregion
         #region tabcontrol testing
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (xalldata.IsSelected) {
-                //MSBeverageRecordApp.Items.Filter = GetFilter();
-            }
-            if (xcategory.IsSelected) {
-                MSBeverageRecordApp.Items.Filter = null;
-
-            }
-            if (xmanufacturer.IsSelected) {
-                MSBeverageRecordApp.Items.Filter = null;
-
-            }
-            if (xlocation.IsSelected) {
-                MSBeverageRecordApp.Items.Filter = null;
-
-            }
-            if (xtotalvalue.IsSelected) {
-                MSBeverageRecordApp.Items.Filter = null;
-            }
 
 
             if (xalldata.IsSelected) {
                 filterName = "allData";
+                MSBeverageRecordApp.Items.Filter = null;
 
             }
             if (xcategory.IsSelected) {
                 filterName = "category";
+                MSBeverageRecordApp.Items.Filter = null;
 
 
             }
             if (xmanufacturer.IsSelected) {
                 filterName = "manufacturer";
-
+                MSBeverageRecordApp.Items.Filter = null;
             }
             if (xlocation.IsSelected) {
                 filterName = "location";
-
+                MSBeverageRecordApp.Items.Filter = null;
             }
             if (xtotalvalue.IsSelected) {
-
                 filterName = "totalValue";
+                MSBeverageRecordApp.Items.Filter = null;
+
             }
 
 
@@ -619,44 +692,7 @@ namespace MSBeverageRecordApp {
 
         #endregion tabcontrol testing
 
-        private void muiSave_Click(object sender, RoutedEventArgs e) {
-            #region fromfile
-            //rows array --> csv
-            var csv = new List<string[]>();
-            var lines = System.IO.File.ReadAllLines(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test.csv"); // csv file location
 
-            // loop through all lines and add it in list as string
-            foreach (string line in lines)
-                csv.Add(line.Split(','));
-
-            //split string to get first line, header line as JSON properties
-            var properties = lines[0].Split(',');
-
-            var listObjResult = new List<Dictionary<string, string>>();
-
-            //loop all remaining lines, except header so starting it from 1
-            // instead of 0
-            var objResult = new Dictionary<string, string>();
-            for (int i = 1; i < lines.Length; i++) {
-                if (i > 1) {
-                    objResult.Clear();
-                }
-                for (int j = 0; j < properties.Length; j++) {
-
-                    objResult.Add(properties[j], csv[i][j]);
-                    //clear duplicates maybe?
-                    listObjResult.Add(objResult);
-                }
-            }
-            //consoleOutput.Text = listObjResult[0]["id"].ToString();
-            #endregion
-
-            //FROM OBJECT
-            
-            string json = Newtonsoft.Json.JsonConvert.SerializeObject(deserializeObject.Items);
-            System.IO.File.AppendAllText(@"C:\Users\MCA\source\repos\MSBeverageRecordApp\test2.txt", json);
-
-        }//
     }//end class
 }//end namespace
 

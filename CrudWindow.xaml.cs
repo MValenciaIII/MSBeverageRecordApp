@@ -541,7 +541,6 @@ namespace MSBeverageRecordApp {
             spText.Visibility = Visibility.Hidden;
         }//end function
 
-
         private void RecordsAPI() {
 
             //SETTING UP NEW INSTANCE OF A TYPE OF DATA

@@ -14,7 +14,8 @@
                 <MenuItem Header="_File">
                     <MenuItem x:Name="muiPrint" Click="muiPrint_Click" Header="_Print"/>
                     
-                    <MenuItem x:Name="muiSave" Header="_Save" Click="muiSave_Click"/>
+                    <MenuItem x:Name="muiSavePDF" Header="_Save PDF" Click="muiSavePDF_Click" />
+                    <MenuItem x:Name="muiSaveCSV" Header="_Save CSV" Click="muiSaveCSV_Click" />
                 </MenuItem>
 
             </Menu>
