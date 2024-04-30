@@ -8,6 +8,7 @@ using System.Reflection;
 using ChoETL;
 using static MSBeverageRecordApp.Reports;
 using System.Linq.Expressions;
+using iText.Kernel.Font;
 
 public class PrintDG {
 
@@ -68,9 +69,9 @@ public class PrintDG {
 
             //check filter arg to choose which grid to print
             //set title in reports.cs
-
+            AddHeaders(table, dataGrid);
             AddDataRows(obj, r, cellNumber, filter);
-
+            AddTotalCostRow(table, CalculateTotalCost(obj, filter));
 
             table.RowGroups.Add(tableRowGroup);
             fd.Blocks.Add(table);
@@ -79,6 +80,28 @@ public class PrintDG {
             printDialog.PrintDocument(((IDocumentPaginatorSource)fd).DocumentPaginator, "");
         }
     }//em
+
+
+    private void AddHeaders(System.Windows.Documents.Table table, DataGrid dataGrid) {
+        TableRowGroup tableRowGroup = new TableRowGroup();
+        TableRow headerRow = new TableRow();
+
+        foreach (DataGridColumn column in dataGrid.Columns) {
+            TableCell cell = new TableCell(new Paragraph(new Run(column.Header.ToString())));
+            cell.ColumnSpan = 4;
+            cell.Padding = new Thickness(4);
+            cell.BorderBrush = Brushes.Black;
+            cell.FontWeight = FontWeights.Bold;
+            cell.Background = Brushes.DarkGray;
+            cell.Foreground = Brushes.White;
+            cell.BorderThickness = new Thickness(1, 1, 1, 1);
+            headerRow.Cells.Add(cell);
+        }
+
+        tableRowGroup.Rows.Add(headerRow);
+        table.RowGroups.Add(tableRowGroup);
+    }
+
 
     //print on filter tabs, cut columns depending on filter
     public void AddDataRows(RootObject obj, TableRow r, int cellNumber, string filter) {
@@ -340,9 +363,42 @@ public class PrintDG {
         }
 
 
-
     }//ef
 
+    private decimal CalculateTotalCost(RootObject obj, string title) {
+        decimal totalCost = 0;
+
+        switch (title) {
+            case "allData":
+            case "category":
+            case "manufacturer":
+            case "location":
+                foreach (var item in obj.Items) {
+                    totalCost += item.cost;
+                }
+                break;
+            case "totalValue":
+                foreach (var item in obj.Items) {
+                    totalCost += item.cost;
+                }
+                break;
+        }
+
+        return totalCost;
+    }
+
+
+    private void AddTotalCostRow(System.Windows.Documents.Table table, decimal totalCost) {
+        TableRowGroup tableRowGroup = table.RowGroups[0]; // Assuming there is only one row group
+        TableRow totalRow = new TableRow();
+        TableCell totalCell = new TableCell(new Paragraph(new Run("Total Cost: " + totalCost.ToString("C"))));
+        totalCell.ColumnSpan = tableRowGroup.Rows[0].Cells.Count; // Span across all columns
+        totalCell.Padding = new Thickness(4);
+        totalCell.BorderBrush = Brushes.DarkGray;
+        totalCell.BorderThickness = new Thickness(0, 0, 1, 1);
+        totalRow.Cells.Add(totalCell);
+        tableRowGroup.Rows.Add(totalRow);
+    }
 
 
 
