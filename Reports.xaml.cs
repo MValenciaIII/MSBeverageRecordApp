@@ -95,7 +95,7 @@ namespace MSBeverageRecordApp {
                 totalObj.CostItems = (List<TotalCostData>)totalGrid.ItemsSource;
                 //TOTAL VALUE
                 //CALL COMBO BOX FUNCTIONS
-                
+
                 CreateCategoryFilterItems(deserializeObject);
                 CreateManufacturerFilterItems(deserializeObject);
                 CreateLocationFilterItems(deserializeObject);
@@ -131,7 +131,7 @@ namespace MSBeverageRecordApp {
 
             switch (filterName) {
                 case "allData":
-                    
+
                     title = $"report    {DateTime.UtcNow.ToString("d")}";
                     p.printDG(allObj, MSBeverageRecordApp, title, filterName);
                     break;
@@ -167,9 +167,9 @@ namespace MSBeverageRecordApp {
             //call current report filter
             switch (filterName) {
                 case "allData":
-                    
+
                     title = $"report    {DateTime.UtcNow.ToString("d")}";
-                    s.ExportToPdf(allObj,MSBeverageRecordApp, title, filterName);
+                    s.ExportToPdf(allObj, MSBeverageRecordApp, title, filterName);
                     //p.printDG(allObj, MSBeverageRecordApp, title, filterName);
                     break;
                 case "category":
@@ -201,16 +201,16 @@ namespace MSBeverageRecordApp {
         }
 
         private void muiSaveCSV_Click(object sender, RoutedEventArgs e) {
-            
+
 
             SaveReport s = new SaveReport();
 
             //call current report filter
             switch (filterName) {
                 case "allData":
-                    
+
                     title = $"report    {DateTime.UtcNow.ToString("d")}";
-                    s.ExportToCsv(allObj,MSBeverageRecordApp, title, filterName);
+                    s.ExportToCsv(allObj, MSBeverageRecordApp, title, filterName);
                     //p.printDG(allObj, MSBeverageRecordApp, title, filterName);
                     break;
                 case "category":
@@ -227,7 +227,7 @@ namespace MSBeverageRecordApp {
                     title = $"location report    {DateTime.UtcNow.ToString("d")}";
                     //p.printDG(locObj, MSBeverageRecordApp4, title, filterName);
                     s.ExportToCsv(locObj, MSBeverageRecordApp4, title, filterName);
-                    
+
                     break;
                 case "totalValue":
                     title = $"cost report    {DateTime.UtcNow.ToString("d")}";
@@ -500,7 +500,7 @@ namespace MSBeverageRecordApp {
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSMANUFACTURER FUNCTION
             MSBeverageRecordApp3.ItemsSource = FilterHotspotRecordsManufacturer(record, FilterManufacturer);
             //manuGrid.ItemsSource = MSBeverageRecordApp3.ItemsSource;
-            manuObj.Items = (List<Records>)manuGrid.ItemsSource;
+            manuObj.Items = (List<Records>)MSBeverageRecordApp3.ItemsSource;
         }//end function
 
 
@@ -560,7 +560,7 @@ namespace MSBeverageRecordApp {
             //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSLOCATION FUNCTION
             MSBeverageRecordApp4.ItemsSource = FilterHotspotRecordsLocation(record, FilterLocation);
             //locGrid.ItemsSource = MSBeverageRecordApp4.ItemsSource;
-            locObj.Items = (List<Records>)locGrid.ItemsSource;
+            locObj.Items = (List<Records>)MSBeverageRecordApp4.ItemsSource;
         }//end function
 
 
@@ -625,7 +625,7 @@ namespace MSBeverageRecordApp {
                     data.Add(new TotalCostData {
                         categoryName = list.Items[index].categoryName,
                         cost = 0
-                        
+
                     });
                 }//end if
             }//end for
@@ -650,7 +650,7 @@ namespace MSBeverageRecordApp {
                 categoryName = "Total Cost",
                 cost = totalCosts
             });
-            
+
             return data;
 
         }//end function

@@ -9,17 +9,15 @@ using ChoETL;
 using static MSBeverageRecordApp.Reports;
 using System.Linq.Expressions;
 
-//order the filter cases to match the datagrid 
-//test prints
 public class PrintDG {
-    
+
     //globals
     TableRowGroup tableRowGroup = new TableRowGroup();
     decimal totalCost = 0.0m;
     public void printDG(RootObject obj, DataGrid dataGrid, string title, string filter) {
 
         PrintDialog printDialog = new PrintDialog();
-        
+
         if (printDialog.ShowDialog() == true) {
             FlowDocument fd = new FlowDocument();
 
@@ -72,7 +70,7 @@ public class PrintDG {
             //set title in reports.cs
 
             AddDataRows(obj, r, cellNumber, filter);
-         
+
 
             table.RowGroups.Add(tableRowGroup);
             fd.Blocks.Add(table);
@@ -83,7 +81,7 @@ public class PrintDG {
     }//em
 
     //print on filter tabs, cut columns depending on filter
-    public void AddDataRows(RootObject obj, TableRow r, int cellNumber, string filter){
+    public void AddDataRows(RootObject obj, TableRow r, int cellNumber, string filter) {
 
 
         switch (filter) {
@@ -162,6 +160,8 @@ public class PrintDG {
                     tableRowGroup.Rows.Add(r);
                 }
 
+
+
                 break;
             case "category":
                 for (int j = 0; j < obj.Items.Count; j++) {
@@ -212,31 +212,6 @@ public class PrintDG {
                     r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
                     cellNumber++;
 
-                    /////////
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].record_id.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].purchase_date.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].cost.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-
                     tableRowGroup.Rows.Add(r);
                 }
 
@@ -283,40 +258,6 @@ public class PrintDG {
                     r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
                     r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
                     cellNumber++;
-
-                    /////
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].categoryName.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].record_id.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-
-
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].purchase_date.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].cost.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
 
                     tableRowGroup.Rows.Add(r);
                 }
@@ -365,41 +306,6 @@ public class PrintDG {
                     r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
                     cellNumber++;
 
-
-                    /////
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].categoryName.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].record_id.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-
-
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].purchase_date.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].cost.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-
                     tableRowGroup.Rows.Add(r);
                 }
 
@@ -427,64 +333,6 @@ public class PrintDG {
                     r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
                     cellNumber++;
 
-
-                    /////
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].purchase_date.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].companyName.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].model.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].serial.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].locationName.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].sub_location.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-                    /////////
-
-                    //r.Cells.Add(new TableCell(new Paragraph(new Run(obj.Items[j].record_id.ToString()))));
-                    //r.Cells[cellNumber].ColumnSpan = 4;
-                    //r.Cells[cellNumber].Padding = new Thickness(4);
-                    //r.Cells[cellNumber].BorderBrush = Brushes.DarkGray;
-                    //r.Cells[cellNumber].BorderThickness = new Thickness(0, 0, 1, 1);
-                    //cellNumber++;
-
-
-
-
-
                     tableRowGroup.Rows.Add(r);
                 }
 
@@ -492,8 +340,10 @@ public class PrintDG {
         }
 
 
-       
+
     }//ef
+
+
 
 
 }//ec
