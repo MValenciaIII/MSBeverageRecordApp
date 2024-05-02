@@ -19,8 +19,10 @@ namespace MSBeverageRecordApp {
     public partial class Reports : Page {
         //GLOBAL VARIABLE
         RootObject deserializeObject = new RootObject();
+
         string filterName = "allData";
         public List<Records> allReports;
+
         public class urlResult {
             public string[] results { get; set; }
         }//end class
@@ -69,27 +71,31 @@ namespace MSBeverageRecordApp {
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                 //ALL DATA
                 MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+
                 allObj = deserializeObject;
                 allGrid.ItemsSource = allObj.Items;
 
                 //CATEGORY
                 MSBeverageRecordApp2.ItemsSource = deserializeObject.Items;
 
-                catObj = deserializeObject;
-                catGrid.ItemsSource = catObj.Items;
+                //catObj = deserializeObject;
+                //catGrid.ItemsSource = catObj.Items;
 
                 //MANUFACTURER
                 MSBeverageRecordApp3.ItemsSource = deserializeObject.Items;
-                manuObj = deserializeObject;
-                manuGrid.ItemsSource = manuObj.Items;
+
+                //manuObj = deserializeObject;
+                //manuGrid.ItemsSource = manuObj.Items;
 
                 //LOCATION
                 MSBeverageRecordApp4.ItemsSource = deserializeObject.Items;
-                locObj = deserializeObject;
-                locGrid.ItemsSource = locObj.Items;
+
+                //locObj = deserializeObject;
+                //locGrid.ItemsSource = locObj.Items;
 
                 //COST
                 MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
+
                 totalObj = deserializeObject;
                 totalGrid.ItemsSource = CreateCostReport(totalObj);
                 totalObj.CostItems = (List<TotalCostData>)totalGrid.ItemsSource;
@@ -113,16 +119,7 @@ namespace MSBeverageRecordApp {
 
 
         #region print calls
-        //SET FILTER NAME
-        //SETS WHICH GRID TO PULL FROM
 
-
-        //TODO
-        //PRINT TOTAL COST ON GRID, DO IN PRINTDG CLASS
-        //ADD UPDATES TO GRID ON COMBOBOX CHANGES
-
-        //"muiPrint_Click" HANDLES PRINTING DATA GRIDS BASED ON DIFFERENT FILTER CONDITIONS("filterName")
-        //(SUCH AS CATEGORY, MANUFACTURER, LOCATION, ETC.)
         private void muiPrint_Click(object sender, RoutedEventArgs e) {
 
             //"PrintDG" CLASS IS RESPONSIBLE FOR THE ACTUAL PRINTING PROCESS
@@ -419,30 +416,48 @@ namespace MSBeverageRecordApp {
 
 
         public static List<Records> FilterHotspotRecordsCategory(List<Records> records, ComboBox filter) {
-            //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL CATEGORIES
-            if (filter.SelectedItem != "All Categories") {
-                //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES CATEGORY NAME
-                return records.FindAll(record => record.categoryName == filter.SelectedItem);
-            } else {
-                //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
+
+            List<Records> filteredRecords = new List<Records>();
+
+            // If the selected item is "All Categories", return all records
+            if (filter.SelectedItem == "All Categories") {
                 return records;
-            }//end if
+            }
+
+            // Iterate through each record
+            foreach (Records record in records) {
+                // Check if the categoryName matches the selected item
+                if (record.categoryName == filter.SelectedItem.ToString()) {
+                    // If yes, add it to the filteredRecords list
+                    filteredRecords.Add(record);
+                }
+            }
+
+            // Return the filtered records
+            return filteredRecords;
 
         }//end function
 
 
         public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
-            //var record = deserializeObject.Items;
+            // Get the original list of records
+            var originalRecords = deserializeObject.Items;
 
-            //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSCATEGORY FUNCTION
-            MSBeverageRecordApp2.ItemsSource = FilterHotspotRecordsCategory(deserializeObject.Items, FilterCategory);
+            // Create a copy of the original records for filtering
+            var recordsCopy = new List<Records>(originalRecords);
 
+            // Get the filtered records based on the selected category
+            var filteredRecords = FilterHotspotRecordsCategory(recordsCopy, FilterCategory);
 
+            // Update the ItemsSource of the grid with the filtered records
+            MSBeverageRecordApp2.ItemsSource = filteredRecords;
 
-            //catGrid.ItemsSource = MSBeverageRecordApp2.ItemsSource;
+            // Update the ItemsSource of the catGrid
+            catGrid.ItemsSource = new List<Records>(filteredRecords);
 
-            catObj.Items = (List<Records>)MSBeverageRecordApp2.ItemsSource;
+            // Update the Items property of the catObj
+            catObj.Items = new List<Records>(filteredRecords);
+
         }//end function
 
 
@@ -481,26 +496,46 @@ namespace MSBeverageRecordApp {
 
 
         public static List<Records> FilterHotspotRecordsManufacturer(List<Records> records, ComboBox filter) {
-            //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL MANUFACTURERS
-            if (filter.SelectedItem.ToString() != "All Manufacturers") {
-                //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES COMPANY NAME
-                return records.FindAll(record => record.companyName == filter.SelectedItem.ToString());
-            } else {
-                //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
+            List<Records> filteredRecords = new List<Records>();
+
+            // If the selected item is "All Categories", return all records
+            if (filter.SelectedItem == "All Categories") {
                 return records;
-            }//end if
+            }
+
+            // Iterate through each record
+            foreach (Records record in records) {
+                // Check if the categoryName matches the selected item
+                if (record.companyName == filter.SelectedItem.ToString()) {
+                    // If yes, add it to the filteredRecords list
+                    filteredRecords.Add(record);
+                }
+            }
+
+            // Return the filtered records
+            return filteredRecords;
 
         }//end function
 
 
         public void Filter_SelectionChangedManufacturer(object sender, SelectionChangedEventArgs e) {
-            //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
-            var record = deserializeObject.Items;
+            // Get the original list of records
+            var originalRecords = deserializeObject.Items;
 
-            //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSMANUFACTURER FUNCTION
-            MSBeverageRecordApp3.ItemsSource = FilterHotspotRecordsManufacturer(record, FilterManufacturer);
-            //manuGrid.ItemsSource = MSBeverageRecordApp3.ItemsSource;
-            manuObj.Items = (List<Records>)MSBeverageRecordApp3.ItemsSource;
+            // Create a copy of the original records for filtering
+            var recordsCopy = new List<Records>(originalRecords);
+
+            // Get the filtered records based on the selected category
+            var filteredRecords = FilterHotspotRecordsManufacturer(recordsCopy, FilterManufacturer);
+
+            // Update the ItemsSource of the grid with the filtered records
+            MSBeverageRecordApp3.ItemsSource = filteredRecords;
+
+            // Update the ItemsSource of the catGrid
+            manuGrid.ItemsSource = new List<Records>(filteredRecords);
+
+            // Update the Items property of the catObj
+            manuObj.Items = new List<Records>(filteredRecords);
         }//end function
 
 
@@ -541,26 +576,47 @@ namespace MSBeverageRecordApp {
 
 
         public static List<Records> FilterHotspotRecordsLocation(List<Records> records, ComboBox filter) {
-            //CHECK IF SELECTED ITEM IS NOT EQUAL TO ALL LOCATIONS
-            if (filter.SelectedItem.ToString() != "All Locations") {
-                //IF TRUE, RETURN FILTERED LIST OF RECORDS THAT MATCHES LOCATION NAME
-                return records.FindAll(record => record.locationName == filter.SelectedItem.ToString());
-            } else {
-                //IF FALSE, RETURN ALL RECORDS WITHOUT FILTER
+            List<Records> filteredRecords = new List<Records>();
+
+            // If the selected item is "All Categories", return all records
+            if (filter.SelectedItem == "All Categories") {
                 return records;
-            }//end if
+            }
+
+            // Iterate through each record
+            foreach (Records record in records) {
+                // Check if the categoryName matches the selected item
+                if (record.locationName == filter.SelectedItem.ToString()) {
+                    // If yes, add it to the filteredRecords list
+                    filteredRecords.Add(record);
+                }
+            }
+
+            // Return the filtered records
+            return filteredRecords;
 
         }//end function
 
 
         public void Filter_SelectionChangedLocation(object sender, SelectionChangedEventArgs e) {
-            //SAVE DESERIALIZED OBJECT ITEMS TO RECORD
-            var record = deserializeObject.Items;
+            // Get the original list of records
+            var originalRecords = deserializeObject.Items;
 
-            //SAVE ITEM SOURCE TO RETURN OF FILTERHOTSPOTRECORDSLOCATION FUNCTION
-            MSBeverageRecordApp4.ItemsSource = FilterHotspotRecordsLocation(record, FilterLocation);
-            //locGrid.ItemsSource = MSBeverageRecordApp4.ItemsSource;
-            locObj.Items = (List<Records>)MSBeverageRecordApp4.ItemsSource;
+            // Create a copy of the original records for filtering
+            var recordsCopy = new List<Records>(originalRecords);
+
+            // Get the filtered records based on the selected category
+            var filteredRecords = FilterHotspotRecordsLocation(recordsCopy, FilterLocation);
+
+            // Update the ItemsSource of the grid with the filtered records
+            MSBeverageRecordApp4.ItemsSource = filteredRecords;
+
+            // Update the ItemsSource of the catGrid
+            locGrid.ItemsSource = new List<Records>(filteredRecords);
+
+            // Update the Items property of the catObj
+            locObj.Items = new List<Records>(filteredRecords);
+
         }//end function
 
 
