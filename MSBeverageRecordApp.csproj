@@ -8,10 +8,15 @@
     <UseWPF>true</UseWPF>
 	<!--<UseWindowsForms>true</UseWindowsForms>-->
 	<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+	<ApplicationIcon>letter-m-32.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="NewFile1.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="letter-m-32.ico" />
   </ItemGroup>
 
   <ItemGroup>

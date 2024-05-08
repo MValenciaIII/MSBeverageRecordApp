@@ -12,9 +12,7 @@ namespace MSBeverageRecordApp {
     /// </summary>
 
 
-    //todo
-    //write filter case function in the SaveReport class
-    //clean & comment & test
+
 
     public partial class Reports : Page {
         //GLOBAL VARIABLE
