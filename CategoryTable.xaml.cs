@@ -40,7 +40,7 @@ namespace MSBeverageRecordApp {
                 txtCategory.Text = "";
 
                 var postData = new PostCategory {
-                    categoryName = txtCategory.Text.ToUpper()
+                    categoryName = input.ToUpper()
                 };
 
                 //CREATING A NEW HTTPCLIENT OBJECT
@@ -87,7 +87,7 @@ namespace MSBeverageRecordApp {
                 txtLocation.Text = "";
             
                 var postData = new PostLocation {
-                    locationName = txtLocation.Text.ToUpper()
+                    locationName = input.ToUpper()
                 };
 
                 //CREATING A NEW HTTPCLIENT OBJECT
@@ -132,7 +132,7 @@ namespace MSBeverageRecordApp {
                 txtManufacturer.Text = "";
 
                 var postData = new PostManufacturer {
-                    companyName = txtManufacturer.Text.ToUpper()
+                    companyName = input.ToUpper()
                 };
 
                 //CREATING A NEW HTTPCLIENT OBJECT
