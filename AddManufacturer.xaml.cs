@@ -1,48 +1,54 @@
-﻿using System.Net.Http;
-using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace MSBeverageRecordApp {
-
     /// <summary>
-    /// INTERACTION LOGIC FOR CategoryTable.xaml
+    /// Interaction logic for AddManufacturer.xaml
     /// </summary>
-
-    public partial class CategoryTable : Page {
+    public partial class AddManufacturer : Page {
         //CLASS TO GET RESPONSE FROM API
         class PostResponse {
             public int Id { get; set; }
         }//end class
-         //GLOBAL CLASS FOR DATA TO SEND TO API
-        class PostCategory {
-            public string categoryName { get; set; }
+        class PostManufacturer {
+            public string companyName { get; set; }
         }//end class
-      
-        public CategoryTable() {
+        public AddManufacturer() {
             InitializeComponent();
-        }//end main CategoryTable
+        }//end main
 
-        //POST CATEGORY
-        private void Category_Button_Click(object sender, RoutedEventArgs e) {
+        private void Manufacturer_Button_Click(object sender, RoutedEventArgs e) {
             //INPUT VALIDATION
-            if (string.IsNullOrEmpty(txtCategory.Text)) {
+            if (string.IsNullOrEmpty(txtManufacturer.Text)) {
                 //THE TEXTBOX IS EMPTY; DISPLAY AN ERROR MESSAGE OR TAKE APPROPRIATE ACTION.
                 MessageBox.Show("Please enter a value in the category.");
             } else {
-                string input = txtCategory.Text;
-                txtCategory.Text = "";
+                string input = txtManufacturer.Text;
+                txtManufacturer.Text = "";
 
-                var postData = new PostCategory {
-                    categoryName = input.ToUpper()
+                var postData = new PostManufacturer {
+                    companyName = input.ToUpper()
                 };
 
                 //CREATING A NEW HTTPCLIENT OBJECT
                 var client = new HttpClient();
 
                 //SET BASE ADDRESS OF API
-                client.BaseAddress = new Uri("http://localhost:4001/api/category/categorycreate/");
+                client.BaseAddress = new Uri("http://localhost:4001/api/manufacturer/manufacturercreate/");
 
                 //SERIALIZE POSTDATA OBJECT TO JSON STRING
                 var json = System.Text.Json.JsonSerializer.Serialize(postData);
@@ -59,20 +65,13 @@ namespace MSBeverageRecordApp {
 
                     };
                     //PROMPT USER CATEGORY IS UPDATED
-                    MessageBox.Show("New Category Created");
+                    MessageBox.Show("New manufacturer Added");
                 }//end if
-
-
 
                 //RETURN TO MAIN MENU
                 this.NavigationService.Navigate(new Uri("MenuPage.xaml", UriKind.Relative));
-
             }//end if
+
         }//end event
-
-
-        
-      
     }//end class
-
 }//end namespace

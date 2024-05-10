@@ -153,7 +153,7 @@ namespace MSBeverageRecordApp
             }//end if
         }//end function
 
-
+        //note need to skip over ""
         private void CreateCategoryComboBox(RootObject list) {
             //INITIALIZE BOOL TO FALSE
             bool contains = false;
@@ -167,6 +167,11 @@ namespace MSBeverageRecordApp
                     if (cboCategory.Items[itemIndex].ToString() == list.CategoryItems[index].categoryName) {
                         //SET CONTAINS TO TRUE, THE COMBOBOX ALREADY HAS THE LIST ITEM
                         contains = true;
+                    }//end if
+                    
+                    //IF LIST ITEM IS EMPTY STRING, MOVE TO NEXT ONE.
+                    if (list.CategoryItems[index].categoryName == " " || list.CategoryItems[index].categoryName == "") {
+                        index++;
                     }//end if
 
                 //IF THE COMBOBOX DOES NOT CONTAIN THE LIST ITEM

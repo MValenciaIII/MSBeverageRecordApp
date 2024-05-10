@@ -29,7 +29,14 @@ namespace MSBeverageRecordApp {
             //NAVIGATE TO CRUDWINDOW TO MODIFY/DELETE RECORDS
             this.NavigationService.Navigate(new Uri("CrudWindow.xaml", UriKind.Relative));
         }//end event
+        private void btnAddManufacturer_Click(object sender, RoutedEventArgs e) {
+            //NAVIGATE TO CREATE A NEW MANUFACTURER
+            this.NavigationService.Navigate(new Uri("AddManufacturer.xaml", UriKind.Relative));
+        }//end event
+        private void btnAddLocation_Click(object sender, RoutedEventArgs e) {
+            //NAVIGATE TO CREATE A NEW LOCATION
+            this.NavigationService.Navigate(new Uri("AddLocation.xaml", UriKind.Relative));
+        }//end event
         #endregion
-
     }//end class
 }//end namespace
