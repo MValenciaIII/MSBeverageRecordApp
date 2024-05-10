@@ -229,6 +229,11 @@ namespace MSBeverageRecordApp
                         contains = true;
                     }//end if
 
+                //IF LIST ITEM IS EMPTY STRING, MOVE TO NEXT ONE.
+                if (list.LocationItems[index].locationName == " " || list.LocationItems[index].locationName == "") {
+                    index++;
+                }//end if
+
                 //IF THE COMBOBOX DOES NOT CONTAIN THE LIST ITEM
                 if (contains == false) {
                     //ADD THE LIST ITEM TO THE COMBOBOX
@@ -285,6 +290,11 @@ namespace MSBeverageRecordApp
                         //SET CONTAINS TO TRUE, THE COMBOBOX ALREADY HAS THE LIST ITEM
                         contains = true;
                     }//end if
+
+                //IF LIST ITEM IS EMPTY STRING, MOVE TO NEXT ONE.
+                if (list.ManufacturerItems[index].companyName == " " || list.ManufacturerItems[index].companyName == "") {
+                    index++;
+                }//end if
 
                 //IF THE COMBOBOX DOES NOT CONTAIN THE LIST ITEM
                 if (contains == false) {
