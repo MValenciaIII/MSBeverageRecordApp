@@ -16,161 +16,7 @@ namespace MSBeverageRecordApp {
 
     public partial class CrudWindow : Page {
 
-        //#region OBJ CONTAINERS
-
-        ////THIS IS SETTING UP A PLACE TO STORE EACH OBJECT ATTRIBUTE INSIDE A LIST 
-        //public class Records {
-        //    public int record_id { get; set; }
-        //    public string categoryName { get; set; }
-        //    public string companyName { get; set; }
-        //    public string model { get; set; }
-        //    public string serial { get; set; }
-        //    public DateTime purchase_date { get; set; }
-        //    public double cost { get; set; }
-        //    public string locationName { get; set; }
-        //    public string sub_location { get; set; }
-        //}//end class
-
-        ////RECORDS CLASS FOR FK'S
-        //public class PostRecords {
-        //    public int record_id { get; set; }
-        //    public int category { get; set; }
-        //    public int manufacturer { get; set; }
-        //    public string model { get; set; }
-        //    public string serial { get; set; }
-        //    public DateTime purchase_date { get; set; }
-        //    public double cost { get; set; }
-        //    public int location { get; set; }
-        //    public string sub_location { get; set; }
-        //}//end class
-
-        ////main
-        //public class RootObject {
-        //    public int id { get; set; }
-
-        //    public List<Records> Items { get; set; }
-        //}//end class
-
-        ////post obj
-        //public class RootObj {
-        //    public int id { get; set; }
-        //    public PostRecords Items { get; set; }
-        //}//end class
-
-
-        //#region FK'S CLASSES
-        //public class Category {
-        //    public int id { get; set; }
-        //    public string categoryName { get; set; }
-        //}//end class
-        //public class Manufacture {
-        //    public int id { get; set; }
-        //    public string companyName { get; set; }
-        //}//end class
-        //public class Location {
-        //    public int ID { get; set; }
-        //    public string locationName { get; set; }
-        //}//end class
-
-        ////category
-        //public class Root {
-        //    public int id { get; set; }
-
-        //    public List<Category> Items { get; set; }
-        //}//end class
-
-        ////location
-        //public class RootLoc {
-        //    public int id { get; set; }
-
-        //    public List<Location> Items { get; set; }
-        //}//end class
-
-        ////manufacturer
-        //public class RootComp {
-        //    public int id { get; set; }
-
-        //    public List<Manufacture> Items { get; set; }
-        //}//end class
-        //#endregion
-
-        //#endregion
-
-        //#region GLOBAL VARIABLES
-        ////GLOBAL VARIABLES
-        //public RootObject deserializeObject = new RootObject();
-        //Root root = new Root();
-        //RootLoc rootLoc = new RootLoc();
-        //RootComp rootComp = new RootComp();
-        ////RootObj postObj = new RootObj();
-        //#endregion
-
-
-        //GLOBAL VARIABLE
-
-
-        //RootObject deserializeObject = new RootObject();
-
-        ////GLOBAL CLASS FOR DATA TO SEND TO API
-        //class PostRecordsData {
-        //    public int record_id { get; set; }
-        //    public int category { get; set; }
-        //    public int manufacturer { get; set; }
-        //    public string model { get; set; }
-        //    public string serial { get; set; }
-        //    public DateTime purchase_date { get; set; }
-        //    public decimal cost { get; set; }
-        //    public int location { get; set; }
-        //    public string sub_location { get; set; }
-        //}//end class
-
-        ////GLOBAL CLASS FOR RECORDS TABLE
-        //public class Records {
-        //    public int record_id { get; set; }
-        //    public string categoryName { get; set; }
-        //    public string companyName { get; set; }
-        //    public string model { get; set; }
-        //    public string serial { get; set; }
-        //    public DateTime purchase_date { get; set; }
-        //    public decimal cost { get; set; }
-        //    public string locationName { get; set; }
-        //    public string sub_location { get; set; }
-        //}//end class
-
-        ////GLOBAL CLASS FOR CATEGORY TABLE
-        //public class Category {
-        //    public int id { get; set; }
-        //    public string categoryName { get; set; }
-        //}//end class
-
-        ////GLOBAL CLASS FOR LOCATION TABLE
-        //public class Location {
-        //    public int ID { get; set; }//*NOTE- LOCATION ID IS UPPERCASE!
-        //    public string locationName { get; set; }
-        //}//end class
-
-        ////GLOBAL CLASS FOR MANUFACTURER TABLE
-        //public class Manufacturer {
-        //    public int id { get; set; }
-        //    public string companyName { get; set; }
-        //}//end class
-
-        ////GLOBAL CLASS TO HOLD DATA
-        //public class RootObject {
-        //    public int id { get; set; }
-        //    public List<Records> Items { get; set; }
-        //    public List<Category> CategoryItems { get; set; }
-        //    public List<Location> LocationItems { get; set; }
-        //    public List<Manufacturer> ManufacturerItems { get; set; }
-        //}//end class
-
-        ////CLASS TO GET RESPONSE FROM API
-        //class PostResponse {
-        //    public int Id { get; set; }
-        //}//end class
-
-
-        //GLOBAL VARIABLE from crud window
+  
 
 
         string file = "";
@@ -181,6 +27,7 @@ namespace MSBeverageRecordApp {
         PostRecordsData post = new PostRecordsData();
         Records rep = new Records();
         RootObject deserializeObject = new RootObject();
+        //RootObject deletedRecs = new RootObject();
 
         //GLOBAL CLASS FOR DATA TO SEND TO API
         class PostRecordsData {
@@ -193,6 +40,7 @@ namespace MSBeverageRecordApp {
             public decimal cost { get; set; }
             public int location { get; set; }
             public string sub_location { get; set; }
+            public bool is_deleted { get; set; }
         }//end class
 
         //GLOBAL CLASS FOR RECORDS TABLE
@@ -206,6 +54,8 @@ namespace MSBeverageRecordApp {
             public decimal cost { get; set; }
             public string locationName { get; set; }
             public string sub_location { get; set; }
+            public int is_deleted { get; set; }
+            public bool isHidden { get; set; }
         }//end class
 
         //GLOBAL CLASS FOR CATEGORY TABLE
@@ -320,6 +170,75 @@ namespace MSBeverageRecordApp {
             }
         }//end function
 
+        private void UpdateDataBaseOnDelete(RootObject list) {
+
+            post = new PostRecordsData {
+                record_id = post.record_id,
+                category = post.category,
+                manufacturer = post.manufacturer,
+                model = post.model,
+                serial = post.serial,
+                purchase_date = post.purchase_date,
+                cost = post.cost,
+                location = post.location,
+                sub_location = post.sub_location,
+                is_deleted = post.is_deleted,
+            };
+
+
+            for (int itemIndex = 0; itemIndex < list.CategoryItems.Count; itemIndex++) {
+                //IF COMBOBOX SELECTED VALUE IS EQUAL TO CATEGORY NAME AT INDEX
+                if (cboCatName.SelectedValue == list.CategoryItems[itemIndex].categoryName) {
+                    //SAVE ID TO POST DATA FOR CATEGORY
+                    post.category = list.CategoryItems[itemIndex].id;
+                    if (post.is_deleted) {
+                        list.CategoryItems.RemoveAt(itemIndex);
+                    }
+                }//end if
+            }//end for 
+
+            //LOOP THROUGH LOCATION TABLE ITEMS 
+            for (int itemIndex = 0; itemIndex < list.LocationItems.Count; itemIndex++) {
+                //IF COMBOBOX SELECTED VALUE IS EQUAL TO LOCATION NAME AT INDEX
+                if (cboLocation.SelectedValue == list.LocationItems[itemIndex].locationName) {
+                    //SAVE ID TO POST DATA FOR LOCATION
+                    post.location = list.LocationItems[itemIndex].ID;
+                    if (post.is_deleted) {
+                        list.LocationItems.RemoveAt(itemIndex);
+                    }
+                }//end if
+            }//end for
+
+            //LOOP THROUGH MANUFACTURER TABLE ITEMS
+            for (int itemIndex = 0; itemIndex < list.ManufacturerItems.Count; itemIndex++) {
+                //IF COMBOBOX SELECTED VALUE IS EQUAL TO MANUFACTURER NAME AT INDEX
+                if (cboManufacturer.SelectedValue == list.ManufacturerItems[itemIndex].companyName) {
+                    //SAVE ID TO POST DATA FOR MANUFACTURER
+                    post.manufacturer = list.ManufacturerItems[itemIndex].id;
+                    if (post.is_deleted) {
+                        list.ManufacturerItems.RemoveAt(itemIndex);
+                    }
+                }//end if
+            }
+
+            //HTTP CLIENT INSTANCE
+            var client = new HttpClient();
+            //CONNECTION URL
+            client.BaseAddress = new Uri("http://localhost:4001/api/records/modifyid");
+            var json = JsonSerializer.Serialize(post);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            //NO STATUS CODE?
+            var response = client.PostAsync("", content).Result;
+            if (response.IsSuccessStatusCode) {
+                var responseContent = response.Content.ReadAsStringAsync().Result;
+                var postResponse = JsonSerializer.Deserialize<Records>(responseContent);
+            } else {
+                System.Windows.MessageBox.Show("Error " + response.StatusCode);
+            }
+
+        }//end function
+
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 
@@ -349,20 +268,18 @@ namespace MSBeverageRecordApp {
             spText.Visibility = Visibility.Visible;
             btnSave.Visibility = Visibility.Visible;
             btnCancel.Visibility = Visibility.Visible;
-
+            btnDelete.Visibility = Visibility.Visible;
             MSBeverageRecordGrid.Visibility = Visibility.Collapsed;
             consoleOutput.Visibility = Visibility.Collapsed;
             fileMenu.Visibility = Visibility.Collapsed;
             Filter.Visibility = Visibility.Collapsed;
 
-
-
+            //add delete button here
 
         }//end event
 
 
         private void btnSaveChange_Click(object sender, RoutedEventArgs e) {
-
 
             Records Reports = rep;
             //CALL UPDATE FUNCTION WHEN USER SAVES
@@ -392,9 +309,6 @@ namespace MSBeverageRecordApp {
                 }
 
               
-
-
-
                 MSBeverageRecordGrid.ItemsSource = null;
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
                 
@@ -406,7 +320,7 @@ namespace MSBeverageRecordApp {
 
             //SWITCH VIEWS
             MSBeverageRecordGrid.Visibility = Visibility.Visible;
-            consoleOutput.Visibility = Visibility.Visible;
+            consoleOutput.Visibility = Visibility.Hidden;
             fileMenu.Visibility = Visibility.Visible;
             Filter.Visibility = Visibility.Visible;
 
@@ -417,9 +331,51 @@ namespace MSBeverageRecordApp {
             spText.Visibility = Visibility.Hidden;
         }//end event function
 
+        private void btnDelete_Click(object sender, RoutedEventArgs e) {
+
+            Records Reports = rep;
+
+            MessageBoxResult dialogResult = MessageBox.Show($"delete record ID: {rep.record_id} \nare you sure?", $"record: {rep.record_id}", MessageBoxButton.YesNo);
+            if (dialogResult == MessageBoxResult.Yes) {
+
+                Reports.isHidden = true;
+                //loop over obj, delete the records where hidden is true
+                for (int i = 0; i < deserializeObject.Items.Count; i++) {
+
+                    if (deserializeObject.Items[i].record_id == Reports.record_id) {
+                        deserializeObject.Items[i].is_deleted = 1;
+                    }
+
+
+
+                }//end for loop
+         
+
+
+
+                //SWITCH VIEWS
+                MSBeverageRecordGrid.Visibility = Visibility.Visible;
+                fileMenu.Visibility = Visibility.Visible;
+                Filter.Visibility = Visibility.Visible;
+
+                btnSave.Visibility = Visibility.Hidden;
+                btnCancel.Visibility = Visibility.Hidden;
+                btnDelete.Visibility = Visibility.Hidden;
+
+                consoleOutput.Visibility = Visibility.Hidden;
+                spLabels.Visibility = Visibility.Hidden;
+                spText.Visibility = Visibility.Hidden;
+
+            } else if (dialogResult == MessageBoxResult.No) {
+                
+                //nothing needed
+
+            }
+        }
+
         private void btnCancel_Click(object sender, RoutedEventArgs e) {
             MSBeverageRecordGrid.Visibility = Visibility.Visible;
-            consoleOutput.Visibility = Visibility.Visible;
+            consoleOutput.Visibility = Visibility.Hidden;
             fileMenu.Visibility = Visibility.Visible;
             Filter.Visibility = Visibility.Visible;
 
@@ -452,7 +408,12 @@ namespace MSBeverageRecordApp {
                 var dataobjects = response.Content.ReadAsStringAsync().Result;
 
                 //CHANGE OUR STRING TO OBJECT DATA
+
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
+
+
+
+               
 
             }//end if
         }//end function
@@ -772,6 +733,7 @@ namespace MSBeverageRecordApp {
 
 
         #endregion sub combobox search
+
 
     }//end class
 }//end namespace

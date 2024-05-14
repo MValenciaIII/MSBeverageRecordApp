@@ -25,11 +25,6 @@
 
 
             <Menu Name="fileMenu" Visibility="Collapsed" HorizontalAlignment="Left" Width="956" Background="White" Grid.ColumnSpan="2">
-                <!--<MenuItem Header="_File">
-                <MenuItem x:Name="muiSave" Header="save csv" Click="savecsv_Click"/>
-                <MenuItem x:Name="savePDF" Header="save pdf" Click="savepdf_Click"/>
-                <MenuItem x:Name="print" Header="print" Click="print_Click" />
-            </MenuItem>-->
 
             </Menu>
 
@@ -96,13 +91,9 @@
             </StackPanel>
             <Button Grid.Column="1" Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="318,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="80" Visibility="Hidden" Click="btnCancel_Click"/>
             <Button Grid.Column="1" Name="btnSave" Content="Save" HorizontalAlignment="Left" Margin="173,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="78" Visibility="Hidden" Click="btnSaveChange_Click"/>
-
+            <Button Grid.Column="1" Name="btnDelete" Content="Delete record" HorizontalAlignment="Left" Margin="33,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="32" Width="78" Visibility="Hidden" Click="btnDelete_Click"/>
         </Grid>
     </Viewbox>
-
-
-
-
 </Page>
     
     
