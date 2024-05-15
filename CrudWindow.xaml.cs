@@ -296,7 +296,7 @@ namespace MSBeverageRecordApp {
                 }//end for loop
 
                 UpdateDataBase(deserializeObject);
-
+                
 
 
                 //SWITCH VIEWS
@@ -317,6 +317,7 @@ namespace MSBeverageRecordApp {
                 //nothing needed
 
             }
+            MSBeverageRecordGrid.Items.Refresh();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e) {
