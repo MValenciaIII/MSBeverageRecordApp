@@ -40,7 +40,7 @@ namespace MSBeverageRecordApp {
             public decimal cost { get; set; }
             public int location { get; set; }
             public string sub_location { get; set; }
-            public bool is_deleted { get; set; }
+            public int is_deleted { get; set; }
         }//end class
 
         //GLOBAL CLASS FOR RECORDS TABLE
@@ -113,7 +113,7 @@ namespace MSBeverageRecordApp {
 
         //UPDATE TO THE DATABASE
         private void UpdateDataBase(RootObject list) {
-            //invalid column names 
+            
             post = new PostRecordsData {
                 record_id = post.record_id,
                 category = post.category,
@@ -123,8 +123,11 @@ namespace MSBeverageRecordApp {
                 purchase_date = post.purchase_date,
                 cost = post.cost,
                 location = post.location,
-                sub_location = post.sub_location
+                sub_location = post.sub_location,
+                is_deleted = post.is_deleted,
             };
+
+
 
 
             for (int itemIndex = 0; itemIndex < list.CategoryItems.Count; itemIndex++) {
@@ -170,74 +173,7 @@ namespace MSBeverageRecordApp {
             }
         }//end function
 
-        private void UpdateDataBaseOnDelete(RootObject list) {
 
-            post = new PostRecordsData {
-                record_id = post.record_id,
-                category = post.category,
-                manufacturer = post.manufacturer,
-                model = post.model,
-                serial = post.serial,
-                purchase_date = post.purchase_date,
-                cost = post.cost,
-                location = post.location,
-                sub_location = post.sub_location,
-                is_deleted = post.is_deleted,
-            };
-
-
-            for (int itemIndex = 0; itemIndex < list.CategoryItems.Count; itemIndex++) {
-                //IF COMBOBOX SELECTED VALUE IS EQUAL TO CATEGORY NAME AT INDEX
-                if (cboCatName.SelectedValue == list.CategoryItems[itemIndex].categoryName) {
-                    //SAVE ID TO POST DATA FOR CATEGORY
-                    post.category = list.CategoryItems[itemIndex].id;
-                    if (post.is_deleted) {
-                        list.CategoryItems.RemoveAt(itemIndex);
-                    }
-                }//end if
-            }//end for 
-
-            //LOOP THROUGH LOCATION TABLE ITEMS 
-            for (int itemIndex = 0; itemIndex < list.LocationItems.Count; itemIndex++) {
-                //IF COMBOBOX SELECTED VALUE IS EQUAL TO LOCATION NAME AT INDEX
-                if (cboLocation.SelectedValue == list.LocationItems[itemIndex].locationName) {
-                    //SAVE ID TO POST DATA FOR LOCATION
-                    post.location = list.LocationItems[itemIndex].ID;
-                    if (post.is_deleted) {
-                        list.LocationItems.RemoveAt(itemIndex);
-                    }
-                }//end if
-            }//end for
-
-            //LOOP THROUGH MANUFACTURER TABLE ITEMS
-            for (int itemIndex = 0; itemIndex < list.ManufacturerItems.Count; itemIndex++) {
-                //IF COMBOBOX SELECTED VALUE IS EQUAL TO MANUFACTURER NAME AT INDEX
-                if (cboManufacturer.SelectedValue == list.ManufacturerItems[itemIndex].companyName) {
-                    //SAVE ID TO POST DATA FOR MANUFACTURER
-                    post.manufacturer = list.ManufacturerItems[itemIndex].id;
-                    if (post.is_deleted) {
-                        list.ManufacturerItems.RemoveAt(itemIndex);
-                    }
-                }//end if
-            }
-
-            //HTTP CLIENT INSTANCE
-            var client = new HttpClient();
-            //CONNECTION URL
-            client.BaseAddress = new Uri("http://localhost:4001/api/records/modifyid");
-            var json = JsonSerializer.Serialize(post);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            //NO STATUS CODE?
-            var response = client.PostAsync("", content).Result;
-            if (response.IsSuccessStatusCode) {
-                var responseContent = response.Content.ReadAsStringAsync().Result;
-                var postResponse = JsonSerializer.Deserialize<Records>(responseContent);
-            } else {
-                System.Windows.MessageBox.Show("Error " + response.StatusCode);
-            }
-
-        }//end function
 
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
@@ -344,12 +280,22 @@ namespace MSBeverageRecordApp {
 
                     if (deserializeObject.Items[i].record_id == Reports.record_id) {
                         deserializeObject.Items[i].is_deleted = 1;
+
+                        post.record_id = Reports.record_id;
+                        //post.manufacturer = deserializeObject.ManufacturerItems[i].id;
+                        //post.category = deserializeObject.CategoryItems[i].id;
+                        post.model = txbModel.Text;
+                        post.serial = txbSerial.Text;
+                        post.purchase_date = DateTime.Parse(txbPurchaseDate.Text);
+                        post.cost = decimal.Parse(txbCost.Text);
+                        //post.location = deserializeObject.LocationItems[i].ID;
+                        post.sub_location = txbSubLocation.Text;
+                        post.is_deleted = 1;
                     }
 
-
-
                 }//end for loop
-         
+
+                UpdateDataBase(deserializeObject);
 
 
 
