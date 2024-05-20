@@ -126,72 +126,98 @@ namespace MSBeverageRecordApp {
 
         private void AddDataRows(RootObject obj, Table table, PdfFont font, string title) {
 
+
             switch (title) {
                 case "allData":
                     foreach (var item in obj.Items) {
-                        table.AddCell(CreateCell(item.record_id.ToString(), font));
-                        table.AddCell(CreateCell(item.categoryName.ToString(), font));
-                        table.AddCell(CreateCell(item.companyName.ToString(), font));
-                        table.AddCell(CreateCell(item.model.ToString(), font));
-                        table.AddCell(CreateCell(item.serial.ToString(), font));
-                        table.AddCell(CreateCell(item.purchase_date.ToString(), font));
-                        table.AddCell(CreateCell(item.cost.ToString("C"), font));
-                        table.AddCell(CreateCell(item.locationName.ToString(), font));
-                        table.AddCell(CreateCell(item.sub_location.ToString(), font));
+                        if(item.sub_location == null) {
+                            item.sub_location = "";
+                        }
+                        if (item.is_deleted == 0) {
+
+                            table.AddCell(CreateCell(item.record_id.ToString(), font));
+                            table.AddCell(CreateCell(item.categoryName.ToString(), font));
+                            table.AddCell(CreateCell(item.companyName.ToString(), font));
+                            table.AddCell(CreateCell(item.model.ToString(), font));
+                            table.AddCell(CreateCell(item.serial.ToString(), font));
+                            table.AddCell(CreateCell(item.purchase_date.ToString(), font));
+                            table.AddCell(CreateCell(item.cost.ToString("C"), font));
+                            table.AddCell(CreateCell(item.locationName.ToString(), font));
+                            table.AddCell(CreateCell(item.sub_location.ToString(), font));
+                        }
                     }
                     break;
                 case "category":
                     foreach (var item in obj.Items) {
-                        //table.AddCell(CreateCell(item.record_id.ToString(), font));
-                        table.AddCell(CreateCell(item.categoryName.ToString(), font));
-                        table.AddCell(CreateCell(item.companyName.ToString(), font));
-                        table.AddCell(CreateCell(item.model.ToString(), font));
-                        table.AddCell(CreateCell(item.serial.ToString(), font));
-                        //table.AddCell(CreateCell(item.purchase_date.ToString(), font));
-                        //table.AddCell(CreateCell(item.cost.ToString(), font));
-                        table.AddCell(CreateCell(item.locationName.ToString(), font));
-                        table.AddCell(CreateCell(item.sub_location.ToString(), font));
+                        if (item.sub_location == null) {
+                            item.sub_location = "";
+                        }
+                        if (item.is_deleted == 0) {
+                            //table.AddCell(CreateCell(item.record_id.ToString(), font));
+                            table.AddCell(CreateCell(item.categoryName.ToString(), font));
+                            table.AddCell(CreateCell(item.companyName.ToString(), font));
+                            table.AddCell(CreateCell(item.model.ToString(), font));
+                            table.AddCell(CreateCell(item.serial.ToString(), font));
+                            //table.AddCell(CreateCell(item.purchase_date.ToString(), font));
+                            //table.AddCell(CreateCell(item.cost.ToString(), font));
+                            table.AddCell(CreateCell(item.locationName.ToString(), font));
+                            table.AddCell(CreateCell(item.sub_location.ToString(), font)); 
+                        }
                     }
                     break;
                 case "manufacturer":
                     foreach (var item in obj.Items) {
-                        //table.AddCell(CreateCell(item.record_id.ToString(), font));
-                        //table.AddCell(CreateCell(item.categoryName.ToString(), font));
-                        table.AddCell(CreateCell(item.companyName.ToString(), font));
-                        table.AddCell(CreateCell(item.model.ToString(), font));
-                        table.AddCell(CreateCell(item.serial.ToString(), font));
-                        //table.AddCell(CreateCell(item.purchase_date.ToString(), font));
-                        //table.AddCell(CreateCell(item.cost.ToString(), font));
-                        table.AddCell(CreateCell(item.locationName.ToString(), font));
-                        table.AddCell(CreateCell(item.sub_location.ToString(), font));
+                        if (item.sub_location == null) {
+                            item.sub_location = "";
+                        }
+                        if (item.is_deleted == 0) {
+                            //table.AddCell(CreateCell(item.record_id.ToString(), font));
+                            //table.AddCell(CreateCell(item.categoryName.ToString(), font));
+                            table.AddCell(CreateCell(item.companyName.ToString(), font));
+                            table.AddCell(CreateCell(item.model.ToString(), font));
+                            table.AddCell(CreateCell(item.serial.ToString(), font));
+                            //table.AddCell(CreateCell(item.purchase_date.ToString(), font));
+                            //table.AddCell(CreateCell(item.cost.ToString(), font));
+                            table.AddCell(CreateCell(item.locationName.ToString(), font));
+                            table.AddCell(CreateCell(item.sub_location.ToString(), font)); 
+                        }
                     }
                     break;
                 case "location":
                     foreach (var item in obj.Items) {
-                        //table.AddCell(CreateCell(item.record_id.ToString(), font));
-                        //table.AddCell(CreateCell(item.categoryName.ToString(), font));
-                        table.AddCell(CreateCell(item.locationName.ToString(), font));
-                        table.AddCell(CreateCell(item.sub_location.ToString(), font));
-                        table.AddCell(CreateCell(item.companyName.ToString(), font));
-                        table.AddCell(CreateCell(item.model.ToString(), font));
-                        table.AddCell(CreateCell(item.serial.ToString(), font));
-                        //table.AddCell(CreateCell(item.purchase_date.ToString(), font));
-                        //table.AddCell(CreateCell(item.cost.ToString(), font));
+                        if (item.sub_location == null) {
+                            item.sub_location = "";
+                        }
+                        if (item.is_deleted == 0) {
+                            //table.AddCell(CreateCell(item.record_id.ToString(), font));
+                            //table.AddCell(CreateCell(item.categoryName.ToString(), font));
+                            table.AddCell(CreateCell(item.locationName.ToString(), font));
+                            table.AddCell(CreateCell(item.sub_location.ToString(), font));
+                            table.AddCell(CreateCell(item.companyName.ToString(), font));
+                            table.AddCell(CreateCell(item.model.ToString(), font));
+                            table.AddCell(CreateCell(item.serial.ToString(), font));
+                            //table.AddCell(CreateCell(item.purchase_date.ToString(), font));
+                            //table.AddCell(CreateCell(item.cost.ToString(), font)); 
+                        }
 
                     }
                     break;
                 case "totalValue":
                     foreach (var item in obj.Items) {
-
-                        //table.AddCell(CreateCell(item.record_id.ToString(), font));
-                        table.AddCell(CreateCell(item.categoryName.ToString(), font));
-                        //table.AddCell(CreateCell(item.companyName.ToString(), font));
-                        //table.AddCell(CreateCell(item.model.ToString(), font));
-                        //table.AddCell(CreateCell(item.serial.ToString(), font));
-                        //table.AddCell(CreateCell(item.purchase_date.ToString(), font));
-                        table.AddCell(CreateCell(item.cost.ToString("C"), font));
-                        //table.AddCell(CreateCell(item.locationName.ToString(), font));
-                        //table.AddCell(CreateCell(item.sub_location.ToString(), font));
+                        if (item.sub_location == null) {
+                            item.sub_location = "";
+                        }
+                        if (item.is_deleted == 0) {
+                            //table.AddCell(CreateCell(item.record_id.ToString(), font));
+                            table.AddCell(CreateCell(item.categoryName.ToString(), font));
+                            //table.AddCell(CreateCell(item.companyName.ToString(), font));
+                            //table.AddCell(CreateCell(item.model.ToString(), font));
+                            //table.AddCell(CreateCell(item.serial.ToString(), font));
+                            //table.AddCell(CreateCell(item.purchase_date.ToString(), font));
+                            table.AddCell(CreateCell(item.cost.ToString("C"), font));
+                            //table.AddCell(CreateCell(item.locationName.ToString(), font));
+                            //table.AddCell(CreateCell(item.sub_location.ToString(), font)); 
+                        }
 
                     }
                     break;
@@ -222,68 +248,93 @@ namespace MSBeverageRecordApp {
             switch (filter) {
                 case "allData":
                     foreach (var item in obj.Items) {
-                        sw.Write(GetStringValue(item.record_id) + ",");
-                        sw.Write(GetStringValue(item.categoryName) + ",");
-                        sw.Write(GetStringValue(item.companyName) + ",");
-                        sw.Write(GetStringValue(item.model) + ",");
-                        sw.Write(GetStringValue(item.serial) + ",");
-                        sw.Write(GetStringValue(item.purchase_date.ToString("d") + ","));
-                        sw.Write(GetStringValue(item.cost.ToString("C") + ","));
-                        sw.Write(GetStringValue(item.locationName) + ",");
-                        sw.WriteLine(GetStringValue(item.sub_location));
+                        if(item.sub_location == null) {
+                            item.sub_location = "";
+                        }
+
+                        if (item.is_deleted == 0) {
+                            sw.Write(GetStringValue(item.record_id) + ",");
+                            sw.Write(GetStringValue(item.categoryName) + ",");
+                            sw.Write(GetStringValue(item.companyName) + ",");
+                            sw.Write(GetStringValue(item.model) + ",");
+                            sw.Write(GetStringValue(item.serial) + ",");
+                            sw.Write(GetStringValue(item.purchase_date.ToString("d") + ","));
+                            sw.Write(GetStringValue(item.cost.ToString("C") + ","));
+                            sw.Write(GetStringValue(item.locationName) + ",");
+                            sw.WriteLine(GetStringValue(item.sub_location)); 
+                        }
                     }
                     break;
                 case "category":
                     foreach (var item in obj.Items) {
-                        //sw.Write(GetStringValue(item.record_id) + ",");
-                        sw.Write(GetStringValue(item.categoryName) + ",");
-                        sw.Write(GetStringValue(item.companyName) + ",");
-                        sw.Write(GetStringValue(item.model) + ",");
-                        sw.Write(GetStringValue(item.serial) + ",");
-                        //sw.Write(GetStringValue(item.purchase_date) + ",");
-                        //sw.Write(GetStringValue(item.cost) + ",");
-                        sw.Write(GetStringValue(item.locationName) + ",");
-                        sw.WriteLine(GetStringValue(item.sub_location));
+                        if (item.is_deleted == 0) {
+                            if (item.sub_location == null) {
+                                item.sub_location = "";
+                            }
+                            //sw.Write(GetStringValue(item.record_id) + ",");
+                            sw.Write(GetStringValue(item.categoryName) + ",");
+                            sw.Write(GetStringValue(item.companyName) + ",");
+                            sw.Write(GetStringValue(item.model) + ",");
+                            sw.Write(GetStringValue(item.serial) + ",");
+                            //sw.Write(GetStringValue(item.purchase_date) + ",");
+                            //sw.Write(GetStringValue(item.cost) + ",");
+                            sw.Write(GetStringValue(item.locationName) + ",");
+                            sw.WriteLine(GetStringValue(item.sub_location)); 
+                        }
                     }
                     break;
                 case "manufacturer":
                     foreach (var item in obj.Items) {
-                        //sw.Write(GetStringValue(item.record_id) + ",");
-                        //sw.Write(GetStringValue(item.categoryName) + ",");
-                        sw.Write(GetStringValue(item.companyName) + ",");
-                        sw.Write(GetStringValue(item.model) + ",");
-                        sw.Write(GetStringValue(item.serial) + ",");
-                        //sw.Write(GetStringValue(item.purchase_date) + ",");
-                        //sw.Write(GetStringValue(item.cost) + ",");
-                        sw.Write(GetStringValue(item.locationName) + ",");
-                        sw.WriteLine(GetStringValue(item.sub_location));
+                        if (item.is_deleted == 0) {
+                            if (item.sub_location == null) {
+                                item.sub_location = "";
+                            }
+                            //sw.Write(GetStringValue(item.record_id) + ",");
+                            //sw.Write(GetStringValue(item.categoryName) + ",");
+                            sw.Write(GetStringValue(item.companyName) + ",");
+                            sw.Write(GetStringValue(item.model) + ",");
+                            sw.Write(GetStringValue(item.serial) + ",");
+                            //sw.Write(GetStringValue(item.purchase_date) + ",");
+                            //sw.Write(GetStringValue(item.cost) + ",");
+                            sw.Write(GetStringValue(item.locationName) + ",");
+                            sw.WriteLine(GetStringValue(item.sub_location)); 
+                        }
                     }
                     break;
                 case "location":
                     foreach (var item in obj.Items) {
-
-                        //sw.Write(GetStringValue(item.record_id) + ",");
-                        //sw.Write(GetStringValue(item.categoryName) + ",");
-                        sw.Write(GetStringValue(item.locationName) + ",");
-                        sw.Write(GetStringValue(item.sub_location) + ",");
-                        sw.Write(GetStringValue(item.companyName) + ",");
-                        sw.Write(GetStringValue(item.model) + ",");
-                        sw.WriteLine(GetStringValue(item.serial));
-                        //sw.Write(GetStringValue(item.purchase_date) + ",");
-                        //sw.Write(GetStringValue(item.cost) + ",");
+                        if (item.sub_location == null) {
+                            item.sub_location = "";
+                        }
+                        if (item.is_deleted == 0) {
+                            //sw.Write(GetStringValue(item.record_id) + ",");
+                            //sw.Write(GetStringValue(item.categoryName) + ",");
+                            sw.Write(GetStringValue(item.locationName) + ",");
+                            sw.Write(GetStringValue(item.sub_location) + ",");
+                            sw.Write(GetStringValue(item.companyName) + ",");
+                            sw.Write(GetStringValue(item.model) + ",");
+                            sw.WriteLine(GetStringValue(item.serial));
+                            //sw.Write(GetStringValue(item.purchase_date) + ",");
+                            //sw.Write(GetStringValue(item.cost) + ","); 
+                        }
                     }
                     break;
                 case "totalValue":
                     foreach (var item in obj.Items) {
-                        //sw.Write(GetStringValue(item.record_id) + ",");
-                        sw.Write(GetStringValue(item.categoryName) + ",");
-                        sw.WriteLine(GetStringValue(item.cost.ToString("C") + ","));
-                        //sw.Write(GetStringValue(item.companyName) + ",");
-                        //sw.Write(GetStringValue(item.model) + ",");
-                        //sw.Write(GetStringValue(item.serial) + ",");
-                        //sw.Write(GetStringValue(item.purchase_date) + ",");
-                        //sw.Write(GetStringValue(item.locationName) + ",");
-                        //sw.WriteLine(GetStringValue(item.sub_location));
+                        if (item.sub_location == null) {
+                            item.sub_location = "";
+                        }
+                        if (item.is_deleted == 0) {
+                            //sw.Write(GetStringValue(item.record_id) + ",");
+                            sw.Write(GetStringValue(item.categoryName) + ",");
+                            sw.WriteLine(GetStringValue(item.cost.ToString("C") + ","));
+                            //sw.Write(GetStringValue(item.companyName) + ",");
+                            //sw.Write(GetStringValue(item.model) + ",");
+                            //sw.Write(GetStringValue(item.serial) + ",");
+                            //sw.Write(GetStringValue(item.purchase_date) + ",");
+                            //sw.Write(GetStringValue(item.locationName) + ",");
+                            //sw.WriteLine(GetStringValue(item.sub_location)); 
+                        }
                     }
                     break;
             }
@@ -298,21 +349,28 @@ namespace MSBeverageRecordApp {
 
         private decimal CalculateTotalCost(RootObject obj, string title) {
             decimal totalCost = 0;
-
-            switch (title) {
-                case "allData":
-                case "category":
-                case "manufacturer":
-                case "location":
-                    foreach (var item in obj.Items) {
-                        totalCost += item.cost;
-                    }
-                    break;
-                case "totalValue":
-                    foreach (var item in obj.Items) {
-                        totalCost += item.cost;
-                    }
-                    break;
+            //only add not deleted items
+            //check if necessary
+            //switch (title) {
+            //    case "allData":
+            //    case "category":
+            //    case "manufacturer":
+            //    case "location":
+            //        foreach (var item in obj.Items) {
+            //            totalCost += item.cost;
+            //        }
+            //        break;
+            //    case "totalValue":
+            //        foreach (var item in obj.Items) {
+            //            totalCost += item.cost;
+            //        }
+            //        break;
+            //}
+            //test on each
+            foreach (var item in obj.Items) {
+                if (item.is_deleted == 0) {
+                    totalCost += item.cost;
+                }
             }
 
             return totalCost;

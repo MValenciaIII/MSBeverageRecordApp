@@ -358,7 +358,11 @@ namespace MSBeverageRecordApp {
 
                 deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
 
-
+                for (int i = 0; i < deserializeObject.Items.Count; i++) {
+                    if (deserializeObject.Items[i].sub_location == null) {
+                        deserializeObject.Items[i].sub_location = "";
+                    }
+                }
 
                
 
@@ -388,7 +392,11 @@ namespace MSBeverageRecordApp {
 
                 //CHANGE OUR STRING TO OBJECT DATA
                 deserializeObject.CategoryItems = JsonSerializer.Deserialize<List<Category>>(dataobjects);
-
+                for (int i = 0; i < deserializeObject.Items.Count; i++) {
+                    if (deserializeObject.Items[i].sub_location == null) {
+                        deserializeObject.Items[i].sub_location = "";
+                    }
+                }
             }//end if
         }//end function
 
@@ -415,7 +423,11 @@ namespace MSBeverageRecordApp {
 
                 //CHANGE OUR STRING TO OBJECT DATA
                 deserializeObject.LocationItems = JsonSerializer.Deserialize<List<Location>>(dataobjects);
-
+                for (int i = 0; i < deserializeObject.Items.Count; i++) {
+                    if (deserializeObject.Items[i].sub_location == null) {
+                        deserializeObject.Items[i].sub_location = "";
+                    }
+                }
             }//end if
         }//end function
 
@@ -442,7 +454,11 @@ namespace MSBeverageRecordApp {
 
                 //CHANGE OUR STRING TO OBJECT DATA
                 deserializeObject.ManufacturerItems = JsonSerializer.Deserialize<List<Manufacturer>>(dataobjects);
-
+                for (int i = 0; i < deserializeObject.Items.Count; i++) {
+                    if (deserializeObject.Items[i].sub_location == null) {
+                        deserializeObject.Items[i].sub_location = "";
+                    }
+                }
             }//end if
         }//end function
 
@@ -540,6 +556,10 @@ namespace MSBeverageRecordApp {
 
             //CHECKS WHAT IS SELECTED ON FILTERBY 
             switch (Filterby.SelectedItem as string) {
+
+                case null:
+                    //RETURN RECORD ID FILTER
+                    return NoFilter;
 
                 //IF RECORD ID IS SELECTED
                 case "RecordID":

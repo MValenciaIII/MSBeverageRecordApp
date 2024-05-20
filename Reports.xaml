@@ -39,6 +39,18 @@
                                 <DataGridTextColumn Header="Location" Binding="{Binding locationName}"/>
                                 <DataGridTextColumn Header="Sub Location" Binding="{Binding sub_location}"/>
                             </DataGrid.Columns>
+
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridRow">
+                                   
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding is_deleted}" Value="1">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+
                         </DataGrid>
                     </Grid>
 
@@ -57,6 +69,18 @@
                                 <DataGridTextColumn Header="Location" Binding="{Binding locationName}" Width="125"/>
                                 <DataGridTextColumn Header="Sub Location" Binding="{Binding sub_location}" Width="125"/>
                             </DataGrid.Columns>
+
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridRow">
+
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding is_deleted}" Value="1">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                            
                         </DataGrid>
                     </Grid>
                 </TabItem>
@@ -73,7 +97,19 @@
                                 <DataGridTextColumn Header="Location" Binding="{Binding locationName}" Width="150"/>
                                 <DataGridTextColumn Header="Sub Location" Binding="{Binding sub_location}" Width="150"/>
                             </DataGrid.Columns>
+
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridRow">
+
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding is_deleted}" Value="1">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
                         </DataGrid>
+
                     </Grid>
                 </TabItem>
 
@@ -89,6 +125,18 @@
                                 <DataGridTextColumn Header="Model" Binding="{Binding model}" Width="150"/>
                                 <DataGridTextColumn Header="Serial Number" Binding="{Binding serial}" Width="150"/>
                             </DataGrid.Columns>
+
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridRow">
+
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding is_deleted}" Value="1">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.Resources>
+                            
                         </DataGrid>
                     </Grid>
                 </TabItem>
@@ -99,6 +147,18 @@
                             <DataGridTextColumn Header="Category" Binding="{Binding categoryName}" Width="150"/>
                             <DataGridTextColumn Header="Cost" Binding="{Binding cost, StringFormat=C}" Width="150"/>
                         </DataGrid.Columns>
+
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridRow">
+
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding is_deleted}" Value="1">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        
                     </DataGrid>
                 </TabItem>
 
