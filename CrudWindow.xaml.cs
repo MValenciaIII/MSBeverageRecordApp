@@ -190,6 +190,7 @@ namespace MSBeverageRecordApp {
 
             //FILLS EDIT WINDOW VALUES
             Reports = rep;
+            EditHeader.Content = $"Edit Record #{rep.record_id}";
             cboCatName.Text = $"{rep.categoryName}";
             cboManufacturer.Text = $"{rep.companyName}";
             txbModel.Text = $"{rep.model}";
@@ -208,8 +209,9 @@ namespace MSBeverageRecordApp {
             MSBeverageRecordGrid.Visibility = Visibility.Collapsed;
             consoleOutput.Visibility = Visibility.Collapsed;
             fileMenu.Visibility = Visibility.Collapsed;
-            Filter.Visibility = Visibility.Collapsed;
-
+            Filterby.Visibility = Visibility.Collapsed;
+            txtSearchPlaceholder.Visibility = Visibility.Collapsed;
+            FilterTextBox.Visibility = Visibility.Collapsed;
             //add delete button here
 
         }//end event
@@ -219,7 +221,7 @@ namespace MSBeverageRecordApp {
 
             Records Reports = rep;
             //CALL UPDATE FUNCTION WHEN USER SAVES
-          
+            
             for (int i = 0; i < deserializeObject.Items.Count; i++) {
 
                 if (deserializeObject.Items[i].record_id == Reports.record_id) {
@@ -244,7 +246,7 @@ namespace MSBeverageRecordApp {
                     deserializeObject.Items[i].sub_location = txbSubLocation.Text;
                 }
 
-              
+                EditHeader.Content = "";
                 MSBeverageRecordGrid.ItemsSource = null;
                 MSBeverageRecordGrid.ItemsSource = deserializeObject.Items;
                 
@@ -258,10 +260,16 @@ namespace MSBeverageRecordApp {
             MSBeverageRecordGrid.Visibility = Visibility.Visible;
             consoleOutput.Visibility = Visibility.Hidden;
             fileMenu.Visibility = Visibility.Visible;
-            Filter.Visibility = Visibility.Visible;
+            Filterby.Visibility = Visibility.Visible;
+            txtSearchPlaceholder.Visibility = Visibility.Visible;
+            FilterTextBox.Visibility = Visibility.Visible;
+            Filterby.Visibility = Visibility.Visible;
+            txtSearchPlaceholder.Visibility = Visibility.Visible;
+            FilterTextBox.Visibility = Visibility.Visible;
 
             btnSave.Visibility = Visibility.Hidden;
             btnCancel.Visibility = Visibility.Hidden;
+            btnDelete.Visibility = Visibility.Hidden;
 
             spLabels.Visibility = Visibility.Hidden;
             spText.Visibility = Visibility.Hidden;
@@ -308,10 +316,14 @@ namespace MSBeverageRecordApp {
                 btnCancel.Visibility = Visibility.Hidden;
                 btnDelete.Visibility = Visibility.Hidden;
 
+                Filterby.Visibility = Visibility.Visible;
+                txtSearchPlaceholder.Visibility = Visibility.Visible;
+                FilterTextBox.Visibility = Visibility.Visible;
+
                 consoleOutput.Visibility = Visibility.Hidden;
                 spLabels.Visibility = Visibility.Hidden;
                 spText.Visibility = Visibility.Hidden;
-
+                EditHeader.Content = "";
             } else if (dialogResult == MessageBoxResult.No) {
                 
                 //nothing needed
@@ -324,13 +336,18 @@ namespace MSBeverageRecordApp {
             MSBeverageRecordGrid.Visibility = Visibility.Visible;
             consoleOutput.Visibility = Visibility.Hidden;
             fileMenu.Visibility = Visibility.Visible;
-            Filter.Visibility = Visibility.Visible;
+            Filterby.Visibility = Visibility.Visible;
+            txtSearchPlaceholder.Visibility = Visibility.Visible;
+            FilterTextBox.Visibility = Visibility.Visible;
 
             btnSave.Visibility = Visibility.Hidden;
             btnCancel.Visibility = Visibility.Hidden;
+            btnDelete.Visibility= Visibility.Hidden;
 
             spLabels.Visibility = Visibility.Hidden;
             spText.Visibility = Visibility.Hidden;
+
+            EditHeader.Content = "";
         }//end function
 
         private void RecordsAPI() {

@@ -11,9 +11,6 @@ namespace MSBeverageRecordApp {
     /// INTERACTION LOGIC FOR Reports.xaml
     /// </summary>
 
-
-
-
     public partial class Reports : Page {
         //GLOBAL VARIABLE
         RootObject deserializeObject = new RootObject();
@@ -43,78 +40,128 @@ namespace MSBeverageRecordApp {
         string title = "";
 
         public Reports() {
-
             InitializeComponent();
+            LoadData();
+        }
 
-            //SETTING UP NEW INSTANCE OF A TYPE OF DATA
-            using HttpClient client = new();
-
-            //GETTING QUERY API LINK FOR OBJECT DATA 
-            client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
-
-            //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
-            client.DefaultRequestHeaders.Accept.Add(
-               new MediaTypeWithQualityHeaderValue("application/json"));
-
-            //THIS IS VARIABLE TO GET OBJECT DATA FROM API
-            var response = client.GetAsync(client.BaseAddress).Result;
-
-            //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
-            if (response.IsSuccessStatusCode) {
-
-                //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
-                var dataobjects = response.Content.ReadAsStringAsync().Result;
-
-                //CHANGE OUR STRING TO OBJECT DATA
-                deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
-                //ALL DATA
-                MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
-
-                allObj = deserializeObject;
-                allGrid.ItemsSource = allObj.Items;
-
-                //CATEGORY
-                MSBeverageRecordApp2.ItemsSource = deserializeObject.Items;
-
-                //catObj = deserializeObject;
-                //catGrid.ItemsSource = catObj.Items;
-
-                //MANUFACTURER
-                MSBeverageRecordApp3.ItemsSource = deserializeObject.Items;
-
-                //manuObj = deserializeObject;
-                //manuGrid.ItemsSource = manuObj.Items;
-
-                //LOCATION
-                MSBeverageRecordApp4.ItemsSource = deserializeObject.Items;
-
-                //locObj = deserializeObject;
-                //locGrid.ItemsSource = locObj.Items;
-
-                //COST
-                MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
-
-                totalObj = deserializeObject;
-                totalGrid.ItemsSource = CreateCostReport(totalObj);
-                totalObj.CostItems = (List<TotalCostData>)totalGrid.ItemsSource;
-                //TOTAL VALUE
-                //CALL COMBO BOX FUNCTIONS
-
-                CreateCategoryFilterItems(deserializeObject);
-                CreateManufacturerFilterItems(deserializeObject);
-                CreateLocationFilterItems(deserializeObject);
+        private async void LoadData() {
+            try {
+                using HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var response = await client.GetAsync(client.BaseAddress);
+                if (response.IsSuccessStatusCode) {
+                    var dataobjects = await response.Content.ReadAsStringAsync();
+                    deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
+                    if (deserializeObject.Items != null) {
+                        //ALL DATA
+                        MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+                        allObj = deserializeObject;
+                        allGrid.ItemsSource = allObj.Items;
+                        //CATEGORY
+                        MSBeverageRecordApp2.ItemsSource = deserializeObject.Items;
+                        //MANUFACTURER
+                        MSBeverageRecordApp3.ItemsSource = deserializeObject.Items;
+                        //LOCATION
+                        MSBeverageRecordApp4.ItemsSource = deserializeObject.Items;
+                        //COST
+                        if (deserializeObject.Items.Count > 0) {
+                            var costReport = CreateCostReport(deserializeObject);
+                            MSBeverageRecordApp5.ItemsSource = costReport;
+                            totalGrid.ItemsSource = costReport;
+                            totalObj = deserializeObject;
+                            totalObj.CostItems = (List<TotalCostData>)totalGrid.ItemsSource;
+                        }
+                        // Initialize filters
+                        CreateCategoryFilterItems(deserializeObject);
+                        CreateManufacturerFilterItems(deserializeObject);
+                        CreateLocationFilterItems(deserializeObject);
+                    } else {
+                        // Handle case where deserializedObject.Items is null
+                        MessageBox.Show("Failed to deserialize items.");
+                    }
+                } else {
+                    MessageBox.Show("Failed to retrieve data from API.");
+                }
+            } catch (Exception ex) {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+        }
 
 
-                #region GridRowCustom
-                MSBeverageRecordApp.CanUserAddRows = false;
-                MSBeverageRecordApp2.CanUserAddRows = false;
-                MSBeverageRecordApp3.CanUserAddRows = false;
-                MSBeverageRecordApp4.CanUserAddRows = false;
-                MSBeverageRecordApp5.CanUserAddRows = false;
-                #endregion GridRowCustom
-            }//end if
-        }//end main
+        //public Reports() {
 
+        //    InitializeComponent();
+
+        //    //SETTING UP NEW INSTANCE OF A TYPE OF DATA
+        //    using HttpClient client = new();
+
+        //    //GETTING QUERY API LINK FOR OBJECT DATA 
+        //    client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
+
+        //    //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
+        //    client.DefaultRequestHeaders.Accept.Add(
+        //       new MediaTypeWithQualityHeaderValue("application/json"));
+
+        //    //THIS IS VARIABLE TO GET OBJECT DATA FROM API
+        //    var response = client.GetAsync(client.BaseAddress).Result;
+
+        //    //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
+        //    if (response.IsSuccessStatusCode) {
+
+        //        //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
+        //        var dataobjects = response.Content.ReadAsStringAsync().Result;
+
+        //        //CHANGE OUR STRING TO OBJECT DATA
+        //        deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
+        //        //ALL DATA
+        //        MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
+
+        //        allObj = deserializeObject;
+        //        allGrid.ItemsSource = allObj.Items;
+
+        //        //CATEGORY
+        //        MSBeverageRecordApp2.ItemsSource = deserializeObject.Items;
+
+        //        //catObj = deserializeObject;
+        //        //catGrid.ItemsSource = catObj.Items;
+
+        //        //MANUFACTURER
+        //        MSBeverageRecordApp3.ItemsSource = deserializeObject.Items;
+
+        //        //manuObj = deserializeObject;
+        //        //manuGrid.ItemsSource = manuObj.Items;
+
+        //        //LOCATION
+        //        MSBeverageRecordApp4.ItemsSource = deserializeObject.Items;
+
+        //        //locObj = deserializeObject;
+        //        //locGrid.ItemsSource = locObj.Items;
+
+        //        //TOTAL VALUE
+        //        //CALL COMBO BOX FUNCTIONS
+
+        //        CreateCategoryFilterItems(deserializeObject);
+        //        CreateManufacturerFilterItems(deserializeObject);
+        //        CreateLocationFilterItems(deserializeObject);
+
+
+        //        //COST
+        //        if (deserializeObject.Items.Count > 0) {
+        //            MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
+        //            totalGrid.ItemsSource = CreateCostReport(totalObj);
+        //            totalObj = deserializeObject;
+        //            totalObj.CostItems = (List<TotalCostData>)totalGrid.ItemsSource;
+        //        }
+        //        #region GridRowCustom
+        //        MSBeverageRecordApp.CanUserAddRows = false;
+        //        MSBeverageRecordApp2.CanUserAddRows = false;
+        //        MSBeverageRecordApp3.CanUserAddRows = false;
+        //        MSBeverageRecordApp4.CanUserAddRows = false;
+        //        MSBeverageRecordApp5.CanUserAddRows = false;
+        //        #endregion GridRowCustom
+        //    }//end if
+        //}//end main
 
         #region print calls
 
@@ -579,8 +626,6 @@ namespace MSBeverageRecordApp {
         #region Tab location
 
 
-
-
         public static List<Records> FilterHotspotRecordsLocation(List<Records> records, ComboBox filter) {
             List<Records> filteredRecords = new List<Records>();
 
@@ -665,55 +710,44 @@ namespace MSBeverageRecordApp {
         //create item for each category
 
         public static List<TotalCostData> CreateCostReport(RootObject list) {
-            List<TotalCostData> data = new List<TotalCostData>();
+              List<TotalCostData> data = new List<TotalCostData>();
+            if (list.Items == null || list.Items.Count == 0) {
+                return data;
+            }
 
-            // add first category
+            // Add first category
             data.Add(new TotalCostData {
-                categoryName = list.Items[1].categoryName,
+                categoryName = list.Items[0].categoryName,
                 cost = 0
             });
 
             for (int index = 0; index < list.Items.Count; index++) {
                 bool contains = false;
                 for (int itemIndex = 0; itemIndex < data.Count; itemIndex++) {
-                    //LOOP THROUGH DATA
-
-                    //IF REPORT CONTAINS THE CATEGORY 
-
                     if (data[itemIndex].categoryName == list.Items[index].categoryName) {
-                        //SET CONTAINS TO TRUE, THE REPORT ALREADY HAS THE LIST ITEM
                         contains = true;
-                    }//end if
-                     //IF THE REPORT DOES NOT CONTAIN THE CATEGORY
-                }//end for
-                if (contains == false) {
-                    //ADD THE CATEGORY TO THE REPORT
+                    }
+                }
+                if (!contains) {
                     data.Add(new TotalCostData {
                         categoryName = list.Items[index].categoryName,
                         cost = 0
-
                     });
-                }//end if
-            }//end for
+                }
+            }
 
-            //CREATE DATA TO HOLD TOTAL COST OF ALL CATEGORIES
-
-            //LOOP THROUGH TO ADD COSTS
             decimal totalCosts = 0;
             for (int index = 0; index < list.Items.Count; index++) {
                 for (int itemIndex = 0; itemIndex < data.Count; itemIndex++) {
-                    //LOOP THROUGH DATAindex
-                    //ADDS COST TO TOTAL FOR CATEGORY 
                     if (data[itemIndex].categoryName == list.Items[index].categoryName && list.Items[index].is_deleted == 0) {
                         data[itemIndex].cost += list.Items[index].cost;
-                    }//end if
-
-                }//end for
-                if (list.Items[index].is_deleted == 0) {
-                    totalCosts += list.Items[index].cost; 
+                    }
                 }
+                if (list.Items[index].is_deleted == 0) {
+                    totalCosts += list.Items[index].cost;
+                }
+            }
 
-            }//end for
             data.Add(new TotalCostData {
                 categoryName = "Total Cost",
                 cost = totalCosts
@@ -754,7 +788,7 @@ namespace MSBeverageRecordApp {
                 locGrid.ItemsSource = filteredLocationRecords;
                 locObj.Items = filteredLocationRecords;
             }
-            if (xtotalvalue.IsSelected) {
+            if (xtotalvalue.IsSelected && deserializeObject.Items.Count > 0) {
                 filterName = "totalValue";
                 MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject); // Update grid for total value
                 totalGrid.ItemsSource = CreateCostReport(deserializeObject);

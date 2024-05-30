@@ -12,8 +12,8 @@
             <Label Content="Mississippi Beverage Equipment Tracking" FontSize="40" HorizontalAlignment="Center" Margin="0,12,0,0" VerticalAlignment="Top"/>
             <Label FontSize="28px" Content="Create New Record" HorizontalAlignment="Left" Margin="286,68,0,0" VerticalAlignment="Top" Height="45" Width="250"/>
 
-            <TextBox x:Name="recordNumber" TextChanged="recordNumber_TextChanged" HorizontalAlignment="Left" Margin="286,118,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="60" Height="30" VerticalContentAlignment="Center"/>
-            <Label x:Name="IDtxtSearchPlaceholder" Content="ID#" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" HorizontalAlignment="Left" Height="30" Margin="286,118,0,0" VerticalAlignment="Top" Width="49" RenderTransformOrigin="0.551,0.8"/>
+            <TextBox x:Name="recordNumber" TextChanged="recordNumber_TextChanged" HorizontalAlignment="Right" Margin="286,118,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="60" Height="30" VerticalContentAlignment="Center" Visibility="Visible"/>
+            <Label x:Name="IDtxtSearchPlaceholder" Content="New Record" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" HorizontalAlignment="Left" Height="30" Margin="286,118,0,0" VerticalAlignment="Top" Width="49" RenderTransformOrigin="0.551,0.8" Visibility="Visible"/>
 
             <ComboBox x:Name="cboCategory"   HorizontalAlignment="Left" Margin="206,159,0,0"                     Text="Category"       VerticalAlignment="Top" Width="140" IsEditable="True" IsReadOnly="True" Focusable="False" Height="30"/>
             <ComboBox x:Name="cboManufacturer"  HorizontalAlignment="Left" Margin="206,205,0,0"                     Text="Manufacturer"   VerticalAlignment="Top" Width="140" IsEditable="True" IsReadOnly="True" Focusable="False" Height="30"/>
@@ -44,7 +44,7 @@
             <Label x:Name="subLocationtxtSearchPlaceholder" Content="Sub Location (optional)" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" HorizontalAlignment="Left" Height="30" Margin="441,205,0,0" VerticalAlignment="Top" Width="140"/>
 
             <Button Content="Submit" HorizontalAlignment="Left" Margin="461,388,0,0" VerticalAlignment="Top" Height="30" Width="100" Click="btnSubmit_Click" RenderTransformOrigin="0.54,1"/>
-            <Label Content="NewRecord ID" HorizontalAlignment="Left" Height="30" Margin="192,118,0,0" VerticalAlignment="Top" Width="89"/>
+            <!--<Label Content="New Record" HorizontalAlignment="Left" Height="30" Margin="192,118,0,0" VerticalAlignment="Top" Width="89"/>-->
 
         </Grid>
     </Viewbox>

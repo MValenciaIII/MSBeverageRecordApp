@@ -344,7 +344,7 @@ namespace MSBeverageRecordApp
                 IDtxtSearchPlaceholder.Visibility = Visibility.Hidden;
             } else {
                 //SHOW THE PLACEHOLDER TEXT IF TEXTBOX IS EMPTY
-                IDtxtSearchPlaceholder.Visibility = Visibility.Visible;
+                IDtxtSearchPlaceholder.Visibility = Visibility.Hidden;
             }//end if
         }//end event
         #endregion RecordID
@@ -409,7 +409,7 @@ namespace MSBeverageRecordApp
         private void PostNewRecords(RootObject list) {
             //RETRIEVE ALL INPUTS FROM CREATE RECORD PAGE
             var postData = new PostRecordsData {
-                record_id = Convert.ToInt32(recordNumber.Text),
+                //record_id = Convert.ToInt32(recordNumber.Text),
                 model = txtModel.Text.ToUpper(),
                 serial = txtSerialNumber.Text.ToUpper(),
                 purchase_date = PurchaseDate.SelectedDate.Value,
