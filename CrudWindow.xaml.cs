@@ -10,7 +10,6 @@ using System.Windows.Input;
 
 
 //TODO
-//
 
 namespace MSBeverageRecordApp {
 
@@ -380,9 +379,6 @@ namespace MSBeverageRecordApp {
                         deserializeObject.Items[i].sub_location = "";
                     }
                 }
-
-               
-
             }//end if
         }//end function
 
