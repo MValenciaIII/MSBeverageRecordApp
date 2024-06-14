@@ -38,7 +38,7 @@
                 </Label.RenderTransform>
             </Label>
 
-            <ComboBox x:Name="cboLocation"      HorizontalAlignment="Left" Margin="441,159,0,0"                     Text="Location"       VerticalAlignment="Top" Width="140" IsEditable="True" IsReadOnly="True" Focusable="False" Height="30"/>
+            <ComboBox x:Name="cboLocation"      HorizontalAlignment="Left" Margin="441,159,0,0"            Text="Location"       VerticalAlignment="Top" Width="140" IsEditable="True" IsReadOnly="True" Focusable="False" Height="30"/>
 
             <TextBox  x:Name="txtSubLocation" TextChanged="txtSubLocation_TextChanged" HorizontalAlignment="Right" Margin="0,205,219,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Height="30" VerticalContentAlignment="Center"/>
             <Label x:Name="subLocationtxtSearchPlaceholder" Content="Sub Location (optional)" Background="Transparent" Opacity="0.5" IsHitTestVisible="False" HorizontalAlignment="Left" Height="30" Margin="441,205,0,0" VerticalAlignment="Top" Width="140"/>

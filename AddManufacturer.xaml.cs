@@ -1,77 +1,115 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MSBeverageRecordApp {
-    /// <summary>
-    /// Interaction logic for AddManufacturer.xaml
-    /// </summary>
     public partial class AddManufacturer : Page {
-        //CLASS TO GET RESPONSE FROM API
         class PostResponse {
             public int Id { get; set; }
-        }//end class
+        }
+
         class PostManufacturer {
             public string companyName { get; set; }
-        }//end class
+        }
+
+        public class Manufacturer {
+            public int id { get; set; }
+            public string companyName { get; set; }
+        }
+
+        public class RootObject {
+            public List<Manufacturer> ManufacturerItems { get; set; }
+        }
+
+        RootObject deserializeObject = new RootObject();
+
         public AddManufacturer() {
             InitializeComponent();
-        }//end main
+            ManufacturerAPI();
+            CreateManufacturerComboBox(deserializeObject);
+
+        }
+
+        private void ManufacturerAPI() {
+            using HttpClient client = new();
+
+            client.BaseAddress = new Uri("http://localhost:4001/api/manufacturer");
+
+            client.DefaultRequestHeaders.Accept.Add(
+               new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var response = client.GetAsync(client.BaseAddress).Result;
+
+            if (response.IsSuccessStatusCode) {
+                var dataobjects = response.Content.ReadAsStringAsync().Result;
+
+                deserializeObject.ManufacturerItems = JsonSerializer.Deserialize<List<Manufacturer>>(dataobjects);
+            }
+
+        }
 
         private void Manufacturer_Button_Click(object sender, RoutedEventArgs e) {
-            //INPUT VALIDATION
             if (string.IsNullOrEmpty(txtManufacturer.Text)) {
-                //THE TEXTBOX IS EMPTY; DISPLAY AN ERROR MESSAGE OR TAKE APPROPRIATE ACTION.
-                MessageBox.Show("Please enter a value in the category.");
+                MessageBox.Show("Please enter a value in the manufacturer.");
             } else {
-                string input = txtManufacturer.Text;
+                string input = txtManufacturer.Text.ToUpper();
                 txtManufacturer.Text = "";
 
-                var postData = new PostManufacturer {
-                    companyName = input.ToUpper()
-                };
+                bool exists = deserializeObject.ManufacturerItems.Any(m => m.companyName == input);
 
-                //CREATING A NEW HTTPCLIENT OBJECT
-                var client = new HttpClient();
-
-                //SET BASE ADDRESS OF API
-                client.BaseAddress = new Uri("http://localhost:4001/api/manufacturer/manufacturercreate/");
-
-                //SERIALIZE POSTDATA OBJECT TO JSON STRING
-                var json = System.Text.Json.JsonSerializer.Serialize(postData);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                //MAKE POST REQUEST
-                var response = client.PostAsync(" ", content).Result;
-
-                //CHECK STATUS CODE TO SEE IF REQUEST WAS SUCCESSFUL
-                if (response.IsSuccessStatusCode) {
-                    var responseContent = response.Content.ReadAsStringAsync().Result;
-                    var options = new JsonSerializerOptions {
-                        PropertyNameCaseInsensitive = true
-
+                if (exists) {
+                    MessageBox.Show("This manufacturer already exists.");
+                } else {
+                    var postData = new PostManufacturer {
+                        companyName = input
                     };
-                    //PROMPT USER CATEGORY IS UPDATED
-                    MessageBox.Show("New manufacturer Added");
-                }//end if
 
-                //RETURN TO MAIN MENU
-                this.NavigationService.Navigate(new Uri("MenuPage.xaml", UriKind.Relative));
-            }//end if
+                    var client = new HttpClient();
 
-        }//end event
-    }//end class
-}//end namespace
+                    client.BaseAddress = new Uri("http://localhost:4001/api/manufacturer/manufacturercreate/");
+
+                    var json = System.Text.Json.JsonSerializer.Serialize(postData);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    var response = client.PostAsync(" ", content).Result;
+
+                    if (response.IsSuccessStatusCode) {
+                        var responseContent = response.Content.ReadAsStringAsync().Result;
+                        var options = new JsonSerializerOptions {
+                            PropertyNameCaseInsensitive = true
+                        };
+                        MessageBox.Show("New manufacturer Added");
+                    }
+
+                    this.NavigationService.Navigate(new Uri("MenuPage.xaml", UriKind.Relative));
+                }
+            }
+        }
+
+
+        private void CreateManufacturerComboBox(RootObject list) {
+            bool contains = false;
+
+            for (int index = 0; index < list.ManufacturerItems.Count; index++) {
+                for (int itemIndex = 0; itemIndex < cboMan.Items.Count; itemIndex++)
+
+                    if (cboMan.Items[itemIndex].ToString() == list.ManufacturerItems[index].companyName) {
+                        contains = true;
+                    }
+
+                if (list.ManufacturerItems[index].companyName == " " || list.ManufacturerItems[index].companyName == "") {
+                    index++;
+                }
+
+                if (contains == false) {
+                    cboMan.Items.Add(list.ManufacturerItems[index].companyName);
+                }
+                contains = false;
+            }
+
+        }
+    }
+}

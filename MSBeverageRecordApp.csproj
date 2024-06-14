@@ -9,6 +9,7 @@
 	<!--<UseWindowsForms>true</UseWindowsForms>-->
 	<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
 	<ApplicationIcon>letter-m-32.ico</ApplicationIcon>
+	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,14 +22,15 @@
 
   <ItemGroup>
     <!--<PackageReference Include="CSVLibraryAK" Version="1.1.4" />-->
+    <PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
     <PackageReference Include="BouncyCastle.NetCore" Version="2.2.1" />
-    <PackageReference Include="ChoETL.JSON" Version="1.2.1.65" />
-    <PackageReference Include="itext" Version="8.0.3" />
-    <PackageReference Include="itext.bouncy-castle-adapter" Version="8.0.3" />
-    <PackageReference Include="itext7" Version="8.0.3" />
+    <PackageReference Include="ChoETL.JSON" Version="1.2.1.66" />
+    <PackageReference Include="itext" Version="8.0.4" />
+    <PackageReference Include="itext.bouncy-castle-adapter" Version="8.0.4" />
+    <PackageReference Include="itext7" Version="8.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="PrintDialogX" Version="2.1.2" />
-    <PackageReference Include="WPF-UI" Version="3.0.3" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="WPF-UI" Version="3.0.4" />
   </ItemGroup>
 
 </Project>

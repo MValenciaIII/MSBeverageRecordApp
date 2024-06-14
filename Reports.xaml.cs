@@ -1,5 +1,6 @@
-﻿using System.Net.Http;
-//IMPORTING
+﻿using ChoETL;
+using System.ComponentModel;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Windows;
@@ -7,12 +8,14 @@ using System.Windows.Controls;
 using ComboBox = System.Windows.Controls.ComboBox;
 
 namespace MSBeverageRecordApp {
-    /// <summary>
-    /// INTERACTION LOGIC FOR Reports.xaml
-    /// </summary>
+
+
+    //reset the cost to the total for all records after switch out and back into the all data tab
 
     public partial class Reports : Page {
-        //GLOBAL VARIABLE
+        decimal totalBox = 0.0m;
+        bool isSubLocationFiltering = false;
+
         RootObject deserializeObject = new RootObject();
 
         string filterName = "allData";
@@ -20,9 +23,8 @@ namespace MSBeverageRecordApp {
 
         public class urlResult {
             public string[] results { get; set; }
-        }//end class
+        }
 
-        //GLOBALS FOR PRINT
         RootObject allObj = new RootObject();
         DataGrid allGrid = new DataGrid();
 
@@ -35,15 +37,22 @@ namespace MSBeverageRecordApp {
         RootObject locObj = new RootObject();
         DataGrid locGrid = new DataGrid();
 
+        RootObject s_locObj = new RootObject();
+        DataGrid s_locGrid = new DataGrid();
+
         RootObject totalObj = new RootObject();
         DataGrid totalGrid = new DataGrid();
         string title = "";
+        private List<Records> filteredRecords;
+
+
 
         public Reports() {
             InitializeComponent();
             LoadData();
         }
 
+        //fetch data from api for grid
         private async void LoadData() {
             try {
                 using HttpClient client = new HttpClient();
@@ -54,17 +63,13 @@ namespace MSBeverageRecordApp {
                     var dataobjects = await response.Content.ReadAsStringAsync();
                     deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
                     if (deserializeObject.Items != null) {
-                        //ALL DATA
                         MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
                         allObj = deserializeObject;
                         allGrid.ItemsSource = allObj.Items;
-                        //CATEGORY
                         MSBeverageRecordApp2.ItemsSource = deserializeObject.Items;
-                        //MANUFACTURER
                         MSBeverageRecordApp3.ItemsSource = deserializeObject.Items;
-                        //LOCATION
                         MSBeverageRecordApp4.ItemsSource = deserializeObject.Items;
-                        //COST
+
                         if (deserializeObject.Items.Count > 0) {
                             var costReport = CreateCostReport(deserializeObject);
                             MSBeverageRecordApp5.ItemsSource = costReport;
@@ -72,12 +77,12 @@ namespace MSBeverageRecordApp {
                             totalObj = deserializeObject;
                             totalObj.CostItems = (List<TotalCostData>)totalGrid.ItemsSource;
                         }
-                        // Initialize filters
                         CreateCategoryFilterItems(deserializeObject);
                         CreateManufacturerFilterItems(deserializeObject);
                         CreateLocationFilterItems(deserializeObject);
+                        CostTotal(deserializeObject);
+
                     } else {
-                        // Handle case where deserializedObject.Items is null
                         MessageBox.Show("Failed to deserialize items.");
                     }
                 } else {
@@ -88,86 +93,20 @@ namespace MSBeverageRecordApp {
             }
         }
 
+        private void CostTotal(RootObject d) {
+            if (d != null) {
+                foreach (var item in d.Items) {
+                    totalBox += item.cost;
+                }
+                lblCost.Content = $"cost: {totalBox.ToString("C")}";
+            } 
+            
+        }
 
-        //public Reports() {
-
-        //    InitializeComponent();
-
-        //    //SETTING UP NEW INSTANCE OF A TYPE OF DATA
-        //    using HttpClient client = new();
-
-        //    //GETTING QUERY API LINK FOR OBJECT DATA 
-        //    client.BaseAddress = new Uri("http://localhost:4001/api/records/recordsreal");
-
-        //    //ADD AN "ACCEPT" HEADER FOR JSON FORMAT
-        //    client.DefaultRequestHeaders.Accept.Add(
-        //       new MediaTypeWithQualityHeaderValue("application/json"));
-
-        //    //THIS IS VARIABLE TO GET OBJECT DATA FROM API
-        //    var response = client.GetAsync(client.BaseAddress).Result;
-
-        //    //IF THE RESPONSE VARIABLE IS TRUE RUN THIS CODE.
-        //    if (response.IsSuccessStatusCode) {
-
-        //        //CONVERTING OBJECT "RESPONSE" VARIABLE DATA TO STRING 
-        //        var dataobjects = response.Content.ReadAsStringAsync().Result;
-
-        //        //CHANGE OUR STRING TO OBJECT DATA
-        //        deserializeObject.Items = JsonSerializer.Deserialize<List<Records>>(dataobjects);
-        //        //ALL DATA
-        //        MSBeverageRecordApp.ItemsSource = deserializeObject.Items;
-
-        //        allObj = deserializeObject;
-        //        allGrid.ItemsSource = allObj.Items;
-
-        //        //CATEGORY
-        //        MSBeverageRecordApp2.ItemsSource = deserializeObject.Items;
-
-        //        //catObj = deserializeObject;
-        //        //catGrid.ItemsSource = catObj.Items;
-
-        //        //MANUFACTURER
-        //        MSBeverageRecordApp3.ItemsSource = deserializeObject.Items;
-
-        //        //manuObj = deserializeObject;
-        //        //manuGrid.ItemsSource = manuObj.Items;
-
-        //        //LOCATION
-        //        MSBeverageRecordApp4.ItemsSource = deserializeObject.Items;
-
-        //        //locObj = deserializeObject;
-        //        //locGrid.ItemsSource = locObj.Items;
-
-        //        //TOTAL VALUE
-        //        //CALL COMBO BOX FUNCTIONS
-
-        //        CreateCategoryFilterItems(deserializeObject);
-        //        CreateManufacturerFilterItems(deserializeObject);
-        //        CreateLocationFilterItems(deserializeObject);
-
-
-        //        //COST
-        //        if (deserializeObject.Items.Count > 0) {
-        //            MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
-        //            totalGrid.ItemsSource = CreateCostReport(totalObj);
-        //            totalObj = deserializeObject;
-        //            totalObj.CostItems = (List<TotalCostData>)totalGrid.ItemsSource;
-        //        }
-        //        #region GridRowCustom
-        //        MSBeverageRecordApp.CanUserAddRows = false;
-        //        MSBeverageRecordApp2.CanUserAddRows = false;
-        //        MSBeverageRecordApp3.CanUserAddRows = false;
-        //        MSBeverageRecordApp4.CanUserAddRows = false;
-        //        MSBeverageRecordApp5.CanUserAddRows = false;
-        //        #endregion GridRowCustom
-        //    }//end if
-        //}//end main
 
         #region print calls
 
         private void muiPrint_Click(object sender, RoutedEventArgs e) {
-
-            //"PrintDG" CLASS IS RESPONSIBLE FOR THE ACTUAL PRINTING PROCESS
 
             PrintDG p = new PrintDG();
 
@@ -187,16 +126,22 @@ namespace MSBeverageRecordApp {
                     p.printDG(manuObj, MSBeverageRecordApp3, title, filterName);
                     break;
                 case "location":
-                    title = $"location report    {DateTime.UtcNow.ToString("d")}";
-                    p.printDG(locObj, MSBeverageRecordApp4, title, filterName);
+                    if (FilterSubLocation.Text != "Select Sub-Location") {
+                        title = $"sublocation report    {DateTime.UtcNow.ToString("d")}";
+                        p.printDG(s_locObj, MSBeverageRecordApp4, title, filterName);
+                    } else {
+                        title = $"location report    {DateTime.UtcNow.ToString("d")}";
+                        p.printDG(locObj, MSBeverageRecordApp4, title, filterName);
+                    }
                     break;
                 case "totalValue":
                     title = $"cost report    {DateTime.UtcNow.ToString("d")}";
                     p.printDG(totalObj, MSBeverageRecordApp5, title, filterName);
                     break;
-            }//end switch
-        } //end function
+            }
+        }
         #endregion
+
 
 
         #region save calls
@@ -206,39 +151,29 @@ namespace MSBeverageRecordApp {
 
             SaveReport s = new SaveReport();
 
-            //call current report filter
             switch (filterName) {
                 case "allData":
 
                     title = $"report    {DateTime.UtcNow.ToString("d")}";
                     s.ExportToPdf(allObj, MSBeverageRecordApp, title, filterName);
-                    //p.printDG(allObj, MSBeverageRecordApp, title, filterName);
                     break;
                 case "category":
                     title = $"category report    {DateTime.UtcNow.ToString("d")}";
                     s.ExportToPdf(catObj, MSBeverageRecordApp2, title, filterName);
-                    //p.printDG(catObj, MSBeverageRecordApp2, title, filterName);
-                    //s.ExportToPdf(catGrid);
                     break;
                 case "manufacturer":
                     s.ExportToPdf(manuObj, MSBeverageRecordApp3, title, filterName);
                     title = $"manufacturers    {DateTime.UtcNow.ToString("d")}";
-                    //p.printDG(manuObj, MSBeverageRecordApp3, title, filterName);
-                    //s.ExportToPdf(manuGrid);
                     break;
                 case "location":
                     s.ExportToPdf(locObj, MSBeverageRecordApp4, title, filterName);
                     title = $"location report    {DateTime.UtcNow.ToString("d")}";
-                    //p.printDG(locObj, MSBeverageRecordApp4, title, filterName);
-                    //s.ExportToPdf(locGrid);
                     break;
                 case "totalValue":
                     s.ExportToPdf(totalObj, MSBeverageRecordApp5, title, filterName);
                     title = $"cost report    {DateTime.UtcNow.ToString("d")}";
-                    // p.printDG(totalObj, MSBeverageRecordApp5, title, filterName);
-                    //s.ExportToPdf(totalGrid);
                     break;
-            }//end switch
+            }
 
         }
 
@@ -247,36 +182,30 @@ namespace MSBeverageRecordApp {
 
             SaveReport s = new SaveReport();
 
-            //call current report filter
             switch (filterName) {
                 case "allData":
 
                     title = $"report    {DateTime.UtcNow.ToString("d")}";
                     s.ExportToCsv(allObj, MSBeverageRecordApp, title, filterName);
-                    //p.printDG(allObj, MSBeverageRecordApp, title, filterName);
                     break;
                 case "category":
                     title = $"category report    {DateTime.UtcNow.ToString("d")}";
-                    //p.printDG(catObj, MSBeverageRecordApp2, title, filterName);
                     s.ExportToCsv(catObj, MSBeverageRecordApp2, title, filterName);
                     break;
                 case "manufacturer":
                     title = $"manufacturers    {DateTime.UtcNow.ToString("d")}";
-                    //p.printDG(manuObj, MSBeverageRecordApp3, title, filterName);
                     s.ExportToCsv(manuObj, MSBeverageRecordApp3, title, filterName);
                     break;
                 case "location":
                     title = $"location report    {DateTime.UtcNow.ToString("d")}";
-                    //p.printDG(locObj, MSBeverageRecordApp4, title, filterName);
                     s.ExportToCsv(locObj, MSBeverageRecordApp4, title, filterName);
 
                     break;
                 case "totalValue":
                     title = $"cost report    {DateTime.UtcNow.ToString("d")}";
-                    // p.printDG(totalObj, MSBeverageRecordApp5, title, filterName);
                     s.ExportToCsv(totalObj, MSBeverageRecordApp5, title, filterName);
                     break;
-            }//end switch
+            }
 
         }
         #endregion
@@ -294,249 +223,93 @@ namespace MSBeverageRecordApp {
             public int is_deleted { get; set; }
             public bool isHidden { get; set; }
 
-        }//end class
+        }
 
-        //CALLING THIS AS PARENT OBJECT HOLDER 
         public class RootObject {
             public int id { get; set; }
             public List<Records> Items { get; set; }
             public List<TotalCostData> CostItems { get; set; }
-        }//end class
+        }
         public class TotalCostData {
             public string categoryName { get; set; }
             public decimal cost { get; set; }
-        }//end class
-
-        #region Tab alldata
-
-        //moved to crud window
-        #region sub combobox search
-
-        //private void comboboxSearch(RootObject deserializedObjectList) {
-        //    //SET FILTERBY ITEM SOURCE TO DESERIALIZED ITEMS LIST
-        //    Filterby.ItemsSource = deserializedObjectList.Items;
-
-        //    //INITIALIZE FILTERBY WITH ARRAY OF ITEMS
-        //    Filterby.ItemsSource = new string[] { "RecordID", "Category", "Manufacturer", "Model", "SerialNumber", "Location" };
-        //}//end comboBoxSearch
+        }
 
 
-        //public Predicate<object> GetFilter() {
-
-        //    //CHECKS WHAT IS SELECTED ON FILTERBY 
-        //    switch (Filterby.SelectedItem as string) {
-
-        //        //IF RECORD ID IS SELECTED
-        //        case "RecordID":
-        //            //RETURN RECORD ID FILTER
-        //            return RecordIDFilter;
-
-        //        //IF CATEGORY IS SELECTED
-        //        case "Category":
-        //            //RETURN CATEGORY FILTER
-        //            return CategoryFilter;
-
-        //        //IF MANUFACTURER IS SELECTED
-        //        case "Manufacturer":
-        //            //RETURN MANUFACTURER FILTER
-        //            return ManufacturerFilter;
-
-        //        //IF MODEL IS SELECTED
-        //        case "Model":
-        //            //RETURN MODEL FILTER
-        //            return ModelFilter;
-
-        //        //IF SERIAL NUMBER IS SELECTED
-        //        case "SerialNumber":
-        //            //RETURN SERIAL NUMBER FILTER
-        //            return SerialNumberFilter;
-
-        //        //IF LOCATION IS SELECTED
-        //        case "Location":
-        //            //RETURN LOCATION FILTER
-        //            return LocationFilter;
-
-        //    }//end switch
-
-        //    //IF NONE OF THE ABOVE ARE SELECTED, RETURN RECORDIDFILTER
-        //    return RecordIDFilter;
-
-        //}//end GetFilter
 
 
-        //private bool RecordIDFilter(object obj) {
-        //    //SET RECORDS CLASS TO FILTER OBJ
-        //    var Filterobj = obj as Records;
-
-        //    //CHECK IF RECORD ID IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT RECORD ID.
-        //    return Filterobj.record_id.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
-
-        //}//end function
+        #region Tab category filters
 
 
-        //private bool CategoryFilter(object obj) {
-        //    //SET RECORDS CLASS TO FILTER OBJ
-        //    var Filterobj = obj as Records;
-
-        //    //CHECK IF CATEGORY NAME IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT CATEGORY NAME.
-        //    return Filterobj.categoryName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
-
-        //}//end function
-
-
-        //private bool ManufacturerFilter(object obj) {
-        //    //SET RECORDS CLASS TO FILTER OBJ
-        //    var Filterobj = obj as Records;
-
-        //    //CHECK IF MANUFACTURER NAME IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT MANUFACTURER.
-        //    return Filterobj.companyName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
-
-        //}//end function
-
-
-        //private bool ModelFilter(object obj) {
-        //    //SET RECORDS CLASS TO FILTER OBJ
-        //    var Filterobj = obj as Records;
-
-        //    //CHECK IF MODEL IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT MODEL.
-        //    return Filterobj.model.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
-
-        //}//end function
-
-
-        //private bool SerialNumberFilter(object obj) {
-        //    //SET RECORDS CLASS TO FILTER OBJ
-        //    var Filterobj = obj as Records;
-
-        //    //CHECK IF SERIAL NUMBER IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT SERIAL NUMBER.
-        //    return Filterobj.serial.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
-
-        //}//end function
-
-
-        //private bool LocationFilter(object obj) {
-        //    //SET RECORDS CLASS TO FILTER OBJ
-        //    var Filterobj = obj as Records;
-
-        //    //CHECK IF LOCATION NAME IS IN RECORDS, IF TRUE, RETURN RECORDS WITH THAT LOCATION.
-        //    return Filterobj.locationName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
-
-        //}//end function
-
-
-        //private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) {
-
-        //    //CHECK IF TEXT BOX IS EMPTY
-        //    if (FilterTextBox.Text == "") {
-        //        //IF NO FILTER IS SELECTED
-        //        MSBeverageRecordApp.Items.Filter = null;
-        //        //SHOW PLACEHOLDER TEXT
-        //        txtSearchPlaceholder.Visibility = System.Windows.Visibility.Visible;
-        //    } else {
-        //        //IF A FILTER IS SELECTED
-        //        MSBeverageRecordApp.Items.Filter = GetFilter();
-        //        //HIDE PLACEHOLDER TEXT
-        //        txtSearchPlaceholder.Visibility = System.Windows.Visibility.Hidden;
-
-        //    }//end if
-        //}//end function
-
-
-        //private void Filterby_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-
-        //    //DYNAMICALLY FILTERS DATAGRID USING SELECTION IN GET FILTER FUNCTION
-        //    MSBeverageRecordApp.Items.Filter = GetFilter();
-
-        //}//end function
-
-
-        #endregion sub combobox search
-
-        #endregion Tab alldata
-
-        #region Tab category
-
-
-        public static List<Records> FilterHotspotRecordsCategory(List<Records> records, ComboBox filter) {
+        public List<Records> FilterHotspotRecordsCategory(List<Records> records, ComboBox filter) {
+            totalBox = 0.0m;
             List<Records> filteredRecords = new List<Records>();
 
-            //null check
             if (filter == null || filter.SelectedItem == null) {
                 return records;
             }
 
-
-            // If the selected item is "All Categories", return all records
             if (filter.SelectedItem.ToString() == "All Categories") {
+                foreach (Records record in records) {
+
+                    totalBox += record.cost;
+
+                }
+                lblCost.Content = $"cost: {totalBox.ToString("C")}";
                 return records;
             }
 
-            string selectedCategory = filter.SelectedItem.ToString();
+                string selectedCategory = filter.SelectedItem.ToString();
             Console.WriteLine($"Filtering records by category: {selectedCategory}");
 
-            // Iterate through each record
             foreach (var record in records) {
-                // Check if the categoryName matches the selected item
                 if (record.categoryName == selectedCategory && record.is_deleted == 0) {
-                    // If yes, add it to the filteredRecords list
                     filteredRecords.Add(record);
                     Console.WriteLine($"Adding record: {record}");
+                    totalBox += record.cost;
                 }
             }
 
-            // Return the filtered records
+            //add total cost to xaml element
+            lblCost.Content = $"cost: {totalBox.ToString("C")}";
+            lblCost.Visibility = Visibility.Visible;
             return filteredRecords;
         }
 
-
         public void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            // Get the original list of records
             var originalRecords = deserializeObject.Items;
 
-            // Create a copy of the original records for filtering
             var recordsCopy = new List<Records>(originalRecords);
 
-            // Get the filtered records based on the selected category
             var filteredRecords = FilterHotspotRecordsCategory(recordsCopy, FilterCategory);
 
-            // Update the ItemsSource of the grid with the filtered records
             MSBeverageRecordApp2.ItemsSource = filteredRecords;
 
-            // Update the ItemsSource of the catGrid
             catGrid.ItemsSource = new List<Records>(filteredRecords);
 
-            // Update the Items property of the catObj
             catObj.Items = new List<Records>(filteredRecords);
 
-        }//end function
+        }
 
 
         private void CreateCategoryFilterItems(RootObject list) {
-            //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
-            //ADD STRING "ALL CATEGORIES" TO FILTER
             FilterCategory.Items.Add("All Categories");
 
-            //LOOP THROUGH LIST OF ITEMS
             for (int index = 0; index < list.Items.Count; index++) {
                 contains = false;
-                //LOOP THROUGH FILTER
                 for (int itemIndex = 0; itemIndex < FilterCategory.Items.Count; itemIndex++)
-                    //IF FILTER CONTAINS THE LIST ITEM
                     if (FilterCategory.Items[itemIndex].ToString() == list.Items[index].categoryName) {
-                        //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
-                    }//end if
+                    }
 
-                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
                 if (contains == false) {
-                    //ADD THE LIST ITEM TO THE FILTER
                     FilterCategory.Items.Add(list.Items[index].categoryName);
-                }//end if
-            }//end for
+                }
+            }
 
-        }//end function
+        }
 
 
         #endregion Tab category
@@ -545,79 +318,77 @@ namespace MSBeverageRecordApp {
         #region Tab manufacturer
 
 
-        public static List<Records> FilterHotspotRecordsManufacturer(List<Records> records, ComboBox filter) {
+        public List<Records> FilterHotspotRecordsManufacturer(List<Records> records, ComboBox filter) {
+
+            totalBox = 0.0m;
+
             List<Records> filteredRecords = new List<Records>();
 
-            //null check
             if (filter == null || filter.SelectedItem == null) {
                 return records;
             }
 
-            if (filter.SelectedItem == "All Manufacturers") {
+            if (filter.SelectedItem.ToString() == "All Manufacturers") {
+                //lblCost.Visibility = Visibility.Collapsed;
+                foreach (Records record in records) {
+
+                    totalBox += record.cost;
+
+                }
+                lblCost.Content = $"cost: {totalBox.ToString("C")}";
+
                 return records;
             }
 
-            // Iterate through each record
+            string selectedManufacturer = filter.SelectedItem.ToString();
+
             foreach (Records record in records) {
-                // Check if the categoryName matches the selected item
-                if (record.companyName == filter.SelectedItem.ToString()) {
-                    // If yes, add it to the filteredRecords list
+                if (record.companyName == selectedManufacturer && record.is_deleted == 0) {
                     filteredRecords.Add(record);
+                    totalBox += record.cost;
                 }
             }
-
-            // Return the filtered records
+            lblCost.Content = $"cost: {totalBox.ToString("C")}";
+            lblCost.Visibility = Visibility.Visible;
             return filteredRecords;
+        }
 
-        }//end function
 
 
         public void Filter_SelectionChangedManufacturer(object sender, SelectionChangedEventArgs e) {
-            // Get the original list of records
             var originalRecords = deserializeObject.Items;
 
-            // Create a copy of the original records for filtering
             var recordsCopy = new List<Records>(originalRecords);
 
-            // Get the filtered records based on the selected category
             var filteredRecords = FilterHotspotRecordsManufacturer(recordsCopy, FilterManufacturer);
 
-            // Update the ItemsSource of the grid with the filtered records
             MSBeverageRecordApp3.ItemsSource = filteredRecords;
 
-            // Update the ItemsSource of the catGrid
             manuGrid.ItemsSource = new List<Records>(filteredRecords);
 
-            // Update the Items property of the catObj
             manuObj.Items = new List<Records>(filteredRecords);
-        }//end function
+        }
 
 
         private void CreateManufacturerFilterItems(RootObject list) {
-            //INITIALIZE BOOL TO FALSE
             bool contains = false;
 
             FilterManufacturer.Items.Add("All Manufacturers");
 
-            //LOOP THROUGH LIST OF ITEMS
             for (int index = 0; index < list.Items.Count; index++) {
                 contains = false;
-                //LOOP THROUGH FILTER
                 for (int itemIndex = 0; itemIndex < FilterManufacturer.Items.Count; itemIndex++)
-                    //IF FILTER CONTAINS THE LIST ITEM
                     if (FilterManufacturer.Items[itemIndex].ToString() == list.Items[index].companyName) {
-                        //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
                         contains = true;
-                    }//end if
+                    }
 
-                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
                 if (contains == false) {
-                    //ADD THE LIST ITEM TO THE FILTER
                     FilterManufacturer.Items.Add(list.Items[index].companyName);
-                }//end if
-            }//end for
+                }
+            }
 
-        }//end function
+
+        }
 
 
         #endregion Tab manufacturer
@@ -625,180 +396,547 @@ namespace MSBeverageRecordApp {
 
         #region Tab location
 
+        public List<Records> FilterHotspotRecordsLocation(List<Records> records, ComboBox filter) {
+            // Reset totalBox to 0 before calculating
 
-        public static List<Records> FilterHotspotRecordsLocation(List<Records> records, ComboBox filter) {
+                totalBox = 0.0m; 
+            
+
             List<Records> filteredRecords = new List<Records>();
 
-            //null check
             if (filter == null || filter.SelectedItem == null) {
                 return records;
             }
 
-            if (filter.SelectedItem == "All Locations") {
+            if (filter.SelectedItem.ToString() == "All Locations" ) {
+
+                foreach (Records record in records) {
+
+                    totalBox += record.cost;
+
+                }
+                lblCost.Content = $"cost: {totalBox.ToString("C")}";
+                //lblCost.Visibility = Visibility.Visible;
                 return records;
             }
 
-            // Iterate through each record
+            string selectedLocation = filter.SelectedItem.ToString();
+            Console.WriteLine($"Filtering records by location: {selectedLocation}");
+
             foreach (Records record in records) {
-                // Check if the categoryName matches the selected item
-                if (record.locationName == filter.SelectedItem.ToString()) {
-                    // If yes, add it to the filteredRecords list
+                if (record.locationName == selectedLocation && record.is_deleted == 0) {
                     filteredRecords.Add(record);
+                    Console.WriteLine($"Adding record: {record}");
+                    totalBox += record.cost;
+                }
+            }
+            lblCost.Content = $"cost: {totalBox.ToString("C")}";
+            //lblCost.Visibility = Visibility.Visible;
+            return filteredRecords;
+        }
+
+        public void Filter_SelectionChangedLocation(object sender, SelectionChangedEventArgs e) {
+            var originalRecords = deserializeObject.Items;
+            var recordsCopy = new List<Records>(originalRecords);
+
+            if (isSubLocationFiltering) {
+                var filteredRecords = FilterHotspotRecordsLocation(recordsCopy, FilterLocation);
+                MSBeverageRecordApp4.ItemsSource = filteredRecords;
+                locGrid.ItemsSource = new List<Records>(filteredRecords);
+                locObj.Items = new List<Records>(filteredRecords);
+
+                FilterSubLocation.Text = "Select Sub-Location";
+            }
+
+            // Reset the sublocation filtering flag
+            isSubLocationFiltering = false;
+
+            // Get the selected location
+            string selectedLocation = FilterLocation.SelectedItem?.ToString();
+
+            filteredRecords = FilterHotspotRecordsLocation(recordsCopy, FilterLocation);
+            MSBeverageRecordApp4.ItemsSource = filteredRecords;
+            locGrid.ItemsSource = new List<Records>(filteredRecords);
+            locObj.Items = new List<Records>(filteredRecords);
+
+            FilterSubLocation.Text = "Select Sub-Location";
+
+            if (selectedLocation == "All Locations") {
+                FilterSubLocation.Visibility = Visibility.Collapsed;
+                MSBeverageRecordApp4.ItemsSource = deserializeObject.Items;
+            } else {
+                FilterSubLocation.Visibility = Visibility.Visible;
+                CreateSubLocationFilterItems(deserializeObject, selectedLocation);
+                filteredRecords = FilterHotspotRecordsLocation(recordsCopy, FilterLocation);
+                MSBeverageRecordApp4.ItemsSource = filteredRecords;
+                locGrid.ItemsSource = new List<Records>(filteredRecords);
+                locObj.Items = new List<Records>(filteredRecords);
+            }
+        }
+
+        private void CreateLocationFilterItems(RootObject list) {
+            bool contains = false;
+
+            FilterLocation.Items.Add("All Locations");
+
+            for (int index = 0; index < list.Items.Count; index++) {
+                contains = false;
+                for (int itemIndex = 0; itemIndex < FilterLocation.Items.Count; itemIndex++)
+                    if (FilterLocation.Items[itemIndex].ToString() == list.Items[index].locationName) {
+                        contains = true;
+                    }
+
+                if (contains == false) {
+                    FilterLocation.Items.Add(list.Items[index].locationName);
                 }
             }
 
-            // Return the filtered records
-            return filteredRecords;
-
-        }//end function
-
-
-        public void Filter_SelectionChangedLocation(object sender, SelectionChangedEventArgs e) {
-            // Get the original list of records
-            var originalRecords = deserializeObject.Items;
-
-            // Create a copy of the original records for filtering
-            var recordsCopy = new List<Records>(originalRecords);
-
-            // Get the filtered records based on the selected category
-            var filteredRecords = FilterHotspotRecordsLocation(recordsCopy, FilterLocation);
-
-            // Update the ItemsSource of the grid with the filtered records
-            MSBeverageRecordApp4.ItemsSource = filteredRecords;
-
-            // Update the ItemsSource of the catGrid
-            locGrid.ItemsSource = new List<Records>(filteredRecords);
-
-            // Update the Items property of the catObj
-            locObj.Items = new List<Records>(filteredRecords);
-
-        }//end function
-
-
-        private void CreateLocationFilterItems(RootObject list) {
-            //INITIALIZE BOOL TO FALSE
-            bool contains = false;
-
-            //ADD STRING "ALL LOCATIONS" TO FILTER
-            FilterLocation.Items.Add("All Locations");
-
-            //LOOP THROUGH LIST OF ITEMS
-            for (int index = 0; index < list.Items.Count; index++) {
-                contains = false;
-                //LOOP THROUGH FILTER
-                for (int itemIndex = 0; itemIndex < FilterLocation.Items.Count; itemIndex++)
-                    //IF FILTER CONTAINS THE LIST ITEM
-                    if (FilterLocation.Items[itemIndex].ToString() == list.Items[index].locationName) {
-                        //SET CONTAINS TO TRUE, THE FILTER ALREADY HAS THE LIST ITEM
-                        contains = true;
-                    }//end if
-
-                //IF THE FILTER DOES NOT CONTAIN THE LIST ITEM
-                if (contains == false) {
-                    //ADD LOCATION NAME TO THE FILTER
-                    FilterLocation.Items.Add(list.Items[index].locationName);
-                }//end if
-            }//end for
-
-        }//end function
+        }
 
 
         #endregion Tab location
 
+        #region subLoc
+        public List<Records> FilterHotspotRecordsSubLocation(List<Records> records, string selectedLocation, string selectedSubLocation) {
+            // Reset totalBox to 0 before calculating
+            if (isSubLocationFiltering) {
+                totalBox = 0.0m;
 
-        #region Total Cost Report
-        //create item for each category
+                List<Records> filteredRecords = new List<Records>();
 
+                foreach (Records record in records) {
+                    // Only add records that match the selected location and sub-location
+                    if (record.locationName == selectedLocation && record.sub_location == selectedSubLocation && record.is_deleted == 0) {
+                        filteredRecords.Add(record);
+                        totalBox += record.cost;
+                    } else if (record.locationName == selectedLocation && selectedSubLocation == "All Sub-Locations" && record.is_deleted == 0) {
+                        filteredRecords.Add(record);
+                        totalBox += record.cost;
+                    }
+                }
+
+                lblCost.Content = $"cost: {totalBox.ToString("C")}";
+                lblCost.Visibility = Visibility.Visible;
+                return filteredRecords;
+            } else {
+                return records;
+            }
+        }
+
+
+        public void FilterSubLocation_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            isSubLocationFiltering = true;
+            var originalRecords = deserializeObject.Items;
+            var recordsCopy = new List<Records>(originalRecords);
+
+            string selectedLocation = FilterLocation.SelectedItem?.ToString();
+
+            string selectedSubLocation = FilterSubLocation.SelectedItem?.ToString();
+
+            var filteredRecords = FilterHotspotRecordsSubLocation(recordsCopy, selectedLocation, selectedSubLocation);
+            MSBeverageRecordApp4.ItemsSource = filteredRecords;
+            s_locGrid.ItemsSource = new List<Records>(filteredRecords);
+            s_locObj.Items = new List<Records>(filteredRecords);
+
+            //isSubLocationFiltering = false; 
+        }
+
+        private void CreateSubLocationFilterItems(RootObject list, string selectedLocation) {
+            bool contains = false;
+
+            FilterSubLocation.Items.Clear();
+            FilterSubLocation.Items.Add("All Sub-Locations");
+            for (int index = 0; index < list.Items.Count; index++) {
+                if (selectedLocation != null && list.Items[index].locationName != selectedLocation) {
+                    continue;
+                }
+
+                contains = false;
+                for (int itemIndex = 0; itemIndex < FilterSubLocation.Items.Count; itemIndex++) {
+                    // Check if the sub-location already exists in the combo box
+                    if (FilterSubLocation.Items[itemIndex].ToString() == list.Items[index].sub_location) {
+                        // Check if the parent location matches the selected location
+                        if (list.Items[index].locationName == selectedLocation) {
+                            contains = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!contains && list.Items[index].is_deleted != 1) {
+                    FilterSubLocation.Items.Add(list.Items[index].sub_location);
+                }
+            }
+        } 
+        #endregion
+
+        #region Total Costs
+        //by company
         public static List<TotalCostData> CreateCostReport(RootObject list) {
-              List<TotalCostData> data = new List<TotalCostData>();
+            List<TotalCostData> data = new List<TotalCostData>();
             if (list.Items == null || list.Items.Count == 0) {
                 return data;
             }
 
-            // Add first category
-            data.Add(new TotalCostData {
-                categoryName = list.Items[0].categoryName,
-                cost = 0
-            });
-
-            for (int index = 0; index < list.Items.Count; index++) {
-                bool contains = false;
-                for (int itemIndex = 0; itemIndex < data.Count; itemIndex++) {
-                    if (data[itemIndex].categoryName == list.Items[index].categoryName) {
-                        contains = true;
-                    }
-                }
-                if (!contains) {
-                    data.Add(new TotalCostData {
-                        categoryName = list.Items[index].categoryName,
-                        cost = 0
-                    });
-                }
-            }
+            // Dictionary to store category names and their corresponding total costs
+            Dictionary<string, decimal> categoryCostMap = new Dictionary<string, decimal>();
 
             decimal totalCosts = 0;
+
             for (int index = 0; index < list.Items.Count; index++) {
-                for (int itemIndex = 0; itemIndex < data.Count; itemIndex++) {
-                    if (data[itemIndex].categoryName == list.Items[index].categoryName && list.Items[index].is_deleted == 0) {
-                        data[itemIndex].cost += list.Items[index].cost;
-                    }
-                }
                 if (list.Items[index].is_deleted == 0) {
-                    totalCosts += list.Items[index].cost;
+                    string categoryName = list.Items[index].categoryName;
+                    decimal cost = list.Items[index].cost;
+
+                    // Add or update the category cost in the dictionary
+                    if (categoryCostMap.ContainsKey(categoryName)) {
+                        categoryCostMap[categoryName] += cost;
+                    } else {
+                        categoryCostMap[categoryName] = cost;
+                    }
+
+                    // Add to the total cost
+                    totalCosts += cost;
                 }
             }
 
+            // Convert dictionary to TotalCostData list
+            foreach (var category in categoryCostMap) {
+                data.Add(new TotalCostData {
+                    categoryName = category.Key,
+                    cost = category.Value
+                });
+            }
+
+            // Add total cost entry
             data.Add(new TotalCostData {
                 categoryName = "Total Cost",
                 cost = totalCosts
             });
 
             return data;
-
-        }//end function
-
-
-
+        }
         #endregion
 
-        #region tabcontrol testing
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        #region tabcontrol 
+        //setting grid data and applying filters based on current tab
+        private async void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+ 
+            if (e.RemovedItems.Contains(xalldata)) {
+                MSBeverageRecordApp.Sorting -= MSBeverageRecordApp_Sorting; // Remove sorting event handler
+                MSBeverageRecordApp.ItemsSource = null; // Clear ItemsSource
+            }
+
+            if (e.RemovedItems.Contains(xcategory)) {
+                MSBeverageRecordApp2.Sorting -= MSBeverageRecordApp_Sorting; // Remove sorting event handler
+                MSBeverageRecordApp2.ItemsSource = null; // Clear ItemsSource
+            }
+            if (e.RemovedItems.Contains(xmanufacturer)) {
+                MSBeverageRecordApp3.Sorting -= MSBeverageRecordApp_Sorting; // Remove sorting event handler
+                MSBeverageRecordApp3.ItemsSource = null; // Clear ItemsSource
+            }
+            if (e.RemovedItems.Contains(xlocation)) {
+                MSBeverageRecordApp4.Sorting -= MSBeverageRecordApp_Sorting; // Remove sorting event handler
+                MSBeverageRecordApp4.ItemsSource = null; // Clear ItemsSource
+            }
+
+            //lblCost.Visibility = Visibility.Visible;
             if (xalldata.IsSelected) {
+                if (filterName != "allData") {
+                    totalBox = 0.0m;
+                    CostTotal(deserializeObject);
+                }
                 filterName = "allData";
-                MSBeverageRecordApp.ItemsSource = allObj.Items; // Update grid for all data
+                MSBeverageRecordApp.ItemsSource = allObj.Items;
+                MSBeverageRecordApp.Sorting += MSBeverageRecordApp_Sorting;
+
+
             }
             if (xcategory.IsSelected) {
                 filterName = "category";
                 var filteredCategoryRecords = FilterHotspotRecordsCategory(deserializeObject.Items, FilterCategory);
-                MSBeverageRecordApp2.ItemsSource = filteredCategoryRecords; // Update grid for category
+                MSBeverageRecordApp2.ItemsSource = filteredCategoryRecords;
                 catGrid.ItemsSource = filteredCategoryRecords;
                 catObj.Items = filteredCategoryRecords;
+                MSBeverageRecordApp2.Sorting += MSBeverageRecordApp_Sorting;
             }
             if (xmanufacturer.IsSelected) {
                 filterName = "manufacturer";
                 var filteredManufacturerRecords = FilterHotspotRecordsManufacturer(deserializeObject.Items, FilterManufacturer);
-                MSBeverageRecordApp3.ItemsSource = filteredManufacturerRecords; // Update grid for manufacturer
+                MSBeverageRecordApp3.ItemsSource = filteredManufacturerRecords;
                 manuGrid.ItemsSource = filteredManufacturerRecords;
                 manuObj.Items = filteredManufacturerRecords;
+
+                MSBeverageRecordApp3.Sorting += MSBeverageRecordApp_Sorting;
+
+
             }
             if (xlocation.IsSelected) {
                 filterName = "location";
-                var filteredLocationRecords = FilterHotspotRecordsLocation(deserializeObject.Items, FilterLocation);
-                MSBeverageRecordApp4.ItemsSource = filteredLocationRecords; // Update grid for location
-                locGrid.ItemsSource = filteredLocationRecords;
-                locObj.Items = filteredLocationRecords;
+                if (!isSubLocationFiltering) {
+                    var filteredLocationRecords = FilterHotspotRecordsLocation(deserializeObject.Items, FilterLocation);
+                    MSBeverageRecordApp4.ItemsSource = filteredLocationRecords;
+                    locGrid.ItemsSource = filteredLocationRecords;
+                    locObj.Items = filteredLocationRecords;
+                    MSBeverageRecordApp4.Sorting += MSBeverageRecordApp_Sorting;
+
+                }
             }
             if (xtotalvalue.IsSelected && deserializeObject.Items.Count > 0) {
                 filterName = "totalValue";
-                MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject); // Update grid for total value
+                MSBeverageRecordApp5.ItemsSource = CreateCostReport(deserializeObject);
                 totalGrid.ItemsSource = CreateCostReport(deserializeObject);
                 totalObj.CostItems = (List<TotalCostData>)totalGrid.ItemsSource;
+                //lblCost.Visibility = Visibility.Collapsed;
+            }
+        }
+        #endregion tabcontrol testing
+
+        #region sub combobox search N/A
+
+
+        private void comboboxSearch(RootObject deserializedObjectList) {
+            Filterby.ItemsSource = deserializedObjectList.Items;
+
+            Filterby.ItemsSource = new string[] { "All", "RecordID", "Category", "Manufacturer", "Model", "SerialNumber", "Location" };
+        }
+
+
+        public Predicate<object> GetFilter() {
+
+            switch (Filterby.SelectedItem as string) {
+
+                case null:
+                    return NoFilter;
+
+                case "RecordID":
+                    return RecordIDFilter;
+
+                case "Category":
+                    return CategoryFilter;
+
+                case "Manufacturer":
+                    return ManufacturerFilter;
+
+                case "Model":
+                    return ModelFilter;
+
+                case "SerialNumber":
+                    return SerialNumberFilter;
+
+                case "Location":
+                    return LocationFilter;
+
+                case "All":
+                    return NoFilter;
+
+            }
+
+            return RecordIDFilter;
+        }
+
+        //returns all id's containing the search? 
+        //check other comparisons
+        private bool NoFilter(object obj) {
+            var Filterobj = obj as Records;
+
+            return Filterobj.record_id.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.categoryName.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.model.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.companyName.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.serial.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.locationName.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.cost.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.sub_location.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase) || Filterobj.purchase_date.ToString().Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }
+
+
+        private bool RecordIDFilter(object obj) {
+            var Filterobj = obj as Records;
+
+            return Filterobj.record_id.ToString().Equals(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }
+
+
+        private bool CategoryFilter(object obj) {
+            var Filterobj = obj as Records;
+
+            return Filterobj.categoryName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }
+
+
+        private bool ManufacturerFilter(object obj) {
+            var Filterobj = obj as Records;
+
+            return Filterobj.companyName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }
+
+
+        private bool ModelFilter(object obj) {
+            var Filterobj = obj as Records;
+
+            return Filterobj.model.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }
+
+
+        private bool SerialNumberFilter(object obj) {
+            var Filterobj = obj as Records;
+
+            return Filterobj.serial.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }
+
+
+        private bool LocationFilter(object obj) {
+            var Filterobj = obj as Records;
+
+            return Filterobj.locationName.Contains(FilterTextBox.Text, StringComparison.OrdinalIgnoreCase);
+
+        }
+
+
+        private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+
+            if (FilterTextBox.Text == "") {
+                MSBeverageRecordApp3.Items.Filter = null;
+                txtSearchPlaceholder.Visibility = System.Windows.Visibility.Visible;
+            } else {
+                MSBeverageRecordApp3.Items.Filter = GetFilter();
+                txtSearchPlaceholder.Visibility = System.Windows.Visibility.Hidden;
+
             }
         }
 
-        #endregion tabcontrol testing
+
+        private void Filterby_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            MSBeverageRecordApp3.Items.Filter = GetFilter();
+
+            switch (Filterby.SelectedItem as string) {
+                case "Category":
+                    clrSearch.Visibility = Visibility.Visible;
+                    cboSearch.Items.Clear();
+                    cboSearch.Visibility = Visibility.Visible;
+                    cboSearch.Text = "Select Category";
+                    foreach (var categoryItem in deserializeObject.Items) {
+                        cboSearch.Items.Add(categoryItem.categoryName);
+                    }
+                    break;
+                case "Manufacturer":
+                    clrSearch.Visibility = Visibility.Visible;
+                    cboSearch.Items.Clear();
+                    cboSearch.Visibility = Visibility.Visible;
+                    cboSearch.Text = "Select Manufacturer";
+                    foreach (var manufacturerItem in deserializeObject.Items) {
+                        cboSearch.Items.Add(manufacturerItem.companyName);
+                    }
+                    break;
+                case "Location":
+                    clrSearch.Visibility = Visibility.Visible;
+                    cboSearch.Items.Clear();
+                    cboSearch.Visibility = Visibility.Visible;
+                    cboSearch.Text = "Select Location";
+                    foreach (var locationItem in deserializeObject.Items) {
+                        cboSearch.Items.Add(locationItem.locationName);
+                    }
+                    break;
+                default:
+                    cboSearch.Visibility = Visibility.Hidden;
+                    clrSearch.Visibility = Visibility.Hidden;
+                    break;
+            }
+        }
+
+        private void cboSearch_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (cboSearch.SelectedItem != null) {
+                string selected = cboSearch.SelectedItem.ToString();
+                string selectedFilter = Filterby.SelectedItem.ToString();
+                switch (selectedFilter) {
+                    case "Category":
+                        MSBeverageRecordApp3.Items.Filter = item =>
+                            ((Records)item).categoryName.Equals(selected, StringComparison.OrdinalIgnoreCase);
+                        break;
+                    case "Manufacturer":
+                        MSBeverageRecordApp3.Items.Filter = item =>
+                            ((Records)item).companyName.Equals(selected, StringComparison.OrdinalIgnoreCase);
+                        break;
+                    case "Location":
+                        MSBeverageRecordApp3.Items.Filter = item =>
+                            ((Records)item).locationName.Equals(selected, StringComparison.OrdinalIgnoreCase);
+                        break;
+                }
+
+            }
+        }
+
+        private void clrSearch_Click(object sender, RoutedEventArgs e) {
+            try {
+                MSBeverageRecordApp3.Items.Filter = null;
+
+                cboSearch.SelectedItem = null;
+                Filterby.SelectedItem = "";
+                MSBeverageRecordApp3.ItemsSource = deserializeObject.Items;
+                MSBeverageRecordApp3.Items.Refresh();
+            } catch (Exception ex) {
+                Console.WriteLine("Error in clrSearch_Click: " + ex.Message);
+            }
+            Filterby.Text = "Search By";
+            clrSearch.Visibility = Visibility.Hidden;
+            cboSearch.Visibility = Visibility.Hidden;
+        }
 
 
-    }//end class
-}//end namespace
+
+
+
+
+
+
+        #endregion sub combobox search
+
+        private void MSBeverageRecordApp_Sorting(object sender, DataGridSortingEventArgs e) {
+            DataGrid dataGrid = sender as DataGrid;
+
+            // Ensure items are of type Records
+            List<Records> sortedList = new List<Records>();
+
+            foreach (var item in dataGrid.Items) {
+                if (item is Records record) {
+                    sortedList.Add(record);
+                } else {
+                    // Handle unexpected types or null items if necessary
+                    // Example: continue; // Skip or log unexpected items
+                }
+
+                // Determine the new sort direction
+                ListSortDirection newDirection = e.Column.SortDirection == ListSortDirection.Ascending
+                ? ListSortDirection.Descending
+                : ListSortDirection.Ascending;
+
+                // Sort the list based on the clicked column and direction
+                if (newDirection == ListSortDirection.Ascending) {
+                    sortedList = sortedList.OrderBy(r => r.GetType().GetProperty(e.Column.SortMemberPath).GetValue(r)).ToList();
+                } else {
+                    sortedList = sortedList.OrderByDescending(r => r.GetType().GetProperty(e.Column.SortMemberPath).GetValue(r)).ToList();
+                }
+
+                // Update the DataGrid and filteredRecords list
+                e.Column.SortDirection = newDirection;
+                dataGrid.ItemsSource = sortedList;
+                filteredRecords = sortedList;
+
+                // Update other UI components bound to filteredRecords
+                manuObj.Items = new List<Records>(filteredRecords);
+                locObj.Items = new List<Records>(filteredRecords);
+                catObj.Items = new List<Records>(filteredRecords);
+                allObj.Items = new List<Records>(filteredRecords);
+
+                // Prevent the default sort from occurring
+                e.Handled = true;
+            }
+        }
+
+
+
+    }//c
+}//n
 

@@ -1,78 +1,95 @@
 ﻿using System.Net.Http;
-using System.Windows;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace MSBeverageRecordApp {
 
-    /// <summary>
-    /// INTERACTION LOGIC FOR CategoryTable.xaml
-    /// </summary>
-
     public partial class CategoryTable : Page {
-        //CLASS TO GET RESPONSE FROM API
         class PostResponse {
             public int Id { get; set; }
-        }//end class
-         //GLOBAL CLASS FOR DATA TO SEND TO API
+        }
+
         class PostCategory {
             public string categoryName { get; set; }
-        }//end class
-      
+        }
+
+        public class Category {
+            public int id { get; set; }
+            public string categoryName { get; set; }
+        }
+
+        private List<Category> existingCategories;
+
         public CategoryTable() {
             InitializeComponent();
-        }//end main CategoryTable
+            LoadCategories();
+        }
 
-        //POST CATEGORY
-        private void Category_Button_Click(object sender, RoutedEventArgs e) {
-            //INPUT VALIDATION
+        private async void LoadCategories() {
+            using (var client = new HttpClient()) {
+                client.BaseAddress = new Uri("http://localhost:4001/");
+                client.DefaultRequestHeaders.Accept.Add(
+                   new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var response = await client.GetAsync("api/category");
+                if (response.IsSuccessStatusCode) {
+                    var dataObjects = await response.Content.ReadAsStringAsync();
+                    existingCategories = JsonSerializer.Deserialize<List<Category>>(dataObjects);
+                    CreateCategoryComboBox(existingCategories);
+                } else {
+                    existingCategories = new List<Category>();
+                }
+            }
+        }
+
+        private async void Category_Button_Click(object sender, RoutedEventArgs e) {
             if (string.IsNullOrEmpty(txtCategory.Text)) {
-                //THE TEXTBOX IS EMPTY; DISPLAY AN ERROR MESSAGE OR TAKE APPROPRIATE ACTION.
                 MessageBox.Show("Please enter a value in the category.");
             } else {
-                string input = txtCategory.Text;
+                string input = txtCategory.Text.Trim().ToUpper();
                 txtCategory.Text = "";
 
+                bool categoryExists = existingCategories.Exists(c => c.categoryName == input);
+                if (categoryExists) {
+                    MessageBox.Show("Category already exists. Please enter a new category.");
+                    return;
+                }
+
                 var postData = new PostCategory {
-                    categoryName = input.ToUpper()
+                    categoryName = input
                 };
 
-                //CREATING A NEW HTTPCLIENT OBJECT
-                var client = new HttpClient();
+                using (var client = new HttpClient()) {
+                    client.BaseAddress = new Uri("http://localhost:4001/");
 
-                //SET BASE ADDRESS OF API
-                client.BaseAddress = new Uri("http://localhost:4001/api/category/categorycreate/");
+                    var json = JsonSerializer.Serialize(postData);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                //SERIALIZE POSTDATA OBJECT TO JSON STRING
-                var json = System.Text.Json.JsonSerializer.Serialize(postData);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var response = await client.PostAsync("api/category/categorycreate/", content);
 
-                //MAKE POST REQUEST
-                var response = client.PostAsync(" ", content).Result;
-
-                //CHECK STATUS CODE TO SEE IF REQUEST WAS SUCCESSFUL
-                if (response.IsSuccessStatusCode) {
-                    var responseContent = response.Content.ReadAsStringAsync().Result;
-                    var options = new JsonSerializerOptions {
-                        PropertyNameCaseInsensitive = true
-
-                    };
-                    //PROMPT USER CATEGORY IS UPDATED
-                    MessageBox.Show("New Category Created");
-                }//end if
+                    if (response.IsSuccessStatusCode) {
+                        MessageBox.Show("New Category Created");
 
 
+                    } else {
+                        MessageBox.Show("Failed to create category. Please try again.");
+                    }
 
-                //RETURN TO MAIN MENU
-                this.NavigationService.Navigate(new Uri("MenuPage.xaml", UriKind.Relative));
+                    this.NavigationService.Navigate(new Uri("MenuPage.xaml", UriKind.Relative));
+                }
+            }
+        }
 
-            }//end if
-        }//end event
-
-
-        
-      
-    }//end class
-
-}//end namespace
+        private void CreateCategoryComboBox(List<Category> list) {
+            cboCat.Items.Clear();
+            foreach (var category in list) {
+                if (!string.IsNullOrEmpty(category.categoryName)) {
+                    cboCat.Items.Add(category.categoryName);
+                }
+            }
+        }
+    }
+}
